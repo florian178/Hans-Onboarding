@@ -1,0 +1,139 @@
+import { auth } from "@/auth"
+import { prisma } from "@/lib/prisma"
+import { redirect } from "next/navigation"
+import { PrintButtonClient as PrintButton } from "@/components/ui/PrintButtonClient"
+
+import styles from "../../admin/contracts/[userId]/page.module.css"
+
+export default async function EmployeeContractPage() {
+  const session = await auth()
+  if (!session?.user) redirect("/login")
+  
+  const userId = session.user.id!
+
+  const document = await prisma.document.findFirst({
+    where: { userId, type: "CONTRACT_SIGNED" },
+    orderBy: { uploadedAt: "desc" }
+  })
+
+  if (!document) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1>Arbeitsvertrag nicht gefunden</h1>
+          <a href="/dashboard" className={styles.backLink}>Zurück zum Dashboard</a>
+        </div>
+      </div>
+    )
+  }
+
+  const personalDataProgress = await prisma.stepProgress.findUnique({
+    where: { userId_stepId: { userId, stepId: "personal-data" } }
+  })
+
+  let personalData = null
+  if (personalDataProgress?.data) {
+    try {
+      personalData = JSON.parse(personalDataProgress.data)
+    } catch {
+      // ignore
+    }
+  }
+
+  const name = personalData ? `${personalData.firstName} ${personalData.lastName}` : "Mitarbeiter/-in"
+  const addressLine = personalData ? `${personalData.address}, ${personalData.zipCode} ${personalData.city}` : "Adresse"
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { startDate: true }
+  })
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <a href="/dashboard" className={styles.backLink}>← Zurück zum Dashboard</a>
+        <PrintButton className={styles.printBtn} />
+      </div>
+
+      <div className={styles.contractPreview} id="contract-preview">
+        <div className={styles.contractText}>
+          <div className={styles.documentLogo}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="Hans im Club Logo" />
+          </div>
+          <h2>Arbeitsvertrag einer geringfügigen Beschäftigung</h2>
+          <p>
+            Zwischen HS Event GmbH, Schützenplatz 14, 01067 Dresden<br/>
+            (Name und Adresse des Arbeitgebers) - nachfolgend „Arbeitgeber“ genannt -
+          </p>
+          <p>und</p>
+          <p>
+            <strong>{name}</strong>, {addressLine}<br/>
+            - nachfolgend „Arbeitnehmer/-in“ genannt -
+          </p>
+          <p>wird folgender Arbeitsvertrag geschlossen:</p>
+
+          <h3>§ 1 Arbeitsverhältnis</h3>
+          <p>Das Arbeitsverhältnis beginnt am {user?.startDate ? new Date(user.startDate).toLocaleDateString('de-DE') : '18.03.2026'}. Der Arbeitnehmer wird im Rahmen eines geringfügigen Beschäftigungsverhältnisses auf Anfrage bis zu 556 Euro beschäftigt.</p>
+
+          <h3>§ 2 Vertragsdauer</h3>
+          <p>Das Arbeitsverhältnis wird auf befristete Zeit geschlossen, einschließlich bis zum 31.08.2026. Nach Ablauf der Frist verlängert sich der Arbeitsvertrag automatisch um jeweils einen Monat bis zur Kündigung.</p>
+
+          <h3>§ 3 Tätigkeit und Aufgabengebiet</h3>
+          <p>Der Arbeitnehmer/ die Arbeitnehmerin wird als Servicekraft/ Barkraft im “Hans im Club”, Wallstraße 11, 01067 Dresden, eingestellt.</p>
+
+          <h3>§ 4 Arbeitsvergütung</h3>
+          <p>Der Arbeitnehmer/ die Arbeitnehmerin erhält einen Stundenlohn von 13,90€/h (höchstens 603 Euro). Die Vergütung wird jeweils am 15. des Folgemonats zahlbar.</p>
+          <p>Der Arbeitgeber leistet die Pauschalabgabe in der jeweils gesetzlich geschuldeten Höhe an die zentrale Einzugsstelle (Bundesknappschaft).</p>
+
+          <h3>§ 5 Arbeitszeit</h3>
+          <p>Der Arbeitnehmer/ die Arbeitnehmerin arbeitet beim Arbeitgeber auf Anfrage<br/>
+          Die regelmäßige monatliche Arbeitszeit beträgt maximal 43,38h Stunden.</p>
+          <p>Die grundsätzliche Verteilung der wöchentlichen Arbeitszeit erfolgt in der Regel an Wochentagen und Zeiten:</p>
+          <ul>
+            <li>Mittwoch: 22:00 Uhr bis 05:00 Uhr</li>
+            <li>Freitag: 22:00 Uhr bis 05:00 Uhr</li>
+            <li>Samstag: 22:00 Uhr bis 05:00 Uhr</li>
+            <li>Feiertage: 22:00 Uhr bis 05:00 Uhr</li>
+          </ul>
+
+          <h3>§ 6 Krankheit</h3>
+          <p>Die Arbeitsunfähigkeit ist dem Arbeitgeber unverzüglich mitzuteilen. Außerdem ist vor Ablauf des dritten Kalendertags nach Beginn der Erkrankung eine ärztliche Bescheinigung über die Arbeitsunfähigkeit und deren voraussichtliche Dauer vorzulegen.</p>
+
+          <h3>§ 8 Verschwiegenheitspflicht</h3>
+          <p>Der Arbeitnehmer/ die Arbeitnehmerin verpflichtet sich, während der Dauer des Arbeitsverhältnisses und auch nach dem Ausscheiden, über alle Betriebs- und Geschäftsgeheimnisse Stillschweigen zu bewahren.</p>
+
+          <h3>§ 9 Nebentätigkeit</h3>
+          <p>Jede entgeltliche oder das Arbeitsverhältnis beeinträchtigende Nebenbeschäftigung ist nur mit Zustimmung des Arbeitgebers zulässig.</p>
+
+          <h3>§10 Hinweis bzgl. des Verzichts auf Rentenversicherungsfreiheit</h3>
+          <p>Der Arbeitnehmer hat die Möglichkeit, jederzeit durch schriftliche Erklärung gegenüber dem Arbeitgeber auf seine Versicherungsfreiheit in der gesetzlichen Rentenversicherung zu verzichten. Der Verzicht kann nur für die Zukunft und im Falle der Ausübung mehrerer geringfügiger Beschäftigungen nur einheitlich für alle Beschäftigungen erklärt werden.</p>
+          <p>Wird der Verzicht erklärt, ist der Arbeitnehmer verpflichtet, den gesetzlichen Pauschalbeitrag zur Rentenversicherung von 15 % des Arbeitsentgelts auf den jeweils geltenden Rentenversicherungsbeitrag aufzustocken. Durch diese eigenen Zuzahlungen werden volle Leistungsansprüche in der Rentenversicherung erworben.</p>
+
+          <h3>§11 Sonstige Bestimmungen</h3>
+          <p>Während der Arbeit darf der Arbeitnehmer/ die Arbeitnehmerin maximal 50,00€ Bargeld mit sich führen. Wenn ein Mitarbeiter aus irgendeinem Grund an einem bestimmten Arbeitstag über mehr Bargeld verfügt, ist er verpflichtet, dies zu melden. Der Mitarbeiter ist mit stichprobenartigen Kontrollen von Taschen oder Jacken einverstanden.</p>
+          
+          <br/>
+          <p>Dresden, {new Date(document.uploadedAt).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+          <p>Ort, Datum</p>
+        </div>
+        
+        <div className={styles.signatureRow}>
+           <div className={styles.sigContainer}>
+             <div className={styles.employerSigPlaceHolder}>
+               HS Event GmbH
+             </div>
+             <div className={styles.signatureLine}></div>
+             <p className={styles.label}>Unterschrift Arbeitgeber</p>
+           </div>
+           <div className={styles.sigContainer}>
+             {/* eslint-disable-next-line @next/next/no-img-element */}
+             <img src={document.url} alt="Digitale Unterschrift" className={styles.finalSignature} />
+             <div className={styles.signatureLine}></div>
+             <p className={styles.label}>Unterschrift Arbeitnehmer/-in</p>
+           </div>
+        </div>
+      </div>
+    </div>
+  )
+}

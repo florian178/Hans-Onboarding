@@ -1,0 +1,69 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--secondary-foreground);
+  padding-left: 0.25rem;
+}
+
+.input {
+  display: flex;
+  height: 3rem;
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  color: var(--foreground);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15); /* Soft Apple Blue glow */
+}
+
+.input:hover:not(:focus) {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .input:hover:not(:focus) {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.input:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  background-color: var(--secondary);
+}
+
+.input::placeholder {
+  color: var(--secondary-foreground);
+  opacity: 0.5;
+}
+
+.hasError {
+  border-color: var(--error);
+}
+
+.hasError:focus {
+  border-color: var(--error);
+  box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.15);
+}
+
+.errorText {
+  font-size: 0.75rem;
+  color: var(--error);
+  margin-top: 0.25rem;
+  padding-left: 0.25rem;
+}

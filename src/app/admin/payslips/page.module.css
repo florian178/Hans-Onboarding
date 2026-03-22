@@ -1,0 +1,106 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #1d1d1f;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #86868b;
+}
+
+.select {
+  padding: 0.8rem;
+  border-radius: 12px;
+  border: 1px solid #d2d2d7;
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.select:focus {
+  border-color: #0071e3;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.fileInput {
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  padding: 1rem;
+  border-bottom: 1px solid #d2d2d7;
+  color: #86868b;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f5f5f7;
+  vertical-align: middle;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.deleteBtn {
+  color: #ff3b30;
+}
+
+.empty {
+  text-align: center;
+  padding: 3rem;
+  color: #86868b;
+}

@@ -1,0 +1,1488 @@
+
+> onboarding-system@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.2.110:3000
+- Environments: .env
+✓ Ready in 196ms
+
+ GET /login 200 in 358ms (next.js: 115ms, proxy.ts: 135ms, application-code: 108ms)
+ GET /login 200 in 55ms (next.js: 1182µs, proxy.ts: 2ms, application-code: 52ms)
+ GET /login 200 in 55ms (next.js: 1623µs, proxy.ts: 3ms, application-code: 50ms)
+[Authorize] Attempting login for: test@example.com
+[Authorize] User not found: test@example.com
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:11711:30)
+    at async AuthInternal (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:12545:24)
+    at async Auth (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:12767:34)
+    at async signIn (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:20317:17)
+    at async action (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0dk8ic.._.js:440:5)
+    at async executeActionAndPrepareForRender (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:64:5248)
+    at async /Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:62:25378)
+    at async renderToHTMLOrFlightImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:69:55630)
+    at async doRender (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:2765:28)
+    at async AppPageRouteModule.handleResponse (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:71:63567)
+    at async handleResponse (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:3040:32)
+    at async Module.handler (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:3443:20)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1454:9)
+    at async DevServer.renderPageComponent (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1506:24)
+    at async DevServer.renderToResponseImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1556:32)
+    at async DevServer.pipeImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1043:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/next-server.js:338:17)
+    at async DevServer.handleRequestImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:934:17)
+    at async /Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/dev/next-dev-server.js:394:20
+    at async Span.traceAsyncFn (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/trace/trace.js:164:20)
+    at async DevServer.handleRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/dev/next-dev-server.js:390:24)
+    at async invokeRender (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:253:21)
+    at async handleRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:452:24)
+    at async requestHandlerImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:501:13)
+    at async Server.requestListener (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/start-server.js:225:13)
+⨯ CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at async action (src/app/login/page.tsx:56:15)
+  54 |             <form action={async () => {
+  55 |               "use server"
+> 56 |               await signIn("credentials", {
+     |               ^
+  57 |                 email: 'test@example.com',
+  58 |                 password: 'hans123',
+  59 |                 redirectTo: '/onboarding' {
+  type: 'CredentialsSignin',
+  kind: 'signIn',
+  code: 'credentials',
+  digest: '3534910040'
+}
+ POST /login 500 in 188ms (next.js: 1115µs, proxy.ts: 3ms, application-code: 184ms)
+  └─ ƒ <inline action>() in 7ms src/app/login/page.tsx
+[browser] Uncaught CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at  action (about://React/Server/file:///Users/florianherbst/Documents/Onboarding%20Hans/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0dk8ic.._.js?29:440:5)
+    at resolveErrorDev (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+    at form (<anonymous>)
+    at LoginPage (about://React/Server/file:///Users/florianherbst/Documents/Onboarding%20Hans/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0dk8ic.._.js?28:560:288)
+ GET /login 200 in 9ms (next.js: 926µs, proxy.ts: 1337µs, application-code: 7ms)
+ GET /login 200 in 9ms (next.js: 764µs, proxy.ts: 1494µs, application-code: 7ms)
+ GET /login 200 in 177ms (next.js: 71ms, proxy.ts: 6ms, application-code: 99ms)
+ GET /login 200 in 76ms (next.js: 19ms, proxy.ts: 37ms, application-code: 20ms)
+ GET /login 200 in 25ms (next.js: 4ms, proxy.ts: 3ms, application-code: 18ms)
+[Authorize] Attempting login for: test@example.com
+[Authorize] User not found: test@example.com
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:11711:30)
+    at async AuthInternal (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:12545:24)
+    at async Auth (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:12767:34)
+    at async signIn (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:20317:17)
+    at async action (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0vzzn~~._.js:431:5)
+    at async executeActionAndPrepareForRender (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:64:5248)
+    at async /Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:62:25378)
+    at async renderToHTMLOrFlightImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:69:55630)
+    at async doRender (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:2765:28)
+    at async AppPageRouteModule.handleResponse (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:71:63567)
+    at async handleResponse (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:3040:32)
+    at async Module.handler (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:3443:20)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1454:9)
+    at async DevServer.renderPageComponent (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1506:24)
+    at async DevServer.renderToResponseImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1556:32)
+    at async DevServer.pipeImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1043:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/next-server.js:338:17)
+    at async DevServer.handleRequestImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:934:17)
+    at async /Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/dev/next-dev-server.js:394:20
+    at async Span.traceAsyncFn (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/trace/trace.js:164:20)
+    at async DevServer.handleRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/dev/next-dev-server.js:390:24)
+    at async invokeRender (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:253:21)
+    at async handleRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:452:24)
+    at async requestHandlerImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:501:13)
+    at async Server.requestListener (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/start-server.js:225:13)
+⨯ CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at async action (src/app/login/page.tsx:56:15)
+  54 |             <form action={async () => {
+  55 |               "use server"
+> 56 |               await signIn("credentials", {
+     |               ^
+  57 |                 email: 'test@example.com',
+  58 |                 password: 'hans123',
+  59 |                 redirectTo: '/onboarding' {
+  type: 'CredentialsSignin',
+  kind: 'signIn',
+  code: 'credentials',
+  digest: '111578741'
+}
+ POST /login 500 in 163ms (next.js: 6ms, proxy.ts: 3ms, application-code: 153ms)
+  └─ ƒ <inline action>() in 5ms src/app/login/page.tsx
+[browser] Uncaught CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at  action (about://React/Server/file:///Users/florianherbst/Documents/Onboarding%20Hans/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0vzzn~~._.js?29:431:5)
+    at resolveErrorDev (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+    at form (<anonymous>)
+    at LoginPage (about://React/Server/file:///Users/florianherbst/Documents/Onboarding%20Hans/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0vzzn~~._.js?28:551:288)
+ GET /login 200 in 31ms (next.js: 815µs, proxy.ts: 1760µs, application-code: 29ms)
+ GET /login 200 in 16ms (next.js: 1034µs, proxy.ts: 1782µs, application-code: 13ms)
+[Authorize] Attempting login for: test@example.com
+[Authorize] User not found: test@example.com
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:11711:30)
+    at async AuthInternal (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:12545:24)
+    at async Auth (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:12767:34)
+    at async signIn (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:20317:17)
+    at async action (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0vzzn~~._.js:431:5)
+    at async executeActionAndPrepareForRender (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:64:5248)
+    at async /Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:62:25378)
+    at async renderToHTMLOrFlightImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:69:55630)
+    at async doRender (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:2765:28)
+    at async AppPageRouteModule.handleResponse (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:71:63567)
+    at async handleResponse (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:3040:32)
+    at async Module.handler (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:3443:20)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1454:9)
+    at async DevServer.renderPageComponent (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1506:24)
+    at async DevServer.renderToResponseImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1556:32)
+    at async DevServer.pipeImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1043:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/next-server.js:338:17)
+    at async DevServer.handleRequestImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:934:17)
+    at async /Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/dev/next-dev-server.js:394:20
+    at async Span.traceAsyncFn (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/trace/trace.js:164:20)
+    at async DevServer.handleRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/dev/next-dev-server.js:390:24)
+    at async invokeRender (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:253:21)
+    at async handleRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:452:24)
+    at async requestHandlerImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:501:13)
+    at async Server.requestListener (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/start-server.js:225:13)
+⨯ CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at async action (src/app/login/page.tsx:56:15)
+  54 |             <form action={async () => {
+  55 |               "use server"
+> 56 |               await signIn("credentials", {
+     |               ^
+  57 |                 email: 'test@example.com',
+  58 |                 password: 'hans123',
+  59 |                 redirectTo: '/onboarding' {
+  type: 'CredentialsSignin',
+  kind: 'signIn',
+  code: 'credentials',
+  digest: '111578741'
+}
+ POST /login 500 in 104ms (next.js: 1106µs, proxy.ts: 2ms, application-code: 101ms)
+  └─ ƒ <inline action>() in 3ms src/app/login/page.tsx
+[browser] Uncaught CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at  action (about://React/Server/file:///Users/florianherbst/Documents/Onboarding%20Hans/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0vzzn~~._.js?29:431:5)
+    at resolveErrorDev (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+    at form (<anonymous>)
+    at LoginPage (about://React/Server/file:///Users/florianherbst/Documents/Onboarding%20Hans/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0vzzn~~._.js?28:551:288)
+ GET /login 200 in 9ms (next.js: 820µs, proxy.ts: 1764µs, application-code: 6ms)
+ GET /login 200 in 11ms (next.js: 1142µs, proxy.ts: 1314µs, application-code: 9ms)
+ GET /login 200 in 8ms (next.js: 762µs, proxy.ts: 1195µs, application-code: 6ms)
+ GET /login 200 in 8ms (next.js: 759µs, proxy.ts: 1138µs, application-code: 6ms)
+ GET /login 200 in 16ms (next.js: 851µs, proxy.ts: 1578µs, application-code: 13ms)
+[Authorize] Attempting login for: admin@admin.com
+ GET /admin 200 in 74ms (next.js: 38ms, proxy.ts: 5ms, application-code: 32ms)
+ POST /login 303 in 90ms (next.js: 841µs, proxy.ts: 2ms, application-code: 87ms)
+  └─ ƒ <inline action>() in 6ms src/app/login/page.tsx
+ GET /admin 200 in 59ms (next.js: 1195µs, proxy.ts: 4ms, application-code: 54ms)
+ GET /login 200 in 9ms (next.js: 713µs, proxy.ts: 1067µs, application-code: 8ms)
+ POST /admin 303 in 21ms (next.js: 836µs, proxy.ts: 4ms, application-code: 17ms)
+  └─ ƒ <inline action>() in 4ms src/app/admin/layout.tsx
+[Authorize] Attempting login for: test@example.com
+[Authorize] User not found: test@example.com
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:11711:30)
+    at async AuthInternal (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:12545:24)
+    at async Auth (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:12767:34)
+    at async signIn (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:20317:17)
+    at async action (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0vzzn~~._.js:431:5)
+    at async executeActionAndPrepareForRender (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:64:5248)
+    at async /Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:62:25378)
+    at async renderToHTMLOrFlightImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:69:55630)
+    at async doRender (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:2765:28)
+    at async AppPageRouteModule.handleResponse (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:71:63567)
+    at async handleResponse (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:3040:32)
+    at async Module.handler (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:3443:20)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1454:9)
+    at async DevServer.renderPageComponent (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1506:24)
+    at async DevServer.renderToResponseImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1556:32)
+    at async DevServer.pipeImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1043:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/next-server.js:338:17)
+    at async DevServer.handleRequestImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:934:17)
+    at async /Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/dev/next-dev-server.js:394:20
+    at async Span.traceAsyncFn (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/trace/trace.js:164:20)
+    at async DevServer.handleRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/dev/next-dev-server.js:390:24)
+    at async invokeRender (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:253:21)
+    at async handleRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:452:24)
+    at async requestHandlerImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:501:13)
+    at async Server.requestListener (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/start-server.js:225:13)
+⨯ CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at async action (src/app/login/page.tsx:56:15)
+  54 |             <form action={async () => {
+  55 |               "use server"
+> 56 |               await signIn("credentials", {
+     |               ^
+  57 |                 email: 'test@example.com',
+  58 |                 password: 'hans123',
+  59 |                 redirectTo: '/onboarding' {
+  type: 'CredentialsSignin',
+  kind: 'signIn',
+  code: 'credentials',
+  digest: '111578741'
+}
+ POST /login 500 in 113ms (next.js: 964µs, proxy.ts: 1883µs, application-code: 110ms)
+  └─ ƒ <inline action>() in 3ms src/app/login/page.tsx
+[browser] Uncaught CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at  action (about://React/Server/file:///Users/florianherbst/Documents/Onboarding%20Hans/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0vzzn~~._.js?86:431:5)
+    at resolveErrorDev (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+    at form (<anonymous>)
+    at LoginPage (about://React/Server/file:///Users/florianherbst/Documents/Onboarding%20Hans/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0vzzn~~._.js?81:551:288)
+ GET /login 200 in 8ms (next.js: 945µs, proxy.ts: 1048µs, application-code: 6ms)
+ GET /login 200 in 8ms (next.js: 775µs, proxy.ts: 1231µs, application-code: 6ms)
+ GET /login 200 in 26ms (next.js: 3ms, proxy.ts: 4ms, application-code: 19ms)
+[Authorize] Attempting login for: test@example.com
+[Authorize] User not found: test@example.com
+[31m[auth][error][0m CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at Module.callback (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:11711:30)
+    at async AuthInternal (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:12545:24)
+    at async Auth (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:12767:34)
+    at async signIn (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0hviu_r._.js:20317:17)
+    at async action (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/[root-of-the-server]__0vzzn~~._.js:431:5)
+    at async executeActionAndPrepareForRender (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:64:5248)
+    at async /Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:64:1986
+    at async handleAction (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:62:25378)
+    at async renderToHTMLOrFlightImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:69:55630)
+    at async doRender (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:2765:28)
+    at async AppPageRouteModule.handleResponse (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js:71:63567)
+    at async handleResponse (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:3040:32)
+    at async Module.handler (/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/chunks/ssr/node_modules_next_dist_0n4ske1._.js:3443:20)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1454:9)
+    at async DevServer.renderPageComponent (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1506:24)
+    at async DevServer.renderToResponseImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1556:32)
+    at async DevServer.pipeImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:1043:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/next-server.js:338:17)
+    at async DevServer.handleRequestImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/base-server.js:934:17)
+    at async /Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/dev/next-dev-server.js:394:20
+    at async Span.traceAsyncFn (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/trace/trace.js:164:20)
+    at async DevServer.handleRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/dev/next-dev-server.js:390:24)
+    at async invokeRender (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:253:21)
+    at async handleRequest (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:452:24)
+    at async requestHandlerImpl (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/router-server.js:501:13)
+    at async Server.requestListener (/Users/florianherbst/Documents/Onboarding Hans/node_modules/next/dist/server/lib/start-server.js:225:13)
+⨯ CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at async action (src/app/login/page.tsx:56:15)
+  54 |             <form action={async () => {
+  55 |               "use server"
+> 56 |               await signIn("credentials", {
+     |               ^
+  57 |                 email: 'test@example.com',
+  58 |                 password: 'hans123',
+  59 |                 redirectTo: '/onboarding' {
+  type: 'CredentialsSignin',
+  kind: 'signIn',
+  code: 'credentials',
+  digest: '111578741'
+}
+ POST /login 500 in 140ms (next.js: 825µs, proxy.ts: 1779µs, application-code: 137ms)
+  └─ ƒ <inline action>() in 3ms src/app/login/page.tsx
+[browser] Uncaught CredentialsSignin: Read more at https://errors.authjs.dev#credentialssignin
+    at  action (about://React/Server/file:///Users/florianherbst/Documents/Onboarding%20Hans/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0vzzn~~._.js?29:431:5)
+    at resolveErrorDev (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+    at form (<anonymous>)
+    at LoginPage (about://React/Server/file:///Users/florianherbst/Documents/Onboarding%20Hans/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0vzzn~~._.js?28:551:288)
+ GET /login 200 in 66ms (next.js: 23ms, proxy.ts: 1888µs, application-code: 41ms)
+[Authorize] Attempting login for: test@example.com
+ GET /onboarding 200 in 34ms (next.js: 13ms, proxy.ts: 2ms, application-code: 18ms)
+ POST /login 303 in 54ms (next.js: 6ms, proxy.ts: 2ms, application-code: 45ms)
+  └─ ƒ <inline action>() in 7ms src/app/login/page.tsx
+ GET /onboarding/personal-data 200 in 39ms (next.js: 10ms, proxy.ts: 4ms, application-code: 26ms)
+ GET /onboarding/personal-data 200 in 34ms (next.js: 5ms, proxy.ts: 16ms, application-code: 13ms)
+ GET /onboarding/contract 200 in 34ms (next.js: 13ms, proxy.ts: 2ms, application-code: 19ms)
+ POST /onboarding/personal-data 303 in 48ms (next.js: 897µs, proxy.ts: 3ms, application-code: 44ms)
+  └─ ƒ <inline action>({}) in 5ms src/app/onboarding/personal-data/page.tsx
+ POST /onboarding/contract 200 in 12ms (next.js: 1004µs, proxy.ts: 4ms, application-code: 8ms)
+  └─ ƒ signContract("data:image/png;base64,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") in 5ms src/app/onboarding/contract/actions.ts
+ GET /onboarding/instructions 200 in 64ms (next.js: 15ms, proxy.ts: 3ms, application-code: 46ms)
+ GET /onboarding/video 200 in 36ms (next.js: 15ms, proxy.ts: 2ms, application-code: 19ms)
+ POST /onboarding/instructions 303 in 49ms (next.js: 1014µs, proxy.ts: 4ms, application-code: 44ms)
+  └─ ƒ <inline action>({}) in 4ms src/app/onboarding/instructions/page.tsx
+ GET /onboarding/success 200 in 33ms (next.js: 12ms, proxy.ts: 2ms, application-code: 19ms)
+ POST /onboarding/video 303 in 337ms (next.js: 999µs, proxy.ts: 4ms, application-code: 332ms)
+  └─ ƒ <inline action>() in 296ms src/app/onboarding/video/page.tsx
+ GET /dashboard 200 in 60ms (next.js: 24ms, proxy.ts: 3ms, application-code: 33ms)
+ GET /dashboard 200 in 180ms (next.js: 48ms, proxy.ts: 58ms, application-code: 73ms)
+ GET /dashboard 200 in 25ms (next.js: 1772µs, proxy.ts: 10ms, application-code: 13ms)
+ GET /dashboard 200 in 21ms (next.js: 2ms, proxy.ts: 6ms, application-code: 13ms)
+ GET /dashboard 200 in 23ms (next.js: 2ms, proxy.ts: 6ms, application-code: 15ms)
+ GET /dashboard 200 in 20ms (next.js: 1368µs, proxy.ts: 6ms, application-code: 13ms)
+ GET /dashboard 200 in 21ms (next.js: 1021µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /dashboard 200 in 21ms (next.js: 1006µs, proxy.ts: 6ms, application-code: 14ms)
+ GET /dashboard 200 in 22ms (next.js: 1314µs, proxy.ts: 6ms, application-code: 15ms)
+ GET /dashboard 200 in 26ms (next.js: 1293µs, proxy.ts: 8ms, application-code: 18ms)
+ GET /dashboard 200 in 36ms (next.js: 1235µs, proxy.ts: 10ms, application-code: 25ms)
+ GET /dashboard 200 in 31ms (next.js: 1711µs, proxy.ts: 14ms, application-code: 15ms)
+ GET /dashboard 200 in 26ms (next.js: 1716µs, proxy.ts: 7ms, application-code: 17ms)
+ GET /dashboard 200 in 24ms (next.js: 1240µs, proxy.ts: 7ms, application-code: 15ms)
+ GET /dashboard 200 in 26ms (next.js: 2ms, proxy.ts: 7ms, application-code: 16ms)
+ GET /dashboard 200 in 24ms (next.js: 2ms, proxy.ts: 7ms, application-code: 15ms)
+ GET /dashboard 200 in 21ms (next.js: 995µs, proxy.ts: 7ms, application-code: 13ms)
+ GET /dashboard 200 in 20ms (next.js: 1132µs, proxy.ts: 6ms, application-code: 13ms)
+ GET /dashboard 200 in 19ms (next.js: 1270µs, proxy.ts: 5ms, application-code: 13ms)
+ GET /dashboard 200 in 20ms (next.js: 991µs, proxy.ts: 6ms, application-code: 13ms)
+ GET /dashboard 200 in 26ms (next.js: 1294µs, proxy.ts: 5ms, application-code: 20ms)
+ GET /dashboard 200 in 21ms (next.js: 853µs, proxy.ts: 7ms, application-code: 13ms)
+ GET /dashboard 200 in 19ms (next.js: 1010µs, proxy.ts: 5ms, application-code: 12ms)
+ GET /dashboard 200 in 18ms (next.js: 1227µs, proxy.ts: 5ms, application-code: 12ms)
+ GET /dashboard 200 in 22ms (next.js: 1014µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /dashboard 200 in 22ms (next.js: 1184µs, proxy.ts: 8ms, application-code: 13ms)
+ GET /dashboard 200 in 23ms (next.js: 5ms, proxy.ts: 5ms, application-code: 12ms)
+ GET /dashboard 200 in 17ms (next.js: 932µs, proxy.ts: 5ms, application-code: 11ms)
+ GET /dashboard 200 in 18ms (next.js: 960µs, proxy.ts: 5ms, application-code: 12ms)
+ GET /dashboard 200 in 21ms (next.js: 1136µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /dashboard 200 in 18ms (next.js: 1050µs, proxy.ts: 6ms, application-code: 12ms)
+ GET /dashboard 200 in 17ms (next.js: 988µs, proxy.ts: 5ms, application-code: 11ms)
+ GET /dashboard 200 in 18ms (next.js: 965µs, proxy.ts: 5ms, application-code: 12ms)
+ GET /dashboard 200 in 20ms (next.js: 736µs, proxy.ts: 6ms, application-code: 14ms)
+ GET /dashboard 200 in 20ms (next.js: 3ms, proxy.ts: 5ms, application-code: 12ms)
+ GET /dashboard 200 in 18ms (next.js: 970µs, proxy.ts: 5ms, application-code: 12ms)
+ GET /dashboard 200 in 18ms (next.js: 1109µs, proxy.ts: 5ms, application-code: 12ms)
+ GET /dashboard 200 in 20ms (next.js: 999µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /dashboard 200 in 23ms (next.js: 1654µs, proxy.ts: 6ms, application-code: 15ms)
+✓ Compiled in 404ms
+ GET /dashboard 200 in 84ms (next.js: 27ms, proxy.ts: 32ms, application-code: 25ms)
+ GET /dashboard 200 in 22ms (next.js: 1116µs, proxy.ts: 6ms, application-code: 14ms)
+ GET /dashboard 200 in 17ms (next.js: 1010µs, proxy.ts: 6ms, application-code: 10ms)
+ GET /dashboard 200 in 44ms (next.js: 1099µs, proxy.ts: 5ms, application-code: 38ms)
+ GET /dashboard 200 in 85ms (next.js: 24ms, proxy.ts: 41ms, application-code: 20ms)
+ GET /dashboard/contract 200 in 572ms (next.js: 433ms, proxy.ts: 3ms, application-code: 136ms)
+ GET /dashboard 200 in 17ms (next.js: 1311µs, proxy.ts: 6ms, application-code: 9ms)
+ GET /dashboard 200 in 24ms (next.js: 995µs, proxy.ts: 3ms, application-code: 20ms)
+ GET /dashboard 200 in 28ms (next.js: 1747µs, proxy.ts: 6ms, application-code: 20ms)
+✓ Compiled in 12ms
+✓ Compiled in 5ms
+ GET /dashboard 200 in 69ms (next.js: 1879µs, proxy.ts: 3ms, application-code: 64ms)
+ GET /dashboard 200 in 28ms (next.js: 6ms, proxy.ts: 3ms, application-code: 18ms)
+ GET /onboarding/success 200 in 68ms (next.js: 21ms, proxy.ts: 3ms, application-code: 44ms)
+ GET /dashboard 200 in 27ms (next.js: 5ms, proxy.ts: 4ms, application-code: 17ms)
+ GET /dashboard/contract 200 in 31ms (next.js: 7ms, proxy.ts: 4ms, application-code: 21ms)
+ GET /dashboard/contract 200 in 23ms (next.js: 990µs, proxy.ts: 3ms, application-code: 19ms)
+✓ Compiled in 2ms
+⨯ ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+✓ Compiled in 477ms
+⨯ ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/contract 500 in 175ms (next.js: 55ms, proxy.ts: 39ms, application-code: 80ms)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+⨯ ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/contract 500 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+⨯ ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/contract 500 in 13ms (next.js: 2ms, proxy.ts: 7ms, application-code: 4ms)
+⨯ ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/contract 500 in 13ms (next.js: 5ms, proxy.ts: 4ms, application-code: 4ms)
+[browser] Uncaught Error: ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./node_modules/fflate/lib/node.cjs:22:13)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+⨯ ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/contract 500 in 11ms (next.js: 3ms, proxy.ts: 4ms, application-code: 4ms)
+[browser] Uncaught Error: ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./node_modules/fflate/lib/node.cjs:22:13)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] Uncaught Error: ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./node_modules/fflate/lib/node.cjs:22:13)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+⨯ ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/contract 500 in 22ms (next.js: 6ms, proxy.ts: 12ms, application-code: 4ms)
+[browser] Uncaught Error: ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./node_modules/fflate/lib/node.cjs:22:13)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+⨯ ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+⨯ ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error
+
+
+
+./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/contract 500 in 36ms (next.js: 13ms, proxy.ts: 18ms, application-code: 6ms)
+[browser] Uncaught Error: ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error
+
+
+    at <unknown> (Error: ./src/app/dashboard/contract/page.tsx:7:21)
+    at <unknown> (Error: (./src/app/dashboard/contract/page.tsx:7:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+⨯ ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error
+
+
+
+./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/contract 500 in 17ms (next.js: 1841µs, proxy.ts: 12ms, application-code: 3ms)
+[browser] Uncaught Error: ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error
+
+
+    at <unknown> (Error: ./src/app/dashboard/contract/page.tsx:7:21)
+    at <unknown> (Error: (./src/app/dashboard/contract/page.tsx:7:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] Uncaught Error: ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error
+
+
+    at <unknown> (Error: ./src/app/dashboard/contract/page.tsx:7:21)
+    at <unknown> (Error: (./src/app/dashboard/contract/page.tsx:7:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+⨯ ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error
+
+
+
+./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/contract 500 in 10ms (next.js: 3ms, proxy.ts: 3ms, application-code: 4ms)
+[browser] Uncaught Error: ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error
+
+
+    at <unknown> (Error: ./src/app/dashboard/contract/page.tsx:7:21)
+    at <unknown> (Error: (./src/app/dashboard/contract/page.tsx:7:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+⨯ ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error
+
+
+
+./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/contract 500 in 8ms (next.js: 1622µs, proxy.ts: 3ms, application-code: 3ms)
+[browser] Uncaught Error: ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error
+
+
+    at <unknown> (Error: ./src/app/dashboard/contract/page.tsx:7:21)
+    at <unknown> (Error: (./src/app/dashboard/contract/page.tsx:7:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/dashboard/contract/page.tsx:7:21
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+Ecmascript file had an error 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./node_modules/fflate/lib/node.cjs:22:13
+Module not found: Can't resolve <dynamic>
+
+Import trace:
+  Client Component SSR:
+    ./node_modules/fflate/lib/node.cjs [Client Component SSR]
+    ./node_modules/jspdf/dist/jspdf.node.min.js [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Client Component SSR]
+    ./src/components/ui/PrintButton.tsx [Server Component]
+    ./src/app/dashboard/contract/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file:///Users/florianherbst/Documents/Onboarding Hans/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+ GET /dashboard/contract 200 in 176ms (next.js: 102ms, proxy.ts: 5ms, application-code: 70ms)
+ GET /dashboard/contract 200 in 139ms (next.js: 41ms, proxy.ts: 48ms, application-code: 49ms)
+ GET /dashboard/contract 200 in 109ms (next.js: 33ms, proxy.ts: 35ms, application-code: 41ms)
+ GET /dashboard/contract 200 in 32ms (next.js: 1500µs, proxy.ts: 8ms, application-code: 23ms)
+ GET /dashboard/contract 200 in 40ms (next.js: 3ms, proxy.ts: 5ms, application-code: 32ms)
+ GET /dashboard/contract 200 in 52ms (next.js: 3ms, proxy.ts: 5ms, application-code: 44ms)
+ GET /dashboard/contract 200 in 55ms (next.js: 5ms, proxy.ts: 8ms, application-code: 42ms)
+ GET /dashboard/contract 200 in 44ms (next.js: 945µs, proxy.ts: 20ms, application-code: 23ms)
+ GET /dashboard/contract 200 in 32ms (next.js: 1450µs, proxy.ts: 6ms, application-code: 24ms)
+ GET /dashboard/contract 200 in 32ms (next.js: 2ms, proxy.ts: 5ms, application-code: 25ms)
+ GET /dashboard/contract 200 in 33ms (next.js: 3ms, proxy.ts: 5ms, application-code: 24ms)
+ GET /dashboard/contract 200 in 33ms (next.js: 3ms, proxy.ts: 6ms, application-code: 24ms)
+ GET /dashboard/contract 200 in 32ms (next.js: 1557µs, proxy.ts: 7ms, application-code: 24ms)
+ GET /dashboard/contract 200 in 35ms (next.js: 1616µs, proxy.ts: 6ms, application-code: 27ms)
+ GET /dashboard/contract 200 in 25ms (next.js: 4ms, proxy.ts: 7ms, application-code: 15ms)
+ GET /dashboard 200 in 76ms (next.js: 26ms, proxy.ts: 9ms, application-code: 41ms)
+ GET /dashboard/contract 200 in 31ms (next.js: 1587µs, proxy.ts: 3ms, application-code: 26ms)
+ GET /dashboard 200 in 20ms (next.js: 1128µs, proxy.ts: 2ms, application-code: 16ms)
+ GET /login 200 in 38ms (next.js: 25ms, proxy.ts: 1720µs, application-code: 12ms)
+ POST /dashboard 303 in 54ms (next.js: 861µs, proxy.ts: 3ms, application-code: 49ms)
+  └─ ƒ handleSignOut() in 4ms src/app/dashboard/actions.ts
+[Authorize] Attempting login for: test@example.com
+ GET /onboarding 200 in 29ms (next.js: 9ms, proxy.ts: 2ms, application-code: 18ms)
+ POST /login 303 in 40ms (next.js: 822µs, proxy.ts: 1751µs, application-code: 38ms)
+  └─ ƒ <inline action>() in 6ms src/app/login/page.tsx
+ GET /dashboard 200 in 20ms (next.js: 1024µs, proxy.ts: 4ms, application-code: 15ms)
+ GET /dashboard 200 in 18ms (next.js: 1308µs, proxy.ts: 5ms, application-code: 12ms)
+ GET /login 200 in 10ms (next.js: 714µs, proxy.ts: 1066µs, application-code: 8ms)
+ POST /dashboard 303 in 21ms (next.js: 930µs, proxy.ts: 4ms, application-code: 16ms)
+  └─ ƒ handleSignOut() in 4ms src/app/dashboard/actions.ts
+[Authorize] Attempting login for: admin@admin.com
+ GET /admin 200 in 103ms (next.js: 34ms, proxy.ts: 2ms, application-code: 67ms)
+ POST /login 303 in 115ms (next.js: 860µs, proxy.ts: 1492µs, application-code: 113ms)
+  └─ ƒ <inline action>() in 6ms src/app/login/page.tsx
+ GET /admin/payslips 200 in 151ms (next.js: 134ms, proxy.ts: 4ms, application-code: 12ms)
+ GET /admin/archive 200 in 32ms (next.js: 19ms, proxy.ts: 3ms, application-code: 10ms)
+ GET /admin 200 in 12ms (next.js: 778µs, proxy.ts: 3ms, application-code: 9ms)
+ GET /admin/archive 200 in 11ms (next.js: 792µs, proxy.ts: 3ms, application-code: 7ms)
+ GET /admin/content 200 in 27ms (next.js: 14ms, proxy.ts: 2ms, application-code: 11ms)
+ GET /admin/payslips 200 in 13ms (next.js: 889µs, proxy.ts: 3ms, application-code: 9ms)
+ GET /admin 200 in 14ms (next.js: 868µs, proxy.ts: 3ms, application-code: 9ms)

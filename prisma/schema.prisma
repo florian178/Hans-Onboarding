@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id               String            @id @default(cuid())
+  name             String?
+  email            String?           @unique
+  emailVerified    DateTime?
+  image            String?
+  role             String            @default("EMPLOYEE")
+  isArchived       Boolean           @default(false)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  startDate        DateTime?
+  accounts         Account[]
+  documents        Document[]
+  onboardingStatus OnboardingStatus?
+  payslips         Payslip[]
+  sessions         Session[]
+  stepProgresses   StepProgress[]
+}
+
+model Payslip {
+  id         String   @id @default(cuid())
+  month      Int
+  year       Int
+  url        String
+  uploadedAt DateTime @default(now())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, month, year])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model OnboardingStatus {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  status    String   @default("INVITED")
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model StepProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  stepId    String
+  completed Boolean  @default(false)
+  data      String?
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, stepId])
+}
+
+model Document {
+  id         String   @id @default(cuid())
+  name       String
+  url        String
+  type       String
+  userId     String?
+  uploadedAt DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id])
+}

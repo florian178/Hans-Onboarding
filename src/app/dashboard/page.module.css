@@ -1,0 +1,104 @@
+.container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1d1d1f;
+}
+
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #d2d2d7;
+  padding-bottom: 0.5rem;
+}
+
+.tab {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #86868b;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.tab:hover {
+  color: #1d1d1f;
+}
+
+.activeTab {
+  color: #1d1d1f;
+  font-weight: 600;
+}
+
+.activeTab::after {
+  content: "";
+  position: absolute;
+  bottom: -0.6rem;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #0071e3;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.docCard {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.docCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.docIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.docTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.docInfo {
+  font-size: 0.9rem;
+  color: #86868b;
+  margin-bottom: 1.5rem;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 4rem 2.5rem;
+  color: #86868b;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  grid-column: 1 / -1;
+}

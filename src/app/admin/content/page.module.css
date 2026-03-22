@@ -1,0 +1,128 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.headerArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 400px 1fr;
+    align-items: start;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.selectWrapper, .fileInputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.select, .fileInput {
+  display: flex;
+  height: 2.5rem;
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--background);
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  color: var(--foreground);
+}
+
+.fileInput {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.docName {
+  font-weight: 500;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  color: var(--secondary-foreground);
+  background: var(--surface-hover);
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--radius-full);
+  align-self: flex-start;
+}
+
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.link {
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.deleteBtn {
+  color: var(--error) !important;
+}
+
+.deleteBtn:hover {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+.empty {
+  color: var(--secondary-foreground);
+  text-align: center;
+  padding: 2rem;
+}

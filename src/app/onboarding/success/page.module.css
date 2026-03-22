@@ -1,0 +1,57 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.card {
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.5s ease forwards, popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.95); }
+  to { transform: scale(1); }
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.title {
+  font-size: 1.75rem !important;
+  color: var(--success);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.message {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--foreground);
+}
+
+.outro {
+  font-size: 0.9rem;
+  color: var(--secondary-foreground);
+  margin-top: 1rem;
+}

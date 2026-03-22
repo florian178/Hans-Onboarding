@@ -1,0 +1,111 @@
+.card {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.description {
+  color: var(--secondary-foreground);
+  font-size: 1.0625rem;
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+
+.contentArea {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.docsList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .docsList {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.docItem {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.docItem:hover {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+@media (prefers-color-scheme: dark) {
+  .docItem:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.docIcon {
+  font-size: 2rem;
+  filter: grayscale(0.2);
+}
+
+.docName {
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.confirmSection {
+  background-color: var(--secondary);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  margin-top: 0.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.checkbox {
+  margin-top: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  accent-color: var(--ring);
+  cursor: pointer;
+}
+
+.checkboxLabel {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--foreground);
+  cursor: pointer;
+  letter-spacing: -0.01em;
+}
+
+.signatureWrapper {
+  max-width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+  margin-top: 0.5rem;
+}

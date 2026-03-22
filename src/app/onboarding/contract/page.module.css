@@ -1,0 +1,95 @@
+.card {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.description {
+  color: var(--secondary-foreground);
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+.contentArea {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.downloadSection {
+  padding: 1.5rem;
+  background-color: var(--surface-hover);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.downloadLink {
+  text-decoration: none;
+}
+
+.missing {
+  padding: 2rem;
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--error);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--error);
+  text-align: center;
+}
+
+.uploadSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.uploadTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.fileInputWrapper {
+  display: flex;
+  align-items: center;
+  border: 2px dashed var(--border);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--background);
+  transition: border-color 0.2s;
+}
+
+.fileInputWrapper:hover {
+  border-color: var(--primary);
+}
+
+.fileInput {
+  width: 100%;
+  font-family: inherit;
+  color: var(--foreground);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.skipLink {
+  text-decoration: none;
+}
