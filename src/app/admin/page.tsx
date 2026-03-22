@@ -33,6 +33,10 @@ export default async function AdminDashboard() {
 
     let user = await prisma.user.findUnique({ where: { email } })
     
+    // Generate a random 8-character password
+    const rawPassword = crypto.randomBytes(4).toString("hex") // 8 characters
+    const hashedPassword = crypto.createHash("sha256").update(rawPassword).digest("hex")
+
     if (!user) {
       user = await prisma.user.create({
         data: {
@@ -40,46 +44,39 @@ export default async function AdminDashboard() {
           name,
           role: 'EMPLOYEE',
           startDate,
+          password: hashedPassword,
           onboardingStatus: {
             create: { status: 'INVITED' }
           }
         }
       })
-    } else if (!user.startDate && startDate) {
+    } else {
       await prisma.user.update({
         where: { id: user.id },
-        data: { startDate }
+        data: { 
+          startDate: startDate || user.startDate,
+          password: hashedPassword
+        }
       })
     }
 
-    const token = crypto.randomBytes(32).toString("hex")
-    const expires = new Date(Date.now() + 1000 * 60 * 60 * 24)
+    const loginUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
 
-    // Auth.js expects the token in the DB to be a SHA256 hash of (token + secret)
-    const secret = process.env.AUTH_SECRET || "f33a7e583c748c8b6b1cb1dd7e0aa8b5"
-    const hashedToken = crypto.createHash("sha256").update(`${token}${secret}`).digest("hex")
-
-    await prisma.verificationToken.create({
-      data: {
-        identifier: email,
-        token: hashedToken,
-        expires,
-      }
-    })
-
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
-    const magicLink = `${baseUrl}/api/auth/callback/resend?callbackUrl=${encodeURIComponent('/')}&token=${token}&email=${encodeURIComponent(email)}`
-
-    // Always log for development convenience
-    console.log(`\n\n[Magic Link generated]:\nTo: ${email}\nURL: ${magicLink}\n\n`)
+    console.log(`\n\n[Employee Invited]:\nTo: ${email}\nPassword: ${rawPassword}\n\n`)
 
     if (process.env.RESEND_API_KEY) {
       try {
         await resend.emails.send({
           from: "onboarding@resend.dev",
           to: email,
-          subject: "Einladung zum Onboarding",
-          html: `<p>Hallo ${name},</p><p>Du wurdest in unser Onboarding-System eingeladen.</p><p><a href="${magicLink}">Klicke hier, um dein Onboarding zu starten</a></p>`,
+          subject: "Deine Einladung zum Hans im Club Onboarding",
+          html: `
+            <p>Hallo ${name},</p>
+            <p>Du wurdest zum Onboarding-System von Hans im Club eingeladen.</p>
+            <p>Bitte logge dich mit deiner E-Mail und dem folgenden Passwort ein:</p>
+            <p><strong>Passwort:</strong> ${rawPassword}</p>
+            <p><a href="${loginUrl}">Hier geht's zum Login</a></p>
+          `,
         })
       } catch (e: unknown) {
         console.error("[Resend API Error]:", (e as Error).message)

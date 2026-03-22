@@ -14,8 +14,8 @@ export default function LoginPage() {
       </div>
       <Card className={clsx(styles.loginCard, "glass")}>
         <CardHeader>
-          <CardTitle>Admin Login</CardTitle>
-          <p className={styles.subtitle}>Bitte melde dich mit deinen Zugangsdaten an, um Mitarbeiter einzuladen.</p>
+          <CardTitle>Login</CardTitle>
+          <p className={styles.subtitle}>Bitte melde dich mit deiner E-Mail und deinem Passwort an.</p>
         </CardHeader>
         <CardContent>
           <form
@@ -24,7 +24,7 @@ export default function LoginPage() {
               await signIn("credentials", {
                 email: formData.get("email"),
                 password: formData.get("password"),
-                redirectTo: "/admin",
+                redirectTo: "/",
               })
             }}
             className={styles.form}

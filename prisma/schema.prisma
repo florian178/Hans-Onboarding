@@ -39,6 +39,7 @@ model User {
   email            String?           @unique
   emailVerified    DateTime?
   image            String?
+  password         String?
   role             String            @default("EMPLOYEE")
   isArchived       Boolean           @default(false)
   createdAt        DateTime          @default(now())
