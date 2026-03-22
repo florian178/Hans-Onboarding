@@ -42,3 +42,34 @@
     grid-column: span 1;
   }
 }
+
+.passwordSection {
+  grid-column: span 2;
+  margin-top: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.sectionHint {
+  color: var(--secondary-foreground);
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.passwordGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .passwordGrid {
+    grid-template-columns: 1fr;
+  }
+}

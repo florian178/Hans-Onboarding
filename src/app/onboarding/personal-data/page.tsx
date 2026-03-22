@@ -1,5 +1,6 @@
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import crypto from "crypto"
 import { redirect } from "next/navigation"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card"
 import { Input } from "@/components/ui/Input"
@@ -38,6 +39,17 @@ export default async function PersonalDataStep() {
       zipCode: formData.get("zipCode"),
       phone: formData.get("phone"),
       iban: formData.get("iban"),
+    }
+
+    const password = formData.get("password") as string
+    const confirmPassword = formData.get("confirmPassword") as string
+
+    if (password && password === confirmPassword) {
+      const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
+      await prisma.user.update({
+        where: { id: session.user.id! },
+        data: { password: hashedPassword }
+      })
     }
 
     await prisma.stepProgress.upsert({
@@ -82,6 +94,15 @@ export default async function PersonalDataStep() {
             <Input label="Stadt" name="city" defaultValue={defaultData.city || ""} required />
             <Input label="Telefonnummer" type="tel" name="phone" defaultValue={defaultData.phone || ""} required className={styles.fullWidth} />
             <Input label="IBAN" name="iban" defaultValue={defaultData.iban || ""} required className={styles.fullWidth} />
+            
+            <div className={styles.passwordSection}>
+              <h3 className={styles.sectionTitle}>Login-Sicherheit</h3>
+              <p className={styles.sectionHint}>Lege hier dein persönliches Passwort für künftige Anmeldungen fest.</p>
+              <div className={styles.passwordGrid}>
+                <Input label="Neues Passwort" type="password" name="password" required />
+                <Input label="Passwort bestätigen" type="password" name="confirmPassword" required />
+              </div>
+            </div>
           </div>
           
           <div className={styles.actions}>
