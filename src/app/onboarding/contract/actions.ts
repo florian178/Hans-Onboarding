@@ -3,8 +3,6 @@
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
-import { writeFile, mkdir } from "fs/promises"
-import path from "path"
 
 export async function signContract(signatureBase64: string) {
   const session = await auth()
@@ -12,27 +10,13 @@ export async function signContract(signatureBase64: string) {
 
   const userId = session.user.id!
 
-  // The base64 string comes as "data:image/png;base64,...""
-  const base64Data = signatureBase64.replace(/^data:image\/png;base64,/, "")
-  const buffer = Buffer.from(base64Data, 'base64')
-  
-  const filename = `${userId}_signature_${Date.now()}.png`
-  const baseUploadDir = path.join(process.cwd(), "public", "uploads", "signatures")
-  const filepath = path.join(baseUploadDir, filename)
-  
-  try {
-    await mkdir(baseUploadDir, { recursive: true })
-    await writeFile(filepath, buffer)
-  } catch (e) {
-    console.error("Signature save error", e)
-    throw new Error("Failed to save signature")
-  }
-
-  // Create a record for the signed contract
+  // In a Vercel serverless environment, the filesystem is read-only.
+  // Instead of saving the signature as a file, we store the Base64 Data URL 
+  // directly in the Postgres database (url field maps to TEXT).
   await prisma.document.create({
     data: {
       name: `Digital unterschriebener Arbeitsvertrag (${session.user.name || userId})`,
-      url: `/uploads/signatures/${filename}`,
+      url: signatureBase64,
       type: "CONTRACT_SIGNED",
       userId: userId
     }
@@ -45,5 +29,5 @@ export async function signContract(signatureBase64: string) {
     update: { completed: true }
   })
 
-  return { success: true, url: `/uploads/signatures/${filename}` }
+  return { success: true, url: signatureBase64 }
 }
