@@ -4,13 +4,12 @@ export const authConfig = {
   providers: [],
   pages: {
     signIn: "/login",
-    verifyRequest: "/verify-request",
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isAuthRoute = nextUrl.pathname.startsWith('/api/auth');
-      const isPublicRoute = nextUrl.pathname === '/' || nextUrl.pathname === '/login' || nextUrl.pathname === '/verify-request';
+      const isPublicRoute = nextUrl.pathname === '/' || nextUrl.pathname === '/login';
       
       if (isAuthRoute) return true;
 
@@ -66,7 +65,7 @@ export const authConfig = {
         token.role = (user as { role?: string }).role;
         token.onboardingStatus = (user as { onboardingStatus?: { status?: string } }).onboardingStatus?.status;
       }
-      if (token.email === "admin@admin.com") {
+      if (token.email === "admin@hansimclub.de") {
         token.role = "ADMIN";
       }
       return token;
