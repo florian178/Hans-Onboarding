@@ -1486,3 +1486,7 @@ https://nextjs.org/docs/messages/module-not-found
  GET /admin/content 200 in 27ms (next.js: 14ms, proxy.ts: 2ms, application-code: 11ms)
  GET /admin/payslips 200 in 13ms (next.js: 889µs, proxy.ts: 3ms, application-code: 9ms)
  GET /admin 200 in 14ms (next.js: 868µs, proxy.ts: 3ms, application-code: 9ms)
+✓ Compiled in 276ms
+✓ Compiled in 37ms
+✓ Compiled in 71ms
+✓ Compiled in 6ms

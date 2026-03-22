@@ -26,19 +26,37 @@ export function PrintButton({ className, label = "Als PDF herunterladen" }: { cl
       
       const imgData = canvas.toDataURL("image/png")
       const pdf = new jsPDF("p", "mm", "a4")
-      const pdfWidth = pdf.internal.pageSize.getWidth()
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width
-      const pageHeight = pdf.internal.pageSize.getHeight()
       
-      let position = 0
-      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight)
-      let heightLeft = pdfHeight - pageHeight
+      const margin = 15 // 15mm margin
+      const pageWidth = pdf.internal.pageSize.getWidth()
+      const pageHeight = pdf.internal.pageSize.getHeight()
+      const usableWidth = pageWidth - 2 * margin
+      const usableHeight = pageHeight - 2 * margin
+      
+      const imgHeight = (canvas.height * usableWidth) / canvas.width
+      
+      let position = margin
+      let heightLeft = imgHeight
 
+      // Page 1
+      pdf.addImage(imgData, "PNG", margin, position, usableWidth, imgHeight)
+      pdf.setFillColor(255, 255, 255)
+      pdf.rect(0, pageHeight - margin, pageWidth, margin, "F") // mask bottom
+      
+      heightLeft -= usableHeight
+
+      // Additional Pages
       while (heightLeft > 0) {
-        position = position - pageHeight
+        position = position - usableHeight
         pdf.addPage()
-        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight)
-        heightLeft -= pageHeight
+        pdf.addImage(imgData, "PNG", margin, position, usableWidth, imgHeight)
+        
+        // mask top and bottom margins
+        pdf.setFillColor(255, 255, 255)
+        pdf.rect(0, 0, pageWidth, margin, "F")
+        pdf.rect(0, pageHeight - margin, pageWidth, margin, "F")
+        
+        heightLeft -= usableHeight
       }
       
       pdf.save("Arbeitsvertrag.pdf")
