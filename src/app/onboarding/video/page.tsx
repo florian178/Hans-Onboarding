@@ -34,9 +34,10 @@ export default async function VideoStep() {
       update: { completed: true }
     })
 
-    await prisma.onboardingStatus.update({
+    await prisma.onboardingStatus.upsert({
       where: { userId: session.user.id! },
-      data: { status: "COMPLETED" }
+      create: { userId: session.user.id!, status: "COMPLETED" },
+      update: { status: "COMPLETED" }
     })
 
     if (process.env.RESEND_API_KEY) {
