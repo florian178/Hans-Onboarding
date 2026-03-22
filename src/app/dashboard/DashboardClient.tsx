@@ -44,7 +44,7 @@ export default function DashboardClient({ user, documents, payslips }: Dashboard
     <div className={styles.container}>
       <header className={styles.header}>
         <div>
-          <h1 className={styles.title}>Hallo, {user.name || "Mitarbeiter/-in"}</h1>
+          <h1 className={styles.title}>Hallo, {user.name}</h1>
           <p className={styles.subtitle}>Willkommen in deinem Mitarbeiter-Bereich.</p>
         </div>
         <form action={handleSignOut}>

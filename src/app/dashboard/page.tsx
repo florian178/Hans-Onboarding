@@ -32,15 +32,31 @@ export default async function DashboardPage() {
     redirect("/onboarding")
   }
 
+  const personalDataProgress = await prisma.stepProgress.findUnique({
+    where: { userId_stepId: { userId, stepId: "personal-data" } }
+  })
+
+  let firstName = ""
+  if (personalDataProgress?.data) {
+    try {
+      const parsed = JSON.parse(personalDataProgress.data)
+      firstName = parsed.firstName || ""
+    } catch {
+      // ignore JSON parse error
+    }
+  }
+
+  const displayName = firstName || user?.name?.split(" ")[0] || "Mitarbeiter/-in"
+
   return (
     <DashboardClient 
       user={{
-        name: user.name,
-        email: user.email,
-        startDate: user.startDate
+        name: displayName,
+        email: user?.email || null,
+        startDate: user?.startDate || null
       }}
-      documents={user.documents || []}
-      payslips={user.payslips || []}
+      documents={user?.documents || []}
+      payslips={user?.payslips || []}
     />
   )
 }
