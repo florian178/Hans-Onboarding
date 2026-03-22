@@ -14,16 +14,17 @@ export default function LoginPage() {
       </div>
       <Card className={clsx(styles.loginCard, "glass")}>
         <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <p className={styles.subtitle}>Gib deine E-Mail Adresse ein, um einen passwortlosen Zugang (Magic Link) zu erhalten.</p>
+          <CardTitle>Admin Login</CardTitle>
+          <p className={styles.subtitle}>Bitte melde dich mit deinen Zugangsdaten an, um Mitarbeiter einzuladen.</p>
         </CardHeader>
         <CardContent>
           <form
             action={async (formData) => {
               "use server"
-              await signIn("resend", {
+              await signIn("credentials", {
                 email: formData.get("email"),
-                redirectTo: "/", // Middleware will sort out Admin vs Employee destinations
+                password: formData.get("password"),
+                redirectTo: "/admin",
               })
             }}
             className={styles.form}
@@ -31,47 +32,19 @@ export default function LoginPage() {
             <Input 
               type="email" 
               name="email" 
-              placeholder="deine.email@beispiel.de" 
+              placeholder="admin@hansimclub.de" 
+              required 
+            />
+            <Input 
+              type="password" 
+              name="password" 
+              placeholder="Passwort" 
               required 
             />
             <Button type="submit" fullWidth>
-              Login Link senden
+              Einloggen
             </Button>
           </form>
-          <div className={styles.divider}>oder</div>
-          <p className={styles.hint}>Entwickler-Modus (Bypass Magic Link):</p>
-          <div className={styles.debugActions}>
-            <form action={async () => {
-              "use server"
-              await prisma.user.upsert({
-                where: { email: 'admin@admin.com' },
-                update: { role: 'ADMIN' },
-                create: { email: 'admin@admin.com', name: 'Admin', role: 'ADMIN', onboardingStatus: { create: { status: 'COMPLETED' } } }
-              })
-              await signIn("credentials", {
-                email: 'admin@admin.com',
-                password: 'hans123',
-                redirectTo: '/admin'
-              })
-            }}>
-              <Button variant="outline" className={styles.debugBtn} type="submit">Admin Express Login</Button>
-            </form>
-            <form action={async () => {
-              "use server"
-              await prisma.user.upsert({
-                where: { email: 'test@example.com' },
-                update: { role: 'EMPLOYEE' },
-                create: { email: 'test@example.com', name: 'Test Mitarbeiter', role: 'EMPLOYEE', onboardingStatus: { create: { status: 'INVITED' } } }
-              })
-              await signIn("credentials", {
-                email: 'test@example.com',
-                password: 'hans123',
-                redirectTo: '/onboarding'
-              })
-            }}>
-              <Button variant="outline" className={styles.debugBtn} type="submit" style={{ marginTop: '0.5rem' }}>Mitarbeiter Express Login</Button>
-            </form>
-          </div>
         </CardContent>
       </Card>
     </div>

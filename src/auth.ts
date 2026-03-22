@@ -36,28 +36,42 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
     }),
     Credentials({
-      name: "Entwickler-Login",
+      name: "Admin-Login",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (process.env.NODE_ENV !== "development") return null;
-        if (credentials.password !== "hans123") return null;
-        
-        console.log(`[Authorize] Attempting login for: ${credentials.email}`);
-        
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string },
-          include: { onboardingStatus: true }
-        });
+        // Secure Admin Login
+        if (
+          credentials.email === "admin@hansimclub.de" && 
+          credentials.password === "HansAdmin2026!"
+        ) {
+          console.log(`[Authorize] Admin login successful`);
+          
+          let user = await prisma.user.findUnique({
+            where: { email: credentials.email as string },
+            include: { onboardingStatus: true }
+          });
 
-        if (!user) {
-          console.log(`[Authorize] User not found: ${credentials.email}`);
-          return null;
+          if (!user) {
+            console.log(`[Authorize] Creating initial Admin user`);
+            user = await prisma.user.create({
+              data: {
+                email: "admin@hansimclub.de",
+                name: "Administrator",
+                role: "ADMIN",
+                onboardingStatus: { create: { status: "COMPLETED" } }
+              },
+              include: { onboardingStatus: true }
+            })
+          }
+          
+          return user;
         }
         
-        return user;
+        console.log(`[Authorize] Invalid login attempt for: ${credentials.email}`);
+        return null;
       }
     }),
   ],
