@@ -14,7 +14,7 @@ export default function LoginPage() {
       </div>
       <Card className={clsx(styles.loginCard, "glass")}>
         <CardHeader>
-          <CardTitle>Login / Mitarbeiter-Bereich</CardTitle>
+          <CardTitle>HANS IM CLUB - LOGIN</CardTitle>
           <p className={styles.subtitle}>Herzlich willkommen! Bitte melde dich mit deinen Zugangsdaten an.</p>
         </CardHeader>
         <CardContent>
