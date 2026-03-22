@@ -40,14 +40,19 @@ export default async function VideoStep() {
     })
 
     if (process.env.RESEND_API_KEY) {
-      const { Resend } = await import("resend")
-      const resend = new Resend(process.env.RESEND_API_KEY)
-      await resend.emails.send({
-        from: "onboarding@diskothek.demo",
-        to: "admin@diskothek.demo", // In production this would query Admin users
-        subject: `Onboarding abgeschlossen: ${session.user.name || session.user.email}`,
-        html: `<p>Der Mitarbeiter ${session.user.name || session.user.email} hat das Onboarding erfolgreich abgeschlossen.</p>`,
-      })
+      try {
+        const { Resend } = await import("resend")
+        const resend = new Resend(process.env.RESEND_API_KEY)
+        await resend.emails.send({
+          from: "onboarding@resend.dev", // Using the safe resend.dev test domain to prevent API crashes
+          to: "admin@diskothek.demo", // In production this would query Admin users
+          subject: `Onboarding abgeschlossen: ${session.user.name || session.user.email}`,
+          html: `<p>Der Mitarbeiter ${session.user.name || session.user.email} hat das Onboarding erfolgreich abgeschlossen.</p>`,
+        })
+      } catch (e) {
+        console.error("Failed to send completion email", e)
+        // We swallow this error so the user can finish onboarding even if Email API is misconfigured
+      }
     }
 
     redirect("/onboarding/success")

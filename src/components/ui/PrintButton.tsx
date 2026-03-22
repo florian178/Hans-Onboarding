@@ -28,8 +28,19 @@ export function PrintButton({ className, label = "Als PDF herunterladen" }: { cl
       const pdf = new jsPDF("p", "mm", "a4")
       const pdfWidth = pdf.internal.pageSize.getWidth()
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width
+      const pageHeight = pdf.internal.pageSize.getHeight()
       
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight)
+      let position = 0
+      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight)
+      let heightLeft = pdfHeight - pageHeight
+
+      while (heightLeft > 0) {
+        position = position - pageHeight
+        pdf.addPage()
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight)
+        heightLeft -= pageHeight
+      }
+      
       pdf.save("Arbeitsvertrag.pdf")
     } catch (e) {
       console.error("PDF generation error", e)
