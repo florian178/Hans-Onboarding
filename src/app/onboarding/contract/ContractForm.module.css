@@ -73,6 +73,7 @@
   justify-content: center;
   gap: 1.5rem;
   margin-top: 1rem;
+  flex-wrap: wrap;
 }
 
 .secondaryActions {
@@ -82,6 +83,24 @@
   margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .finalActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .finalActions a,
+  .finalActions button {
+    width: 100%;
+  }
+
+  .secondaryActions {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .sectionHeader {
@@ -108,11 +127,31 @@
   overflow: hidden;
 }
 
+@media (max-width: 640px) {
+  .contractPreview {
+    padding: 2rem 1.5rem;
+    border-radius: var(--radius-lg);
+  }
+}
+
 .signatureRow {
   margin-top: 4rem;
   display: flex;
   justify-content: space-between;
   gap: 2rem;
+}
+
+@media (max-width: 640px) {
+  .signatureRow {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .sigContainer {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .sigContainer {

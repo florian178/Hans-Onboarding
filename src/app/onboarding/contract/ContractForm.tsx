@@ -110,21 +110,26 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
 
     setIsGenerating(true)
     try {
-      // Dynamic imports to avoid SSR issues with fflate/jspdf
       const { jsPDF } = await import("jspdf")
       const html2canvas = (await import("html2canvas")).default
 
+      // Use a fixed width to ensure consistent A4 output regardless of device/viewport
+      const A4_WIDTH_PX = 794 // ~A4 at 96dpi
+      const currentWidth = element.offsetWidth
+      const scaleFactor = A4_WIDTH_PX / currentWidth
+
       const canvas = await html2canvas(element, {
-        scale: 2, // Higher quality
+        scale: Math.max(1, scaleFactor) * 2,
         useCORS: true,
         logging: false,
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        windowWidth: A4_WIDTH_PX,
       })
       
       const imgData = canvas.toDataURL("image/png")
       const pdf = new jsPDF("p", "mm", "a4")
       
-      const margin = 15 // 15mm margin
+      const margin = 15
       const pageWidth = pdf.internal.pageSize.getWidth()
       const pageHeight = pdf.internal.pageSize.getHeight()
       const usableWidth = pageWidth - 2 * margin
@@ -138,7 +143,7 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
       // Page 1
       pdf.addImage(imgData, "PNG", margin, position, usableWidth, imgHeight)
       pdf.setFillColor(255, 255, 255)
-      pdf.rect(0, pageHeight - margin, pageWidth, margin, "F") // mask bottom
+      pdf.rect(0, pageHeight - margin, pageWidth, margin, "F")
       
       heightLeft -= usableHeight
 
@@ -147,12 +152,9 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
         position = position - usableHeight
         pdf.addPage()
         pdf.addImage(imgData, "PNG", margin, position, usableWidth, imgHeight)
-        
-        // mask top and bottom margins
         pdf.setFillColor(255, 255, 255)
         pdf.rect(0, 0, pageWidth, margin, "F")
         pdf.rect(0, pageHeight - margin, pageWidth, margin, "F")
-        
         heightLeft -= usableHeight
       }
       

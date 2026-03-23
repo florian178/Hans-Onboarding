@@ -34,13 +34,27 @@
   animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   position: relative;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .logo {
   height: 80px;
+  max-width: 80%;
   width: auto;
   object-fit: contain;
-  filter: brightness(0) invert(1); /* Macht das schwarze Logo weiß, damit es auf dem dunklen Hintergrund sichtbar ist */
+  filter: brightness(0) invert(1);
+}
+
+@media (max-width: 480px) {
+  .logoWrapper {
+    margin-bottom: 2rem;
+  }
+  .logo {
+    height: 60px;
+  }
 }
 
 .loginCard {
@@ -63,6 +77,22 @@
   flex-direction: column;
   gap: 1.5rem;
   margin-top: 1rem;
+}
+
+.resetLinkWrapper {
+  text-align: center;
+}
+
+.resetLink {
+  font-size: 0.875rem;
+  color: var(--secondary-foreground);
+  text-decoration: underline;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.resetLink:hover {
+  opacity: 1;
 }
 
 .divider {

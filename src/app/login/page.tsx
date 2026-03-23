@@ -32,7 +32,7 @@ export default function LoginPage() {
             <Input 
               type="email" 
               name="email" 
-              placeholder="admin@hansimclub.de" 
+              placeholder="E-Mail Adresse" 
               required 
             />
             <Input 
@@ -44,6 +44,9 @@ export default function LoginPage() {
             <Button type="submit" fullWidth>
               Einloggen
             </Button>
+            <div className={styles.resetLinkWrapper}>
+              <a href="/reset-password" className={styles.resetLink}>Passwort vergessen?</a>
+            </div>
           </form>
         </CardContent>
       </Card>
