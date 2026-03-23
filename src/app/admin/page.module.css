@@ -59,6 +59,13 @@
   font-size: 0.95rem;
 }
 
+@media (max-width: 640px) {
+  .table th, .table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+  }
+}
+
 .table tr:last-child td {
   border-bottom: none;
 }

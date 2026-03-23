@@ -149,6 +149,12 @@ button:active {
   margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1.5rem 1rem;
+  }
+}
+
 /* Scroll padding for anchors */
 html {
   scroll-padding-top: 80px;
