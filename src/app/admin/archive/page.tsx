@@ -15,19 +15,31 @@ export default async function ArchiveDashboard() {
 
   async function restoreEmployee(userId: string) {
     "use server"
-    await prisma.user.update({
-      where: { id: userId },
-      data: { isArchived: false }
-    })
+    console.log(`[Restore Action] Starting for userId: ${userId}`)
+    try {
+      const result = await prisma.user.update({
+        where: { id: userId },
+        data: { isArchived: false }
+      })
+      console.log(`[Restore Action] SUCCESS for ${result.email}`)
+    } catch (error) {
+      console.error(`[Restore Action] FAILED for ${userId}:`, error)
+    }
     revalidatePath("/admin")
     revalidatePath("/admin/archive")
   }
 
   async function deleteEmployee(userId: string) {
     "use server"
-    await prisma.user.delete({
-      where: { id: userId }
-    })
+    console.log(`[Delete Action] Starting for userId: ${userId}`)
+    try {
+      await prisma.user.delete({
+        where: { id: userId }
+      })
+      console.log(`[Delete Action] SUCCESS for ${userId}`)
+    } catch (error) {
+      console.error(`[Delete Action] FAILED for ${userId}:`, error)
+    }
     revalidatePath("/admin/archive")
   }
 

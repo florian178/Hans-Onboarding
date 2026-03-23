@@ -99,10 +99,16 @@ export default async function AdminDashboard() {
 
   async function archiveEmployee(userId: string) {
     "use server"
-    await prisma.user.update({
-      where: { id: userId },
-      data: { isArchived: true }
-    })
+    console.log(`[Archive Action] Starting for userId: ${userId}`)
+    try {
+      const result = await prisma.user.update({
+        where: { id: userId },
+        data: { isArchived: true }
+      })
+      console.log(`[Archive Action] SUCCESS for ${result.email}`)
+    } catch (error) {
+      console.error(`[Archive Action] FAILED for ${userId}:`, error)
+    }
     revalidatePath("/admin")
     revalidatePath("/admin/archive")
   }
