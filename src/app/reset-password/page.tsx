@@ -4,7 +4,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card"
 import { Input } from "@/components/ui/Input"
 import { Button } from "@/components/ui/Button"
 import { clsx } from "clsx"
-import crypto from "crypto"
 import styles from "../login/page.module.css"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -19,6 +18,9 @@ export default async function ResetPasswordPage({
 
   async function handleReset(formData: FormData) {
     "use server"
+    // Import Node.js crypto inside server action to avoid Edge Runtime conflicts
+    const crypto = await import("crypto")
+
     const email = formData.get("email") as string
     if (!email) return
 

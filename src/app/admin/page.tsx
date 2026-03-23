@@ -75,7 +75,7 @@ export default async function AdminDashboard() {
             <p>Du wurdest zum Onboarding-System von Hans im Club eingeladen.</p>
             <p>Bitte logge dich mit deiner E-Mail und dem folgenden Passwort ein:</p>
             <p><strong>Passwort:</strong> ${rawPassword}</p>
-            <p><a href="${loginUrl}">Hier geht's zum Login</a></p>
+            <p><a href="${loginUrl}/login">Hier geht's zum Login</a></p>
           `,
         })
       } catch (e: unknown) {
