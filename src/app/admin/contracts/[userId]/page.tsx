@@ -4,7 +4,8 @@ import { redirect } from "next/navigation"
 import { PrintButtonClient as PrintButton } from "@/components/ui/PrintButtonClient"
 import styles from "./page.module.css"
 
-export default async function ContractPage({ params }: { params: { userId: string } }) {
+export default async function ContractPage(props: { params: Promise<{ userId: string }> }) {
+  const params = await props.params;
   const session = await auth()
   if (!session?.user) redirect("/login")
   if ((session.user as { role?: string }).role !== "ADMIN") redirect("/unauthorized")
