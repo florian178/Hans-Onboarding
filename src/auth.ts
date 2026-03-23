@@ -49,8 +49,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const user = await prisma.user.findUnique({
           where: { email },
           include: { onboardingStatus: true }
-        });
-
+        }) as any;
+        
         if (user && user.password) {
           const hashedPassword = crypto.createHash("sha256").update(password).digest("hex");
           if (hashedPassword === user.password) {

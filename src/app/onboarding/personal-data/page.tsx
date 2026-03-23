@@ -46,7 +46,7 @@ export default async function PersonalDataStep() {
 
     if (password && password === confirmPassword) {
       const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
-      await prisma.user.update({
+      await (prisma.user.update as any)({
         where: { id: session.user.id! },
         data: { password: hashedPassword }
       })
