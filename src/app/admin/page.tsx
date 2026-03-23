@@ -38,7 +38,7 @@ export default async function AdminDashboard() {
     const hashedPassword = crypto.createHash("sha256").update(rawPassword).digest("hex")
 
     if (!user) {
-      user = await prisma.user.create({
+      user = await (prisma.user.create as any)({
         data: {
           email,
           name,
@@ -51,7 +51,7 @@ export default async function AdminDashboard() {
         }
       })
     } else {
-      await prisma.user.update({
+      await (prisma.user.update as any)({
         where: { id: user.id },
         data: { 
           startDate: startDate || user.startDate,
