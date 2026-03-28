@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
-import { handleSignOut } from "./actions"
+import { signOut } from "next-auth/react"
 import styles from "./page.module.css"
 
 interface Document {
@@ -47,9 +47,9 @@ export default function DashboardClient({ user, documents, payslips }: Dashboard
           <h1 className={styles.title}>Hallo, {user.name}</h1>
           <p className={styles.subtitle}>Willkommen in deinem Mitarbeiter-Bereich.</p>
         </div>
-        <form action={handleSignOut}>
-          <Button variant="ghost" type="submit">Abmelden</Button>
-        </form>
+        <div>
+          <Button variant="ghost" onClick={() => signOut({ callbackUrl: "/login" })}>Abmelden</Button>
+        </div>
       </header>
 
       <div className={styles.tabs}>
