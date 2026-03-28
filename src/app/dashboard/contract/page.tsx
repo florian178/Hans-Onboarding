@@ -5,6 +5,13 @@ import { PrintButtonClient as PrintButton } from "@/components/ui/PrintButtonCli
 
 import styles from "../../admin/contracts/[userId]/page.module.css"
 
+const getEndDate = (start?: Date | null | string) => {
+  const s = start ? new Date(start) : new Date();
+  const e = new Date(s);
+  e.setMonth(e.getMonth() + 6);
+  return e.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
+};
+
 export default async function EmployeeContractPage() {
   const session = await auth()
   if (!session?.user) redirect("/login")
@@ -74,16 +81,16 @@ export default async function EmployeeContractPage() {
           <p>wird folgender Arbeitsvertrag geschlossen:</p>
 
           <h3>§ 1 Arbeitsverhältnis</h3>
-          <p>Das Arbeitsverhältnis beginnt am {user?.startDate ? new Date(user.startDate).toLocaleDateString('de-DE') : '18.03.2026'}. Der Arbeitnehmer wird im Rahmen eines geringfügigen Beschäftigungsverhältnisses auf Anfrage bis zu 556 Euro beschäftigt.</p>
+          <p>Das Arbeitsverhältnis beginnt am {user?.startDate ? new Date(user.startDate).toLocaleDateString('de-DE') : '18.03.2026'}. Der Arbeitnehmer wird im Rahmen eines geringfügigen Beschäftigungsverhältnisses auf Anfrage bis zu 603 Euro beschäftigt.</p>
 
           <h3>§ 2 Vertragsdauer</h3>
-          <p>Das Arbeitsverhältnis wird auf befristete Zeit geschlossen, einschließlich bis zum 31.08.2026. Nach Ablauf der Frist verlängert sich der Arbeitsvertrag automatisch um jeweils einen Monat bis zur Kündigung.</p>
+          <p>Das Arbeitsverhältnis wird auf befristete Zeit geschlossen, einschließlich bis zum {getEndDate(user?.startDate)}. Nach Ablauf der Frist verlängert sich der Arbeitsvertrag automatisch um jeweils einen Monat bis zur Kündigung.</p>
 
           <h3>§ 3 Tätigkeit und Aufgabengebiet</h3>
           <p>Der Arbeitnehmer/ die Arbeitnehmerin wird als Servicekraft/ Barkraft im “Hans im Club”, Wallstraße 11, 01067 Dresden, eingestellt.</p>
 
           <h3>§ 4 Arbeitsvergütung</h3>
-          <p>Der Arbeitnehmer/ die Arbeitnehmerin erhält einen Stundenlohn von 13,90€/h (höchstens 603 Euro). Die Vergütung wird jeweils am 15. des Folgemonats zahlbar.</p>
+          <p>Der Arbeitnehmer/ die Arbeitnehmerin erhält einen Stundenlohn von 13,90€/h (höchstens 603 Euro). Die Vergütung wird jeweils am 15. des Folgemonats zahlbar auf das vom Arbeitnehmer angegebene Konto überwiesen: IBAN {personalData?.iban || '_______________________'}.</p>
           <p>Der Arbeitgeber leistet die Pauschalabgabe in der jeweils gesetzlich geschuldeten Höhe an die zentrale Einzugsstelle (Bundesknappschaft).</p>
 
           <h3>§ 5 Arbeitszeit</h3>

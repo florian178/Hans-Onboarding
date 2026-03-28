@@ -17,13 +17,27 @@ export function PrintButton({ className, label = "Als PDF herunterladen" }: { cl
 
     setIsGenerating(true)
     try {
-      const canvas = await html2canvas(element, {
+      // Create a hidden desktop-width clone to enforce correct A4 layout
+      const clone = element.cloneNode(true) as HTMLElement
+      const wrapper = document.createElement("div")
+      wrapper.style.position = "absolute"
+      wrapper.style.left = "-9999px"
+      wrapper.style.top = "0"
+      wrapper.style.width = "794px" // A4 width at 96dpi
+      wrapper.style.backgroundColor = "#ffffff"
+      wrapper.appendChild(clone)
+      document.body.appendChild(wrapper)
+
+      const canvas = await html2canvas(clone, {
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        windowWidth: 794,
       })
       
+      document.body.removeChild(wrapper)
+
       const imgData = canvas.toDataURL("image/png")
       const pdf = new jsPDF("p", "mm", "a4")
       

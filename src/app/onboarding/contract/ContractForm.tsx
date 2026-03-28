@@ -4,7 +4,16 @@ import React, { useState, useTransition } from "react"
 import { SignaturePad } from "@/components/ui/SignaturePad"
 import { Button } from "@/components/ui/Button"
 import { signContract } from "./actions"
+import { jsPDF } from "jspdf"
+import html2canvas from "html2canvas"
 import styles from "./ContractForm.module.css"
+
+const getEndDateStr = (startStr?: string | Date | null) => {
+  const start = startStr ? new Date(startStr) : new Date();
+  const end = new Date(start);
+  end.setMonth(end.getMonth() + 6);
+  return end.toLocaleDateString("de-DE", { day: '2-digit', month: '2-digit', year: 'numeric' });
+};
 
 interface PersonalData {
   firstName: string
@@ -12,6 +21,7 @@ interface PersonalData {
   address: string
   zipCode: string
   city: string
+  iban?: string
 }
 
 interface ContractFormProps {
@@ -19,7 +29,7 @@ interface ContractFormProps {
   startDate?: Date | null
 }
 
-function ContractText({ name, addressLine, today, startDate }: { name: string, addressLine: string, today: string, startDate: string | null }) {
+function ContractText({ name, addressLine, today, startDate, personalData }: { name: string, addressLine: string, today: string, startDate: string | null, personalData: PersonalData | null }) {
   return (
     <div className={styles.contractText} id="contract-content">
       <div className={styles.documentLogo}>
@@ -39,16 +49,16 @@ function ContractText({ name, addressLine, today, startDate }: { name: string, a
       <p>wird folgender Arbeitsvertrag geschlossen:</p>
 
       <h3>§ 1 Arbeitsverhältnis</h3>
-      <p>Das Arbeitsverhältnis beginnt am {startDate || '18.03.2026'}. Der Arbeitnehmer wird im Rahmen eines geringfügigen Beschäftigungsverhältnisses auf Anfrage bis zu 556 Euro beschäftigt.</p>
+      <p>Das Arbeitsverhältnis beginnt am {startDate || '18.03.2026'}. Der Arbeitnehmer wird im Rahmen eines geringfügigen Beschäftigungsverhältnisses auf Anfrage bis zu 603 Euro beschäftigt.</p>
 
       <h3>§ 2 Vertragsdauer</h3>
-      <p>Das Arbeitsverhältnis wird auf befristete Zeit geschlossen, einschließlich bis zum 31.08.2026. Nach Ablauf der Frist verlängert sich der Arbeitsvertrag automatisch um jeweils einen Monat bis zur Kündigung.</p>
+      <p>Das Arbeitsverhältnis wird auf befristete Zeit geschlossen, einschließlich bis zum {getEndDateStr(startDate)}. Nach Ablauf der Frist verlängert sich der Arbeitsvertrag automatisch um jeweils einen Monat bis zur Kündigung.</p>
 
       <h3>§ 3 Tätigkeit und Aufgabengebiet</h3>
       <p>Der Arbeitnehmer/ die Arbeitnehmerin wird als Servicekraft/ Barkraft im “Hans im Club”, Wallstraße 11, 01067 Dresden, eingestellt.</p>
 
       <h3>§ 4 Arbeitsvergütung</h3>
-      <p>Der Arbeitnehmer/ die Arbeitnehmerin erhält einen Stundenlohn von 13,90€/h (höchstens 603 Euro). Die Vergütung wird jeweils am 15. des Folgemonats zahlbar.</p>
+      <p>Der Arbeitnehmer/ die Arbeitnehmerin erhält einen Stundenlohn von 13,90€/h (höchstens 603 Euro). Die Vergütung wird jeweils am 15. des Folgemonats zahlbar auf das vom Arbeitnehmer angegebene Konto überwiesen: IBAN {personalData?.iban || '_______________________'}.</p>
       <p>Der Arbeitgeber leistet die Pauschalabgabe in der jeweils gesetzlich geschuldeten Höhe an die zentrale Einzugsstelle (Bundesknappschaft).</p>
 
       <h3>§ 5 Arbeitszeit</h3>
@@ -110,22 +120,27 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
 
     setIsGenerating(true)
     try {
-      const { jsPDF } = await import("jspdf")
-      const html2canvas = (await import("html2canvas")).default
+      // Create a hidden desktop-width clone to enforce correct A4 layout regardless of device viewport
+      const clone = element.cloneNode(true) as HTMLElement
+      const wrapper = document.createElement("div")
+      wrapper.style.position = "absolute"
+      wrapper.style.left = "-9999px"
+      wrapper.style.top = "0"
+      wrapper.style.width = "794px" // A4 width at 96dpi
+      wrapper.style.backgroundColor = "#ffffff"
+      wrapper.appendChild(clone)
+      document.body.appendChild(wrapper)
 
-      // Use a fixed width to ensure consistent A4 output regardless of device/viewport
-      const A4_WIDTH_PX = 794 // ~A4 at 96dpi
-      const currentWidth = element.offsetWidth
-      const scaleFactor = A4_WIDTH_PX / currentWidth
-
-      const canvas = await html2canvas(element, {
-        scale: Math.max(1, scaleFactor) * 2,
+      const canvas = await html2canvas(clone, {
+        scale: 2,
         useCORS: true,
         logging: false,
         backgroundColor: "#ffffff",
-        windowWidth: A4_WIDTH_PX,
+        windowWidth: 794,
       })
       
+      document.body.removeChild(wrapper)
+
       const imgData = canvas.toDataURL("image/png")
       const pdf = new jsPDF("p", "mm", "a4")
       
@@ -198,7 +213,7 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
         </div>
 
         <div className={styles.contractPreview} id="contract-preview">
-          <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} />
+          <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} personalData={personalData} />
           
           <div className={styles.signatureRow}>
              <div className={styles.sigContainer}>
@@ -224,7 +239,7 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
     <div className={styles.container}>
       {error && <div className={styles.error}>{error}</div>}
       
-      <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} />
+      <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} personalData={personalData} />
 
       <div className={styles.signatureSection}>
         <div className={styles.sectionHeader}>
