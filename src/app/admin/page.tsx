@@ -166,7 +166,7 @@ export default async function AdminDashboard() {
                         <div className={styles.tableActions}>
                           {emp.documents?.length > 0 && (
                             <a href={`/admin/contracts/${emp.id}`} className={styles.actionBtn}>
-                              <Button variant="outline" size="sm">Vertrag</Button>
+                              <Button variant="outline" size="sm">Mitarbeiter-Akte</Button>
                             </a>
                           )}
                           <form action={resetProgress.bind(null, emp.id)} style={{ display: 'inline' }}>

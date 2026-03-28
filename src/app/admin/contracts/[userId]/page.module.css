@@ -35,6 +35,85 @@
   overflow: hidden;
 }
 
+.auditLog {
+  background-color: var(--surface);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  margin-bottom: 3rem;
+}
+
+.auditLog h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.auditLog p {
+  color: var(--secondary-foreground);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.auditTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.auditTable th {
+  text-align: left;
+  padding: 1rem;
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+}
+
+.auditTable th:first-child {
+  border-top-left-radius: var(--radius-sm);
+}
+.auditTable th:last-child {
+  border-top-right-radius: var(--radius-sm);
+}
+
+.auditTable td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.auditTable tr:last-child td {
+  border-bottom: none;
+}
+
+.contractHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.contractHeader h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.missingContract {
+  background-color: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-xl);
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--secondary-foreground);
+}
+
 .contractText {
   line-height: 1.7;
   font-family: var(--font-sans), system-ui, sans-serif;

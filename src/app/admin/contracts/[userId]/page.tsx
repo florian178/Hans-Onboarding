@@ -19,21 +19,21 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
 
   const { userId } = params
 
+  const steps = await prisma.stepProgress.findMany({
+    where: { userId },
+  })
+
+  const personalDataStep = steps.find(s => s.stepId === 'personal-data' && s.completed)
+  const instructionsStep = steps.find(s => s.stepId === 'instructions' && s.completed)
+  const contractStep = steps.find(s => s.stepId === 'contract' && s.completed)
+  const videoStep = steps.find(s => s.stepId === 'video' && s.completed)
+
   const document = await prisma.document.findFirst({
     where: { userId, type: "CONTRACT_SIGNED" },
     orderBy: { uploadedAt: "desc" }
   })
 
-  if (!document) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1>Arbeitsvertrag nicht gefunden</h1>
-          <a href="/admin" className={styles.backLink}>Zurück zum Dashboard</a>
-        </div>
-      </div>
-    )
-  }
+
 
   const personalDataProgress = await prisma.stepProgress.findUnique({
     where: { userId_stepId: { userId, stepId: "personal-data" } }
@@ -60,10 +60,54 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
     <div className={styles.container}>
       <div className={styles.header}>
         <a href="/admin" className={styles.backLink}>← Zurück zum Dashboard</a>
-        <PrintButton className={styles.printBtn} />
       </div>
 
-      <div className={styles.contractPreview} id="contract-preview">
+      <div className={styles.auditLog}>
+        <h2>Zertifizierungsnachweis & Signatur-Protokoll</h2>
+        <p>Dieses Protokoll dient als rechtlicher Nachweis für die digitale Erfassung und Signatur relevanter Dokumente durch den Arbeitnehmer <strong>{name}</strong>.</p>
+        
+        <div className={styles.tableWrapper}>
+          <table className={styles.auditTable}>
+            <thead>
+              <tr>
+                <th>Protokollierter Schritt</th>
+                <th>Status</th>
+                <th>Zeitstempel (Datum & Uhrzeit)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Erfassung der Stammdaten</td>
+                <td>{personalDataStep ? "✅ Erledigt" : "⏳ Ausstehend"}</td>
+                <td>{personalDataStep ? new Date(personalDataStep.updatedAt).toLocaleDateString("de-DE", { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + " Uhr" : "-"}</td>
+              </tr>
+              <tr>
+                <td>2. Kenntnisnahme gesetzlicher Belehrungen & Anweisungen</td>
+                <td>{instructionsStep ? "✅ Digital Signiert" : "⏳ Ausstehend"}</td>
+                <td>{instructionsStep ? new Date(instructionsStep.updatedAt).toLocaleDateString("de-DE", { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + " Uhr" : "-"}</td>
+              </tr>
+              <tr>
+                <td>3. Unterzeichnung des Arbeitsvertrags</td>
+                <td>{contractStep ? "✅ Digital Signiert" : "⏳ Ausstehend"}</td>
+                <td>{contractStep ? new Date(contractStep.updatedAt).toLocaleDateString("de-DE", { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + " Uhr" : "-"}</td>
+              </tr>
+              <tr>
+                <td>4. Bestätigung des Arbeitsschutz-Videos</td>
+                <td>{videoStep ? "✅ Angesehen & Bestätigt" : "⏳ Ausstehend"}</td>
+                <td>{videoStep ? new Date(videoStep.updatedAt).toLocaleDateString("de-DE", { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + " Uhr" : "-"}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className={styles.contractHeader}>
+        <h2>Arbeitsvertrag</h2>
+        {document && <PrintButton className={styles.printBtn} />}
+      </div>
+
+      {document ? (
+        <div className={styles.contractPreview} id="contract-preview">
         <div className={styles.contractText}>
           <div className={styles.documentLogo}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -141,7 +185,12 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
              <p className={styles.label}>Unterschrift Arbeitnehmer/-in</p>
            </div>
         </div>
-      </div>
+        </div>
+      ) : (
+        <div className={styles.missingContract}>
+          <p>Der Arbeitsvertrag wurde (noch) nicht digital signiert und es liegt kein PDF vor.</p>
+        </div>
+      )}
     </div>
   )
 }
