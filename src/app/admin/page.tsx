@@ -69,13 +69,14 @@ export default async function AdminDashboard() {
         await resend.emails.send({
           from: "onboarding@resend.dev",
           to: email,
-          subject: "Deine Einladung zum Hans im Club Onboarding",
+          subject: "Willkommen im Team! Deine Einladung zum Hans im Club Onboarding",
           html: `
-            <p>Hallo ${name},</p>
-            <p>Du wurdest zum Onboarding-System von Hans im Club eingeladen.</p>
-            <p>Bitte logge dich mit deiner E-Mail und dem folgenden Passwort ein:</p>
-            <p><strong>Passwort:</strong> ${rawPassword}</p>
-            <p><a href="${loginUrl}/login">Hier geht's zum Login</a></p>
+            <p>Hi ${name || ''},</p>
+            <p>du bist willkommen im Hans im Club Team, schön dass du dabei bist.</p>
+            <p>Bitte nutze diesen folgenden Link, um dich bei uns als Mitarbeiter zu registrieren:</p>
+            <p><strong>E-Mail:</strong> ${email}<br/><strong>Passwort:</strong> ${rawPassword}</p>
+            <p><a href="${loginUrl}/login">Hier geht's zur Registrierung / zum Login</a></p>
+            <p>Viel Erfolg! Wenn du Fragen hast, melde dich bitte bei der Betriebsleiterin.</p>
           `,
         })
       } catch (e: unknown) {
