@@ -60,7 +60,7 @@ export default async function AdminDashboard() {
       })
     }
 
-    const loginUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
+    const loginUrl = "https://team.hansimclub.de"
 
     console.log(`\n\n[Employee Invited]:\nTo: ${email}\nPassword: ${rawPassword}\n\n`)
 
