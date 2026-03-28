@@ -30,7 +30,7 @@ export async function resetPassword(formData: FormData) {
       if (process.env.RESEND_API_KEY) {
         try {
           await resend.emails.send({
-            from: "onboarding@resend.dev",
+            from: "onboarding@hansimclub.de",
             to: email,
             subject: "Dein neues Passwort – Hans im Club",
             html: `

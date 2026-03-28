@@ -67,7 +67,7 @@ export default async function AdminDashboard() {
     if (process.env.RESEND_API_KEY) {
       try {
         await resend.emails.send({
-          from: "onboarding@resend.dev",
+          from: "onboarding@hansimclub.de",
           to: email,
           subject: "Willkommen im Team! Deine Einladung zum Hans im Club Onboarding",
           html: `
