@@ -32,6 +32,14 @@ export default async function DashboardPage() {
     redirect("/onboarding")
   }
 
+  const globalInstructions = await prisma.document.findMany({
+    where: { type: 'INSTRUCTION', userId: null },
+    orderBy: { uploadedAt: 'desc' }
+  })
+
+  // Combine signed documents and templates
+  const allDocuments = [...(user?.documents || []), ...globalInstructions]
+
   const personalDataProgress = await prisma.stepProgress.findUnique({
     where: { userId_stepId: { userId, stepId: "personal-data" } }
   })
@@ -55,7 +63,7 @@ export default async function DashboardPage() {
         email: user?.email || null,
         startDate: user?.startDate || null
       }}
-      documents={user?.documents || []}
+      documents={allDocuments}
       payslips={user?.payslips || []}
     />
   )

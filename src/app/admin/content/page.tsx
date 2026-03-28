@@ -43,6 +43,8 @@ export default async function ContentDashboard() {
     })
 
     revalidatePath("/admin/content")
+    revalidatePath("/dashboard")
+    revalidatePath("/onboarding/instructions")
   }
 
   async function deleteContent(formData: FormData) {
@@ -50,6 +52,8 @@ export default async function ContentDashboard() {
     const id = formData.get("id") as string
     await prisma.document.delete({ where: { id } })
     revalidatePath("/admin/content")
+    revalidatePath("/dashboard")
+    revalidatePath("/onboarding/instructions")
   }
 
   return (
