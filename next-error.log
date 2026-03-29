@@ -1984,3 +1984,68 @@ Caused by:
     3: No such file or directory (os error 2)
 Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
 Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+
+thread 'tokio-runtime-worker' (4168418) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:224:17:
+Failed to restore task data (corrupted database or bug): Data for batch of 23 tasks
+
+Caused by:
+    0: Looking up typed data for 23 tasks from database failed
+    1: Unable to open static sorted file referenced from 00004236.meta
+    2: Unable to open static sorted file 00004235.sst
+    3: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00004235.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (4168418) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:224:17:
+Failed to restore task data (corrupted database or bug): Data for batch of 23 tasks
+
+Caused by:
+    0: Looking up typed data for 23 tasks from database failed
+    1: Unable to open static sorted file referenced from 00004236.meta
+    2: Unable to open static sorted file 00004235.sst
+    3: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00004235.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (4168418) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:224:17:
+Failed to restore task data (corrupted database or bug): Data for batch of 2 tasks
+
+Caused by:
+    0: Looking up typed data for 2 tasks from database failed
+    1: Unable to open static sorted file referenced from 00004236.meta
+    2: Unable to open static sorted file 00004235.sst
+    3: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00004235.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (4168418) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:196:17:
+Failed to restore task data (corrupted database or bug): Data for TaskId 264780)
+
+Caused by:
+    0: Looking up task storage for TaskId 264780 from database failed
+    1: Unable to open static sorted file referenced from 00004236.meta
+    2: Unable to open static sorted file 00004234.sst
+    3: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00004234.sst
+    4: No such file or directory (os error 2)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+
+thread 'tokio-runtime-worker' (4169164) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:618:14:
+Failed to lookup task ids: Looking up task id for CachedTaskType { native_fn: NativeFunction { name: "AnalyzeIssue::new", global_name: "turbopack_core::issue::analyze::AnalyzeIssue::new", .. }, this: None, arg: (Error, Vc(RawVc::TaskCell(294847, "turbopack_core::ident::AssetIdent#0")), Vc(RawVc::TaskCell(294871, "turbo_rcstr::RcStr#0")), Vc(RawVc::TaskCell(294871, "turbopack_core::issue::StyledString#0")), None, Some(IssueSource { source: ResolvedVc(RawVc::TaskCell(294843, "turbopack_core::file_source::FileSource#0")), range: Some(ByteOffset(13612, 13617)) })) } from database failed
+
+Caused by:
+    0: Unable to open static sorted file referenced from 00002705.meta
+    1: Unable to open static sorted file 00002703.sst
+    2: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00002703.sst
+    3: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (4168867) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:618:14:
+Failed to lookup task ids: Looking up task id for CachedTaskType { native_fn: NativeFunction { name: "AnalyzeIssue::new", global_name: "turbopack_core::issue::analyze::AnalyzeIssue::new", .. }, this: None, arg: (Error, Vc(RawVc::TaskCell(294847, "turbopack_core::ident::AssetIdent#0")), Vc(RawVc::TaskCell(294849, "turbo_rcstr::RcStr#0")), Vc(RawVc::TaskCell(294849, "turbopack_core::issue::StyledString#0")), None, Some(IssueSource { source: ResolvedVc(RawVc::TaskCell(294843, "turbopack_core::file_source::FileSource#0")), range: Some(ByteOffset(14736, 14737)) })) } from database failed
+
+Caused by:
+    0: Unable to open static sorted file referenced from 00002743.meta
+    1: Unable to open static sorted file 00002741.sst
+    2: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00002741.sst
+    3: No such file or directory (os error 2)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)

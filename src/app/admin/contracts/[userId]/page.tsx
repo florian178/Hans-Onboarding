@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { PrintButtonClient as PrintButton } from "@/components/ui/PrintButtonClient"
 import { TaxFormPreview } from "@/components/TaxFormPreview"
 import { RVBefreiungPreview } from "@/components/RVBefreiungPreview"
+import { FireSafetyPreview } from "@/components/FireSafetyPreview"
 import { SendToAdvisorButton } from "@/components/ui/SendToAdvisorButton"
 import styles from "./page.module.css"
 
@@ -52,6 +53,15 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
   if (taxDataProgress?.data) {
     try {
       taxData = JSON.parse(taxDataProgress.data)
+    } catch {
+      // ignore
+    }
+  }
+
+  let instructionsData = null
+  if (instructionsStep?.data) {
+    try {
+      instructionsData = JSON.parse(instructionsStep.data)
     } catch {
       // ignore
     }
@@ -265,6 +275,27 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
           <p>Der Arbeitsvertrag wurde (noch) nicht digital signiert und es liegt kein PDF vor.</p>
         </div>
       )}
+
+      {instructionsStep && instructionsData?.signature && (
+        <>
+          <div className={styles.actionHeader} style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h2 style={{ fontSize: '1.2rem', margin: 0 }}>Brandschutzbelehrung</h2>
+            <PrintButton elementId="fire-safety" label="Brandschutzbelehrung (PDF) herunterladen" />
+          </div>
+
+          <div style={{ transform: 'scale(1.0)', transformOrigin: 'top left', border: '1px solid #ccc', margin: '20px 0', overflowX: 'auto', backgroundColor: '#e0e0e0', padding: '20px', borderRadius: '8px' }}>
+            <div id="fire-safety">
+              <FireSafetyPreview 
+                employeeName={name}
+                signatureUrl={instructionsData.signature}
+                signatureDate={instructionsStep.updatedAt}
+              />
+            </div>
+          </div>
+        </>
+      )}
+
     </div>
   )
 }
+
