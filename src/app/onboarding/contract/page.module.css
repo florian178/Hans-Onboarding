@@ -93,3 +93,37 @@
 .skipLink {
   text-decoration: none;
 }
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+  .card {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .downloadSection {
+    padding: 1rem;
+  }
+
+  .fileInputWrapper {
+    padding: 1.25rem;
+  }
+
+  .fileInput {
+    font-size: 0.85rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+
+  .uploadTitle {
+    font-size: 1rem;
+  }
+}
+

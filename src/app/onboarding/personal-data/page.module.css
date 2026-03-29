@@ -78,4 +78,18 @@
   .passwordGrid {
     grid-template-columns: 1fr;
   }
+
+  .card {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .actions button {
+    width: 100%;
+  }
 }
+

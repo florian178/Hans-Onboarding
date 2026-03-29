@@ -31,3 +31,19 @@
 .content {
   padding: 2rem;
 }
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+  .header {
+    padding: 1.25rem 1.25rem 0;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .content {
+    padding: 1.25rem;
+  }
+}
+

@@ -64,3 +64,28 @@
   text-decoration: underline;
   opacity: 1;
 }
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+  .card {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .videoWrapper {
+    border-radius: var(--radius-lg);
+  }
+
+  .missing {
+    padding: 2rem 1rem;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}
+

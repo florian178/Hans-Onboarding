@@ -109,3 +109,47 @@
   padding-top: 2rem;
   margin-top: 0.5rem;
 }
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+  .card {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .confirmSection {
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .checkboxWrapper {
+    gap: 0.75rem;
+  }
+
+  .checkboxLabel {
+    font-size: 0.95rem;
+  }
+
+  .checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    min-width: 1.25rem;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+
+  .docItem {
+    padding: 1rem;
+  }
+
+  .contentArea {
+    gap: 2rem;
+  }
+}
+
