@@ -129,8 +129,15 @@
 
 @media (max-width: 640px) {
   .contractPreview {
-    padding: 2rem 1.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0;
     border-radius: var(--radius-lg);
+  }
+
+  /* Innerer Inhalt behält lesbares A4-Format */
+  .contractPreview > * {
+    min-width: 700px;
   }
 }
 
