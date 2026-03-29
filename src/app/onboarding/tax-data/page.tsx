@@ -187,7 +187,7 @@ export default async function TaxDataStep() {
                     Ich beantrage die Befreiung von der Rentenversicherungspflicht (nur bei Minijobs)
                 </label>
                 <p className={styles.helpText} style={{ marginTop: '5px', fontSize: '12px', color: '#666' }}>
-                    Hinweis: Minijobber sind grundsätzlich rentenversicherungspflichtig (Eigenanteil von i.d.R. 3,6%). Mit diesem Kreuz kannst du dich von dieser Beitragspflicht befreien lassen.
+                    Hinweis: Minijobber sind grundsätzlich rentenversicherungspflichtig (Eigenanteil von i.d.R. 3,6%). Mit diesem Kreuz kannst du dich von dieser Beitragspflicht befreien lassen. <strong>Wir empfehlen die Befreiung, da du ansonsten aktive Abzüge von deinem Lohn hast.</strong>
                 </p>
             </div>
 
