@@ -4,7 +4,9 @@
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-.contractPreview .contractText {
+.contractPreview .contractText,
+:global(.scaledInner) .contractText,
+:global(.overlayDocument) .contractText {
   color: #1a1a1a;
 }
 
