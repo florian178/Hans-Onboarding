@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { PrintButtonClient as PrintButton } from "@/components/ui/PrintButtonClient"
 import { TaxFormPreview } from "@/components/TaxFormPreview"
 import { RVBefreiungPreview } from "@/components/RVBefreiungPreview"
+import { SendToAdvisorButton } from "@/components/ui/SendToAdvisorButton"
 import styles from "./page.module.css"
 
 const getEndDate = (start?: Date | null | string) => {
@@ -66,8 +67,11 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
+      <div className={styles.header} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <a href="/admin" className={styles.backLink}>← Zurück zum Dashboard</a>
+        {contractStep && taxDataProgress && (
+          <SendToAdvisorButton userId={userId} employeeName={name} />
+        )}
       </div>
 
       <div className={styles.auditLog}>
