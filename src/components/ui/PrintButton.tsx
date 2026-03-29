@@ -5,13 +5,23 @@ import { Button } from "./Button"
 import { jsPDF } from "jspdf"
 import html2canvas from "html2canvas"
 
-export function PrintButton({ className, label = "Als PDF herunterladen" }: { className?: string, label?: string }) {
+export function PrintButton({ 
+  className, 
+  label = "Als PDF herunterladen",
+  elementId = "contract-preview",
+  filename = "Dokument.pdf"
+}: { 
+  className?: string, 
+  label?: string,
+  elementId?: string,
+  filename?: string
+}) {
   const [isGenerating, setIsGenerating] = useState(false)
 
   const handleDownloadPdf = async () => {
-    const element = document.getElementById("contract-preview")
+    const element = document.getElementById(elementId)
     if (!element) {
-      alert("Vertrag konnte nicht gefunden werden.")
+      alert("Dokument konnte nicht gefunden werden.")
       return
     }
 
@@ -73,7 +83,7 @@ export function PrintButton({ className, label = "Als PDF herunterladen" }: { cl
         heightLeft -= usableHeight
       }
       
-      pdf.save("Arbeitsvertrag.pdf")
+      pdf.save(filename)
     } catch (e) {
       console.error("PDF generation error", e)
       alert("Fehler bei der PDF-Erzeugung. Bitte nutzen Sie stattdessen die Drucken-Funktion Ihres Browsers.")

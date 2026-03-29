@@ -206,7 +206,7 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
             <Button variant="ghost" size="sm" onClick={() => setSignedUrl(null)}>
               Unterschrift ändern
             </Button>
-            <a href="/onboarding/personal-data">
+            <a href="/onboarding/tax-data">
               <Button variant="ghost" size="sm">Daten korrigieren</Button>
             </a>
           </div>
@@ -244,7 +244,7 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
       <div className={styles.signatureSection}>
         <div className={styles.sectionHeader}>
           <h4>Bitte hier digital unterschreiben:</h4>
-          <a href="/onboarding/personal-data">
+          <a href="/onboarding/tax-data">
             <Button variant="ghost" size="sm" className={styles.backBtn}>Daten korrigieren / Zurück</Button>
           </a>
         </div>

@@ -37,8 +37,23 @@ export default async function DashboardPage() {
     orderBy: { uploadedAt: 'desc' }
   })
 
-  // Combine signed documents and templates
+  const taxDataProgress = await prisma.stepProgress.findUnique({
+    where: { userId_stepId: { userId, stepId: "tax-data" } }
+  })
+
+  // Combine signed documents, templates and tax questionnaire
   const allDocuments = [...(user?.documents || []), ...globalInstructions]
+  
+  if (taxDataProgress?.completed) {
+    allDocuments.push({
+      id: "tax-questionnaire-virtual",
+      name: "Personalfragebogen (Steuer)",
+      url: "/dashboard/tax-form",
+      type: "TAX_QUESTIONNAIRE",
+      uploadedAt: taxDataProgress.updatedAt,
+      userId: userId
+    })
+  }
 
   const personalDataProgress = await prisma.stepProgress.findUnique({
     where: { userId_stepId: { userId, stepId: "personal-data" } }

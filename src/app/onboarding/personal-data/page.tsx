@@ -75,7 +75,7 @@ export default async function PersonalDataStep() {
       })
     }
 
-    redirect("/onboarding/contract")
+    redirect("/onboarding/tax-data")
   }
 
   return (
