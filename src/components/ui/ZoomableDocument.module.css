@@ -6,10 +6,18 @@
   background-color: white;
   box-shadow: var(--shadow-premium);
   margin-bottom: 3rem;
+  /* Width is governed by parent, height is set via inline style on React side if scaled */
 }
 
 .scaledInner {
   pointer-events: none; /* Verhindert versehentliche Interaktion in der Miniatur */
+}
+
+/* On mobile (scaled), the inner content must be absolute so its unscaled bounding box doesn't push the container height */
+.scaledInner.isScaled {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .tapHint {

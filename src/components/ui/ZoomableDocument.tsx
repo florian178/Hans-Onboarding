@@ -14,13 +14,14 @@ export function ZoomableDocument({ children, id, className }: ZoomableDocumentPr
   const containerRef = useRef<HTMLDivElement>(null)
   const innerRef = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(1)
+  const [contentHeight, setContentHeight] = useState(0)
 
   useEffect(() => {
     const calculateScale = () => {
       if (innerRef.current && containerRef.current) {
         const containerWidth = containerRef.current.offsetWidth
         const docWidth = 794 // A4 target width
-        if (containerWidth < docWidth) {
+        if (containerWidth < docWidth && containerWidth > 0) {
           setScale(containerWidth / docWidth)
         } else {
           setScale(1)
@@ -31,6 +32,18 @@ export function ZoomableDocument({ children, id, className }: ZoomableDocumentPr
     calculateScale()
     window.addEventListener("resize", calculateScale)
     return () => window.removeEventListener("resize", calculateScale)
+  }, [])
+
+  // Use ResizeObserver to track the actual unscaled height of the inner content
+  useEffect(() => {
+    if (!innerRef.current) return
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContentHeight(entry.target.scrollHeight)
+      }
+    })
+    resizeObserver.observe(innerRef.current)
+    return () => resizeObserver.disconnect()
   }, [])
 
   // Lock body scroll when zoomed
@@ -55,7 +68,7 @@ export function ZoomableDocument({ children, id, className }: ZoomableDocumentPr
       >
         <div
           ref={innerRef}
-          className={styles.scaledInner}
+          className={`${styles.scaledInner} ${scale < 1 ? styles.isScaled : ''}`}
           style={{
             transform: scale < 1 ? `scale(${scale})` : 'none',
             transformOrigin: 'top left',
@@ -64,9 +77,10 @@ export function ZoomableDocument({ children, id, className }: ZoomableDocumentPr
         >
           {children}
         </div>
-        {/* Platzhalter für korrekte Container-Höhe */}
-        {scale < 1 && innerRef.current && (
-          <div style={{ height: (innerRef.current.scrollHeight * scale) + 'px' }} />
+        
+        {/* Platzhalter für exakte Container-Höhe bei absolute positioning */}
+        {scale < 1 && contentHeight > 0 && (
+          <div style={{ height: (contentHeight * scale) + 'px', width: '100%' }} />
         )}
 
         {/* Tap-Hinweis auf Mobile */}
