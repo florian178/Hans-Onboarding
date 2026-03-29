@@ -36,7 +36,7 @@ export function SendToAdvisorButton({
       document.body.appendChild(wrapper)
 
       const canvas = await html2canvas(clone, {
-        scale: 2,
+        scale: 1, // Reduziert von 2 auf 1 für Vercel Payload Limits (< 4.5MB)
         useCORS: true,
         logging: false,
         backgroundColor: "#ffffff",
@@ -53,7 +53,7 @@ export function SendToAdvisorButton({
       const usableHeight = pageHeight - 2 * margin
       
       const imgHeight = (canvas.height * usableWidth) / canvas.width
-      const imgData = canvas.toDataURL("image/jpeg", 0.95) // Use JPEG to reduce size
+      const imgData = canvas.toDataURL("image/jpeg", 0.7) // Reduziert für den Dateianhang
       
       let heightLeft = imgHeight
       let position = margin
