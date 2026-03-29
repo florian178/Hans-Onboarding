@@ -283,8 +283,8 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
             <PrintButton elementId="fire-safety" label="Brandschutzbelehrung (PDF) herunterladen" />
           </div>
 
-          <div style={{ transform: 'scale(1.0)', transformOrigin: 'top left', border: '1px solid #ccc', margin: '20px 0', overflowX: 'auto', backgroundColor: '#e0e0e0', padding: '20px', borderRadius: '8px' }}>
-            <div id="fire-safety">
+          <div className={styles.contractPreview} style={{ padding: '0', marginTop: '20px', marginBottom: '20px' }}>
+            <div id="fire-safety" style={{ minWidth: '700px' }}>
               <FireSafetyPreview 
                 employeeName={name}
                 signatureUrl={instructionsData.signature}

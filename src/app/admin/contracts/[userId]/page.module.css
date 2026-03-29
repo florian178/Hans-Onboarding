@@ -211,3 +211,58 @@
     border-radius: 0;
   }
 }
+
+/* ─── Mobile: Dokumente horizontal scrollbar, nicht gestaucht ─── */
+@media (max-width: 860px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .contractPreview {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0;
+  }
+
+  /* Innere Dokument-Inhalte auf Mindestbreite halten */
+  .contractPreview > *,
+  .contractPreview > div {
+    min-width: 700px;
+  }
+
+  .contractHeader {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .contractHeader h2 {
+    font-size: 1.15rem;
+  }
+
+  .signatureRow {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sigContainer {
+    max-width: 100%;
+  }
+
+  .auditLog {
+    padding: 1rem;
+  }
+
+  .auditTable th,
+  .auditTable td {
+    padding: 0.6rem 0.5rem;
+    font-size: 0.8rem;
+  }
+}
+
