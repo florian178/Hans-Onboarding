@@ -7,6 +7,7 @@ import { signContract } from "./actions"
 import { jsPDF } from "jspdf"
 import html2canvas from "html2canvas"
 import styles from "./ContractForm.module.css"
+import { ZoomableDocument } from "@/components/ui/ZoomableDocument"
 
 const getEndDateStr = (startStr?: string | Date | null) => {
   const start = startStr ? new Date(startStr) : new Date();
@@ -212,7 +213,8 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
           </div>
         </div>
 
-        <div className={styles.contractPreview} id="contract-preview">
+        <ZoomableDocument id="contract-preview">
+          <div style={{ padding: '4rem 3.5rem' }}>
           <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} personalData={personalData} />
           
           <div className={styles.signatureRow}>
@@ -230,7 +232,8 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
                <p className={styles.label}>Unterschrift Arbeitnehmer</p>
              </div>
           </div>
-        </div>
+          </div>
+        </ZoomableDocument>
       </div>
     )
   }

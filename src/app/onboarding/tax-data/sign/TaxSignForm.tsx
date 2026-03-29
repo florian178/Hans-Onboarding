@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button"
 import { TaxFormPreview } from "@/components/TaxFormPreview"
 import { RVBefreiungPreview } from "@/components/RVBefreiungPreview"
 import { signTaxForm } from "./actions"
+import { ZoomableDocument } from "@/components/ui/ZoomableDocument"
 import styles from "../../contract/ContractForm.module.css"
 
 interface TaxSignFormProps {
@@ -58,7 +59,7 @@ export function TaxSignForm({ user, personalData, taxData, taxDataProgress }: Ta
           </div>
         </div>
 
-        <div className={styles.contractPreview} style={{ padding: 0 }}>
+        <ZoomableDocument>
           <TaxFormPreview 
             user={user} 
             personalData={personalData} 
@@ -66,10 +67,10 @@ export function TaxSignForm({ user, personalData, taxData, taxDataProgress }: Ta
             taxDataProgressDate={taxDataProgress?.updatedAt || new Date()} 
             signatureUrl={signedUrl}
           />
-        </div>
+        </ZoomableDocument>
 
         {taxData?.pensionExemption === 'on' && (
-          <div className={styles.contractPreview} style={{ padding: 0, marginTop: '20px' }}>
+          <ZoomableDocument>
             <RVBefreiungPreview 
               firstName={personalData?.firstName || ''}
               lastName={personalData?.lastName || ''}
@@ -78,7 +79,7 @@ export function TaxSignForm({ user, personalData, taxData, taxDataProgress }: Ta
               startDate={user?.startDate}
               signatureUrl={signedUrl}
             />
-          </div>
+          </ZoomableDocument>
         )}
       </div>
     )
@@ -88,17 +89,17 @@ export function TaxSignForm({ user, personalData, taxData, taxDataProgress }: Ta
     <div className={styles.container}>
       {error && <div className={styles.error}>{error}</div>}
       
-      <div className={styles.contractPreview} style={{ padding: 0 }}>
+      <ZoomableDocument>
         <TaxFormPreview 
           user={user} 
           personalData={personalData} 
           taxData={taxData} 
           taxDataProgressDate={taxDataProgress?.updatedAt || new Date()} 
         />
-      </div>
+      </ZoomableDocument>
 
       {taxData?.pensionExemption === 'on' && (
-        <div className={styles.contractPreview} style={{ padding: 0, marginTop: '20px' }}>
+        <ZoomableDocument>
           <RVBefreiungPreview 
             firstName={personalData?.firstName || ''}
             lastName={personalData?.lastName || ''}
@@ -106,7 +107,7 @@ export function TaxSignForm({ user, personalData, taxData, taxDataProgress }: Ta
             signDate={taxDataProgress?.updatedAt || new Date()}
             startDate={user?.startDate}
           />
-        </div>
+        </ZoomableDocument>
       )}
 
       <div className={styles.signatureSection}>
