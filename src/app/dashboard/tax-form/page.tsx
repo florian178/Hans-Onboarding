@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import { PrintButtonClient as PrintButton } from "@/components/ui/PrintButtonClient"
 import { TaxFormPreview } from "@/components/TaxFormPreview"
+import { RVBefreiungPreview } from "@/components/RVBefreiungPreview"
 import styles from "../../admin/contracts/[userId]/page.module.css"
 
 export default async function TaxFormPage() {
@@ -74,6 +75,30 @@ export default async function TaxFormPage() {
           signatureUrl={taxData?.signatureUrl} 
         />
       </div>
+
+      {taxData?.pensionExemption === 'on' && (
+        <>
+          <div className={styles.contractHeader} style={{ marginTop: '2rem' }}>
+            <h2>Antrag auf RV-Befreiung</h2>
+            <PrintButton 
+              className={styles.printBtn} 
+              elementId="rv-befreiung" 
+              filename={`RV_Befreiung_${name.replace(/\s/g, '_')}.pdf`}
+              label="Als PDF speichern"
+            />
+          </div>
+          <div className={styles.contractPreview} id="rv-befreiung" style={{ padding: '0' }}>
+            <RVBefreiungPreview 
+              firstName={personalData?.firstName || ''}
+              lastName={personalData?.lastName || ''}
+              svNumber={taxData?.svNumber || ''}
+              signDate={taxDataProgress?.updatedAt}
+              startDate={user?.startDate}
+              signatureUrl={taxData?.signatureUrl}
+            />
+          </div>
+        </>
+      )}
     </div>
   )
 }

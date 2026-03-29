@@ -1779,3 +1779,89 @@ Error: ENOENT: no such file or directory, open '/Users/florianherbst/Documents/O
   syscall: 'open',
   path: '/Users/florianherbst/Documents/Onboarding Hans/.next/dev/server/pages/_app/build-manifest.json'
 }
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+
+thread 'tokio-runtime-worker' (4141220) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:196:17:
+Failed to restore task data (corrupted database or bug): Meta for TaskId 500210)
+
+Caused by:
+    0: Looking up task storage for TaskId 500210 from database failed
+    1: Unable to open static sorted file referenced from 00001771.meta
+    2: Unable to open static sorted file 00001767.sst
+    3: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00001767.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (4168418) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:196:17:
+Failed to restore task data (corrupted database or bug): Meta for TaskId 295240)
+
+Caused by:
+    0: Looking up task storage for TaskId 295240 from database failed
+    1: Unable to open static sorted file referenced from 00004231.meta
+    2: Unable to open static sorted file 00004230.sst
+    3: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00004230.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (4169164) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:196:17:
+Failed to restore task data (corrupted database or bug): Data for TaskId 300919)
+
+Caused by:
+    0: Looking up task storage for TaskId 300919 from database failed
+    1: Unable to open static sorted file referenced from 00001631.meta
+    2: Unable to open static sorted file 00001628.sst
+    3: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00001628.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (4169164) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:618:14:
+Failed to lookup task ids: Looking up task id for CachedTaskType { native_fn: NativeFunction { name: "<ModuleAssetContext as AssetContext>::resolve_asset", global_name: "<turbopack::ModuleAssetContext as dyn turbopack_core::context::AssetContext>::resolve_asset", .. }, this: Some(RawVc::TaskCell(31876, "turbopack::ModuleAssetContext#0")), arg: (FileSystemPath { fs: ResolvedVc(RawVc::TaskCell(9, "turbo_tasks_fs::DiskFileSystem#0")), path: "src/app/admin/contracts/[userId]/page.tsx" }, Vc(RawVc::TaskCell(500212, "turbopack_core::resolve::parse::Request#0")), Vc(RawVc::TaskCell(32335, "turbopack_core::resolve::options::ResolveOptions#0")), EcmaScriptModules(ImportPart(Evaluation))) } from database failed
+
+Caused by:
+    0: Unable to open static sorted file referenced from 00000019.meta
+    1: Unable to open static sorted file 00000015.sst
+    2: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00000015.sst
+    3: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (4165679) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:196:17:
+Failed to restore task data (corrupted database or bug): Meta for TaskId 500214)
+
+Caused by:
+    0: Looking up task storage for TaskId 500214 from database failed
+    1: Unable to open static sorted file referenced from 00000165.meta
+    2: Unable to open static sorted file 00000160.sst
+    3: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00000160.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (4169464) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:618:14:
+Failed to lookup task ids: Looking up task id for CachedTaskType { native_fn: NativeFunction { name: "<EsmAssetReference as ModuleReference>::resolve_reference", global_name: "<turbopack_ecmascript::references::esm::base::EsmAssetReference as dyn turbopack_core::reference::ModuleReference>::resolve_reference", .. }, this: Some(RawVc::TaskCell(294867, "turbopack_ecmascript::references::esm::base::EsmAssetReference#15")), arg: () } from database failed
+
+Caused by:
+    0: Unable to open static sorted file referenced from 00003695.meta
+    1: Unable to open static sorted file 00003693.sst
+    2: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00003693.sst
+    3: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (4165679) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:618:14:
+Failed to lookup task ids: Looking up task id for CachedTaskType { native_fn: NativeFunction { name: "<EsmAssetReference as ModuleReference>::resolve_reference", global_name: "<turbopack_ecmascript::references::esm::base::EsmAssetReference as dyn turbopack_core::reference::ModuleReference>::resolve_reference", .. }, this: Some(RawVc::TaskCell(294867, "turbopack_ecmascript::references::esm::base::EsmAssetReference#15")), arg: () } from database failed
+
+Caused by:
+    0: Unable to open static sorted file referenced from 00003695.meta
+    1: Unable to open static sorted file 00003693.sst
+    2: Failed to open SST file /Users/florianherbst/Documents/Onboarding Hans/.next/dev/cache/turbopack/0ca967b86/00003693.sst
+    3: No such file or directory (os error 2)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)

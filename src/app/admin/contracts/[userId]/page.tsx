@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import { PrintButtonClient as PrintButton } from "@/components/ui/PrintButtonClient"
 import { TaxFormPreview } from "@/components/TaxFormPreview"
+import { RVBefreiungPreview } from "@/components/RVBefreiungPreview"
 import styles from "./page.module.css"
 
 const getEndDate = (start?: Date | null | string) => {
@@ -139,6 +140,30 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
         <div className={styles.missingContract} style={{ marginBottom: '3rem' }}>
           <p>Der Personalfragebogen wurde noch nicht vollständig ausgefüllt.</p>
         </div>
+      )}
+
+      {taxData?.pensionExemption === 'on' && (
+        <>
+          <div className={styles.contractHeader} style={{ marginTop: '2rem' }}>
+            <h2>RV-Befreiung (Antrag)</h2>
+            <PrintButton 
+              className={styles.printBtn} 
+              elementId="rv-befreiung" 
+              filename={`RV_Befreiung_${name.replace(/\s/g, '_')}.pdf`}
+              label="Antrag als PDF speichern"
+            />
+          </div>
+          <div className={styles.contractPreview} id="rv-befreiung" style={{ padding: '0' }}>
+            <RVBefreiungPreview 
+              firstName={personalData?.firstName || ''}
+              lastName={personalData?.lastName || ''}
+              svNumber={taxData?.svNumber || ''}
+              signDate={taxDataProgress?.updatedAt}
+              startDate={user?.startDate}
+              signatureUrl={taxData?.signatureUrl}
+            />
+          </div>
+        </>
       )}
 
       <div className={styles.contractHeader}>

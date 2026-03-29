@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { SignaturePad } from "@/components/ui/SignaturePad"
 import { Button } from "@/components/ui/Button"
 import { TaxFormPreview } from "@/components/TaxFormPreview"
+import { RVBefreiungPreview } from "@/components/RVBefreiungPreview"
 import { signTaxForm } from "./actions"
 import styles from "../../contract/ContractForm.module.css"
 
@@ -66,6 +67,19 @@ export function TaxSignForm({ user, personalData, taxData, taxDataProgress }: Ta
             signatureUrl={signedUrl}
           />
         </div>
+
+        {taxData?.pensionExemption === 'on' && (
+          <div className={styles.contractPreview} style={{ padding: 0, marginTop: '20px' }}>
+            <RVBefreiungPreview 
+              firstName={personalData?.firstName || ''}
+              lastName={personalData?.lastName || ''}
+              svNumber={taxData?.svNumber || ''}
+              signDate={taxDataProgress?.updatedAt || new Date()}
+              startDate={user?.startDate}
+              signatureUrl={signedUrl}
+            />
+          </div>
+        )}
       </div>
     )
   }
@@ -82,6 +96,18 @@ export function TaxSignForm({ user, personalData, taxData, taxDataProgress }: Ta
           taxDataProgressDate={taxDataProgress?.updatedAt || new Date()} 
         />
       </div>
+
+      {taxData?.pensionExemption === 'on' && (
+        <div className={styles.contractPreview} style={{ padding: 0, marginTop: '20px' }}>
+          <RVBefreiungPreview 
+            firstName={personalData?.firstName || ''}
+            lastName={personalData?.lastName || ''}
+            svNumber={taxData?.svNumber || ''}
+            signDate={taxDataProgress?.updatedAt || new Date()}
+            startDate={user?.startDate}
+          />
+        </div>
+      )}
 
       <div className={styles.signatureSection}>
         <div className={styles.sectionHeader}>
