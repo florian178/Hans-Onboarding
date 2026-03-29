@@ -37,16 +37,16 @@ export default async function TaxDataStep() {
       create: {
         userId: session.user.id!,
         stepId: "tax-data",
-        completed: true,
+        completed: false,
         data: JSON.stringify(data)
       },
       update: {
-        completed: true,
+        completed: false,
         data: JSON.stringify(data)
       }
     })
 
-    redirect("/onboarding/contract")
+    redirect("/onboarding/tax-data/sign")
   }
 
   return (
@@ -186,6 +186,9 @@ export default async function TaxDataStep() {
                     <input type="checkbox" name="pensionExemption" defaultChecked={d.pensionExemption === "on"} />
                     Ich beantrage die Befreiung von der Rentenversicherungspflicht (nur bei Minijobs)
                 </label>
+                <p className={styles.helpText} style={{ marginTop: '5px', fontSize: '12px', color: '#666' }}>
+                    Hinweis: Minijobber sind grundsätzlich rentenversicherungspflichtig (Eigenanteil von i.d.R. 3,6%). Mit diesem Kreuz kannst du dich von dieser Beitragspflicht befreien lassen.
+                </p>
             </div>
 
             <div className={styles.section}>
@@ -210,11 +213,14 @@ export default async function TaxDataStep() {
                     <input type="checkbox" name="beaContradiction" defaultChecked={d.beaContradiction === "on"} />
                     Ich widerspreche der elektronischen Übermittlung von Arbeitsbescheinigungen (Bea)
                 </label>
+                <p className={styles.helpText} style={{ marginTop: '5px', fontSize: '12px', color: '#666' }}>
+                    Hinweis: "Bea" ermöglicht der Agentur für Arbeit, Bescheinigungen digital bei uns abzurufen. Ein Widerspruch führt dazu, dass du sie stattdessen in Papierform erhältst. Wir empfehlen, das Feld leer zu lassen.
+                </p>
             </div>
           </div>
           
           <div className={styles.actions}>
-            <Button type="submit">Speichern & Weiter zum Vertrag</Button>
+            <Button type="submit">Speichern & Vorschau ansehen</Button>
           </div>
         </form>
       </CardContent>
