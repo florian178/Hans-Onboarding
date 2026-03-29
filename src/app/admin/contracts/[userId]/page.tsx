@@ -5,7 +5,7 @@ import { PrintButtonClient as PrintButton } from "@/components/ui/PrintButtonCli
 import { TaxFormPreview } from "@/components/TaxFormPreview"
 import { RVBefreiungPreview } from "@/components/RVBefreiungPreview"
 import { FireSafetyPreview } from "@/components/FireSafetyPreview"
-import { SendToAdvisorButton } from "@/components/ui/SendToAdvisorButton"
+import { SendToAdvisorButtonClient as SendToAdvisorButton } from "@/components/ui/SendToAdvisorButtonClient"
 import styles from "./page.module.css"
 
 const getEndDate = (start?: Date | null | string) => {
