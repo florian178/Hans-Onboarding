@@ -2,6 +2,7 @@ import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import { PrintButtonClient as PrintButton } from "@/components/ui/PrintButtonClient"
+import { ZoomableDocument } from "@/components/ui/ZoomableDocument"
 
 import styles from "../../admin/contracts/[userId]/page.module.css"
 
@@ -62,7 +63,8 @@ export default async function EmployeeContractPage() {
         <PrintButton className={styles.printBtn} />
       </div>
 
-      <div className={styles.contractPreview} id="contract-preview">
+      <ZoomableDocument id="contract-preview">
+        <div style={{ padding: '4rem 3.5rem' }}>
         <div className={styles.contractText}>
           <div className={styles.documentLogo}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -140,7 +142,8 @@ export default async function EmployeeContractPage() {
              <p className={styles.label}>Unterschrift Arbeitnehmer/-in</p>
            </div>
         </div>
-      </div>
+        </div>
+      </ZoomableDocument>
     </div>
   )
 }

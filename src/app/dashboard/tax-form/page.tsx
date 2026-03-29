@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { PrintButtonClient as PrintButton } from "@/components/ui/PrintButtonClient"
 import { TaxFormPreview } from "@/components/TaxFormPreview"
 import { RVBefreiungPreview } from "@/components/RVBefreiungPreview"
+import { ZoomableDocument } from "@/components/ui/ZoomableDocument"
 import styles from "../../admin/contracts/[userId]/page.module.css"
 
 export default async function TaxFormPage() {
@@ -66,7 +67,7 @@ export default async function TaxFormPage() {
         />
       </div>
 
-      <div className={styles.contractPreview} id="tax-questionnaire" style={{ padding: '0' }}>
+      <ZoomableDocument id="tax-questionnaire">
         <TaxFormPreview 
           user={user} 
           personalData={personalData} 
@@ -74,7 +75,7 @@ export default async function TaxFormPage() {
           taxDataProgressDate={taxDataProgress?.updatedAt} 
           signatureUrl={taxData?.signatureUrl} 
         />
-      </div>
+      </ZoomableDocument>
 
       {taxData?.pensionExemption === 'on' && (
         <>
@@ -87,7 +88,7 @@ export default async function TaxFormPage() {
               label="Als PDF speichern"
             />
           </div>
-          <div className={styles.contractPreview} id="rv-befreiung" style={{ padding: '0' }}>
+          <ZoomableDocument id="rv-befreiung">
             <RVBefreiungPreview 
               firstName={personalData?.firstName || ''}
               lastName={personalData?.lastName || ''}
@@ -96,7 +97,7 @@ export default async function TaxFormPage() {
               startDate={user?.startDate}
               signatureUrl={taxData?.signatureUrl}
             />
-          </div>
+          </ZoomableDocument>
         </>
       )}
     </div>

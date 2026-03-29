@@ -64,10 +64,10 @@ export function ZoomableDocument({ children, id, className }: ZoomableDocumentPr
         className={`${styles.previewContainer} ${className || ''}`}
         onClick={() => scale < 1 && setIsZoomed(true)}
         style={{ cursor: scale < 1 ? 'pointer' : 'default' }}
-        id={id}
       >
         <div
           ref={innerRef}
+          id={id}
           className={`${styles.scaledInner} ${scale < 1 ? styles.isScaled : ''}`}
           style={{
             transform: scale < 1 ? `scale(${scale})` : 'none',

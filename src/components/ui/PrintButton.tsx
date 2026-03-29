@@ -29,6 +29,10 @@ export function PrintButton({
     try {
       // Create a hidden desktop-width clone to enforce correct A4 layout
       const clone = element.cloneNode(true) as HTMLElement
+      // Reset any mobile scaling/positioning that might be on the element
+      clone.style.transform = "none"
+      clone.style.position = "static"
+      
       const wrapper = document.createElement("div")
       wrapper.style.position = "absolute"
       wrapper.style.left = "-9999px"
