@@ -19,7 +19,7 @@ export async function sendDocumentsToAdvisor(
       throw new Error("Keine Dokumente zum Versenden vorhanden.")
     }
 
-    // Convert data URIs to plain base64 strings if necessary
+    // Convert data URIs to Node Buffers
     const cleanedAttachments = attachments.map(att => {
       let b64 = att.content
       if (b64.includes("base64,")) {
@@ -27,7 +27,7 @@ export async function sendDocumentsToAdvisor(
       }
       return {
         filename: att.filename,
-        content: b64,
+        content: Buffer.from(b64, "base64"),
       }
     })
 
