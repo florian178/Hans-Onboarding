@@ -33,16 +33,6 @@
   margin-top: 1rem;
 }
 
-@media (max-width: 640px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .fullWidth {
-    grid-column: span 1;
-  }
-}
-
 .section {
   grid-column: span 2;
   margin-top: 1rem;
@@ -141,3 +131,76 @@
 .checkboxLabel input {
   margin-top: 0.25rem;
 }
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+  .card {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .fullWidth {
+    grid-column: span 1;
+  }
+
+  .section {
+    grid-column: span 1;
+  }
+
+  .sectionTitle {
+    font-size: 1.1rem;
+  }
+
+  .radioGroup {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .radioGroup label,
+  .verticalRadios label {
+    font-size: 1rem;
+    padding: 0.5rem 0;
+  }
+
+  .radioGroup input[type="radio"],
+  .verticalRadios input[type="radio"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  .select {
+    font-size: 1rem;
+    padding: 0.85rem;
+  }
+
+  .textarea {
+    font-size: 1rem;
+    padding: 0.85rem;
+  }
+
+  .checkboxLabel {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .checkboxLabel input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}
+
+
