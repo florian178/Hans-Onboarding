@@ -16,6 +16,9 @@ export default async function AdminDashboard() {
       onboardingStatus: true,
       documents: {
         where: { type: 'CONTRACT_SIGNED' }
+      },
+      stepProgresses: {
+        where: { stepId: 'advisor-sent' }
       }
     },
     orderBy: { createdAt: 'desc' }
@@ -147,6 +150,7 @@ export default async function AdminDashboard() {
                     <th>Name</th>
                     <th>E-Mail</th>
                     <th>Status</th>
+                    <th>Steuerkanzlei</th>
                     <th>Erstellt am</th>
                     <th>Optionen</th>
                   </tr>
@@ -160,6 +164,15 @@ export default async function AdminDashboard() {
                         <span className={`${styles.badge} ${styles['status-' + (emp.onboardingStatus?.status || 'INVITED')]}`}>
                           {emp.onboardingStatus?.status || 'INVITED'}
                         </span>
+                      </td>
+                      <td>
+                        {emp.stepProgresses && emp.stepProgresses.length > 0 ? (
+                          <span style={{ fontSize: '11px', backgroundColor: '#e6f4ea', color: '#137333', padding: '4px 8px', borderRadius: '12px', fontWeight: 'bold' }}>
+                            {emp.stepProgresses[0].updatedAt.toLocaleDateString('de-DE')} {emp.stepProgresses[0].updatedAt.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr
+                          </span>
+                        ) : (
+                          <span style={{ color: '#aaa', fontSize: '12px' }}>Ausstehend</span>
+                        )}
                       </td>
                       <td>{emp.createdAt.toLocaleDateString('de-DE')}</td>
                       <td>
@@ -181,7 +194,7 @@ export default async function AdminDashboard() {
                   ))}
                   {employees.length === 0 && (
                     <tr>
-                      <td colSpan={5} className={styles.empty}>Keine Mitarbeiter gefunden.</td>
+                      <td colSpan={6} className={styles.empty}>Keine Mitarbeiter gefunden.</td>
                     </tr>
                   )}
                 </tbody>

@@ -33,6 +33,7 @@ export async function sendDocumentsToAdvisor(
 
     const data = await resend.emails.send({
       from: "onboarding@hansimclub.de",
+      replyTo: "onboarding@hansimclub.de",
       to: "hallo@hansimclub.de",
       subject: `Neue Mitarbeiter-Unterlagen: ${employeeName}`,
       html: `
@@ -49,6 +50,19 @@ export async function sendDocumentsToAdvisor(
       console.error("[sendDocumentsToAdvisor] Resend Error:", data.error)
       return { success: false, error: data.error.message }
     }
+
+    // Erfolgreicher Versand -> Track im onboarding system
+    await prisma.stepProgress.upsert({
+      where: { userId_stepId: { userId, stepId: 'advisor-sent' } },
+      create: { 
+        userId, 
+        stepId: 'advisor-sent', 
+        completed: true 
+      },
+      update: { 
+        updatedAt: new Date() 
+      }
+    })
 
     return { success: true }
   } catch (error: any) {
