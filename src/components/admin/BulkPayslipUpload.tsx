@@ -86,12 +86,22 @@ export default function BulkPayslipUpload({ employees }: Props) {
         body: formData,
       })
 
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || "Fehler beim Verarbeiten")
+      // Read response as text first to handle non-JSON responses (e.g. HTML error pages)
+      const responseText = await res.text()
+
+      let data
+      try {
+        data = JSON.parse(responseText)
+      } catch {
+        // Response is not JSON (likely an HTML error page or redirect)
+        console.error("Non-JSON response:", res.status, responseText.substring(0, 500))
+        throw new Error(`Server-Fehler (${res.status}): ${responseText.substring(0, 150)}`)
       }
 
-      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.error || `Fehler (${res.status})`)
+      }
+
       setResult(data)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unbekannter Fehler")
@@ -118,12 +128,17 @@ export default function BulkPayslipUpload({ employees }: Props) {
         body: formData,
       })
 
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || "Fehler beim Zuordnen")
+      const responseText = await res.text()
+      let data
+      try {
+        data = JSON.parse(responseText)
+      } catch {
+        throw new Error(`Server-Fehler (${res.status})`)
       }
 
-      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.error || "Fehler beim Zuordnen")
+      }
 
       // Move from unassigned to assigned
       setResult((prev) => {
