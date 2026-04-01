@@ -206,12 +206,12 @@ export default function BulkPayslipUpload({ employees }: Props) {
    * Match employee name and PLZ in page text.
    * Auto-assignment: Requires ALL 3 (First Name, Last Name, Zip Code).
    * Overview Detection: If >1 employee matches 3/3, skip auto-assign.
+   * Candidate detection: Suggest name ONLY if exactly one person matches 2/3.
    */
   function findEmployeeMatch(pageText: string): { employee: Employee | null, candidateName: string } {
     const text = pageText.toLowerCase()
-    const matchesAll: Employee[] = []
-    let bestCandidate: Employee | null = null
-    let maxMatches = 0
+    const matches3per3: Employee[] = []
+    const matches2per3: Employee[] = []
     
     for (const emp of employees) {
       let matches = 0
@@ -228,31 +228,44 @@ export default function BulkPayslipUpload({ employees }: Props) {
       if (zipMatch) matches++
 
       if (matches === 3) {
-        matchesAll.push(emp)
-      } else if (matches > maxMatches) {
-        maxMatches = matches
-        bestCandidate = emp
+        matches3per3.push(emp)
+      } else if (matches === 2) {
+        matches2per3.push(emp)
       }
     }
 
-    // Perfect match for EXACTLY one person: Auto-assign
-    if (matchesAll.length === 1) {
-      const emp = matchesAll[0]
+    // 1. Perfect match for EXACTLY one person: Auto-assign
+    if (matches3per3.length === 1) {
+      const emp = matches3per3[0]
       return { employee: emp, candidateName: emp.name || "" }
     }
 
-    // Multiple matches: Likely an overview page
-    if (matchesAll.length > 1) {
+    // 2. Multiple perfect matches: Overview page
+    if (matches3per3.length > 1) {
       return { 
         employee: null, 
-        candidateName: `Mehrere Mitarbeiter erkannt (${matchesAll.length}) — Übersichtsseite?` 
+        candidateName: `Mehrere Mitarbeiter erkannt (${matches3per3.length}) — Übersichtsseite?` 
       }
     }
 
-    // No 3/3 match: Use best candidate
+    // 3. Exactly one 2/3 match: Suggest as candidate
+    if (matches2per3.length === 1) {
+      const emp = matches2per3[0]
+      return { employee: null, candidateName: emp.name || "" }
+    }
+
+    // 4. Multiple 2/3 matches: Ambiguous
+    if (matches2per3.length > 1) {
+      return { 
+        employee: null, 
+        candidateName: "Mehrere Kandidaten (2/3 Match)" 
+      }
+    }
+
+    // 5. No strong match
     return { 
       employee: null, 
-      candidateName: bestCandidate ? (bestCandidate.name || "") : "" 
+      candidateName: "" 
     }
   }
 
