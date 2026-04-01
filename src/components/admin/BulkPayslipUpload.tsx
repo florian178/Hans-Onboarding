@@ -63,14 +63,30 @@ export default function BulkPayslipUpload({ employees }: Props) {
   /**
    * Extract text from each page using pdfjs-dist (runs in browser).
    */
-  async function extractTextPerPage(data: ArrayBuffer): Promise<string[]> {
+  async function extractTextPerPage(data: ArrayBuffer, onProgress: (cur: number, total: number) => void): Promise<string[]> {
+    console.log("Starting text extraction...")
     const pdfjsLib = await import("pdfjs-dist")
-    // Use the bundled worker for browser
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`
+    
+    // Use a fixed version or let it be dynamic, but wrap in try-catch
+    const version = pdfjsLib.version || "4.10.38" // fallback
+    const workerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${version}/pdf.worker.min.mjs`
+    console.log(`Using PDF.js version ${version}, worker: ${workerUrl}`)
+    
+    pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl
 
-    const doc = await pdfjsLib.getDocument({ data: new Uint8Array(data) }).promise
+    const loadingTask = pdfjsLib.getDocument({ 
+      data: new Uint8Array(data),
+      useWorkerFetch: false,
+      isEvalSupported: false,
+    })
+    
+    const doc = await loadingTask.promise
+    const totalPages = doc.numPages
+    console.log(`PDF loaded, total pages: ${totalPages}`)
+    
     const texts: string[] = []
-    for (let i = 1; i <= doc.numPages; i++) {
+    for (let i = 1; i <= totalPages; i++) {
+      onProgress(i, totalPages)
       const page = await doc.getPage(i)
       const content = await page.getTextContent()
       const text = content.items
@@ -86,12 +102,15 @@ export default function BulkPayslipUpload({ employees }: Props) {
   /**
    * Split PDF into single-page PDFs using pdf-lib (runs in browser).
    */
-  async function splitPages(data: ArrayBuffer): Promise<Map<number, Uint8Array>> {
+  async function splitPages(data: ArrayBuffer, onProgress: (cur: number, total: number) => void): Promise<Map<number, Uint8Array>> {
+    console.log("Starting PDF split...")
     const { PDFDocument } = await import("pdf-lib")
     const srcDoc = await PDFDocument.load(data)
+    const totalPages = srcDoc.getPageCount()
     const pages = new Map<number, Uint8Array>()
 
-    for (let i = 0; i < srcDoc.getPageCount(); i++) {
+    for (let i = 0; i < totalPages; i++) {
+      onProgress(i + 1, totalPages)
       const newDoc = await PDFDocument.create()
       const [page] = await newDoc.copyPages(srcDoc, [i])
       newDoc.addPage(page)
@@ -165,12 +184,15 @@ export default function BulkPayslipUpload({ employees }: Props) {
       const arrayBuffer = await file.arrayBuffer()
 
       // Step 1: Extract text from each page (in browser)
-      setStatusText("Text wird aus PDF extrahiert…")
-      const pageTexts = await extractTextPerPage(arrayBuffer)
+      setStatusText("Bibliotheken werden geladen…")
+      const pageTexts = await extractTextPerPage(arrayBuffer, (cur, total) => {
+        setStatusText(`Analysiere Seite ${cur} von ${total}…`)
+      })
 
       // Step 2: Split PDF into individual pages (in browser)
-      setStatusText("PDF wird aufgeteilt…")
-      const pages = await splitPages(arrayBuffer)
+      const pages = await splitPages(arrayBuffer, (cur, total) => {
+        setStatusText(`Teile Seite ${cur} von ${total}…`)
+      })
       splitPagesRef.current = pages
 
       const monthNum = parseInt(month)
