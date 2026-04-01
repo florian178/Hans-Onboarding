@@ -3,10 +3,7 @@ import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { PDFDocument } from "pdf-lib"
 import { put } from "@vercel/blob"
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf.mjs"
-
-// Disable worker for serverless environment
-GlobalWorkerOptions.workerSrc = ""
+import { extractText } from "unpdf"
 
 interface AssignedResult {
   employeeName: string
@@ -17,34 +14,6 @@ interface AssignedResult {
 interface UnassignedResult {
   page: number
   textSnippet: string
-}
-
-/**
- * Extract text from a PDF buffer, returning an array of text strings (one per page).
- */
-async function extractTextPerPage(pdfBuffer: Buffer): Promise<string[]> {
-  const uint8Array = new Uint8Array(pdfBuffer)
-  const loadingTask = getDocument({
-    data: uint8Array,
-    useWorkerFetch: false,
-    isEvalSupported: false,
-    useSystemFonts: true,
-  })
-  const pdfDoc = await loadingTask.promise
-  const pageTexts: string[] = []
-
-  for (let i = 1; i <= pdfDoc.numPages; i++) {
-    const page = await pdfDoc.getPage(i)
-    const textContent = await page.getTextContent()
-    const text = textContent.items
-      .filter((item): item is { str: string } & typeof item => "str" in item)
-      .map((item) => item.str)
-      .join(" ")
-    pageTexts.push(text)
-  }
-
-  await pdfDoc.destroy()
-  return pageTexts
 }
 
 export async function POST(req: NextRequest) {
@@ -69,8 +38,10 @@ export async function POST(req: NextRequest) {
     const pdfLibDoc = await PDFDocument.load(pdfBuffer)
     const pageCount = pdfLibDoc.getPageCount()
 
-    // Use pdfjs-dist for text extraction (worker-free)
-    const pageTexts = await extractTextPerPage(pdfBuffer)
+    // Use unpdf for serverless-safe text extraction (per page)
+    const { text: pageTexts } = await extractText(new Uint8Array(pdfBuffer), {
+      mergePages: false,
+    })
 
     // Get all employees from DB
     const employees = await prisma.user.findMany({
