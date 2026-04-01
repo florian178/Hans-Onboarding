@@ -119,7 +119,57 @@ export default async function ContentDashboard() {
 
         <div className={styles.categories}>
           
-          <h2 className={styles.categoryHeading}>Von uns hochgeladene Daten</h2>
+          <h2 className={styles.categoryHeading}>Mitarbeiter Ordner</h2>
+          <div className={styles.employeeFolders}>
+             {employees.map(emp => {
+               // The physical PDFs (Contract, Tax Form, etc.) are dynamically generated in the personal record.
+               // We provide a quick link to the dossier, plus list all uploaded payslips.
+               const totalItems = emp.payslips.length + 1; // +1 for the Dossier link
+               
+               return (
+                 <details key={emp.id} className={styles.folder}>
+                   <summary className={styles.folderSummary}>
+                     <div className={styles.folderHeaderLeft}>
+                       <span className={styles.folderIcon}>📁</span>
+                       <strong className={styles.folderName}>{emp.name || emp.email}</strong>
+                     </div>
+                     <span className={styles.folderBadge}>{totalItems} Dokumente</span>
+                   </summary>
+                   <div className={styles.folderContent}>
+                     <div className={styles.list}>
+                       
+                       {/* Link to Full Dossier */}
+                       <div className={styles.listItem} style={{ backgroundColor: 'var(--surface-hover)' }}>
+                         <div className={styles.itemInfo}>
+                           <strong className={styles.docName}>Digitale Personalakte</strong>
+                           <span className={styles.badge} style={{ backgroundColor: 'var(--primary)', color: 'var(--primary-foreground)' }}>VERTRAG & FORMULARE</span>
+                         </div>
+                         <div className={styles.itemActions}>
+                           <a href={`/admin/contracts/${emp.id}`} className={styles.link}>Akte öffnen & PDF drucken</a>
+                         </div>
+                       </div>
+
+                       {/* List of Payslips */}
+                       {emp.payslips.map((slip) => (
+                         <div key={slip.id} className={styles.listItem}>
+                           <div className={styles.itemInfo}>
+                             <strong className={styles.docName}>Lohnabrechnung {String(slip.month).padStart(2, '0')}/{slip.year}</strong>
+                             <span className={styles.badge}>PAYSLIP</span>
+                           </div>
+                           <div className={styles.itemActions}>
+                             <a href={slip.url} target="_blank" rel="noreferrer" className={styles.link}>Ansehen</a>
+                           </div>
+                         </div>
+                       ))}
+                     </div>
+                   </div>
+                 </details>
+               )
+             })}
+             {employees.length === 0 && <p className={styles.empty}>Keine aktiven Mitarbeiter gefunden.</p>}
+          </div>
+
+          <h2 className={styles.categoryHeading} style={{ marginTop: '1rem' }}>Von uns hochgeladene Daten</h2>
           <Card className={styles.categoryCard}>
             <CardContent className={styles.cardContentPadded}>
               <div className={styles.list}>
@@ -144,60 +194,6 @@ export default async function ContentDashboard() {
               </div>
             </CardContent>
           </Card>
-
-          <h2 className={styles.categoryHeading}>Mitarbeiter Ordner</h2>
-          <div className={styles.employeeFolders}>
-             {employees.map(emp => {
-               const totalItems = emp.documents.length + emp.payslips.length;
-               
-               return (
-                 <details key={emp.id} className={styles.folder}>
-                   <summary className={styles.folderSummary}>
-                     <div className={styles.folderHeaderLeft}>
-                       <span className={styles.folderIcon}>📁</span>
-                       <strong className={styles.folderName}>{emp.name || emp.email}</strong>
-                     </div>
-                     <span className={styles.folderBadge}>{totalItems} Dateien</span>
-                   </summary>
-                   <div className={styles.folderContent}>
-                     <div className={styles.list}>
-                       {emp.documents.map((doc) => (
-                         <div key={doc.id} className={styles.listItem}>
-                           <div className={styles.itemInfo}>
-                             <strong className={styles.docName}>{doc.name}</strong>
-                             <span className={styles.badge}>{doc.type}</span>
-                           </div>
-                           <div className={styles.itemActions}>
-                             <a href={doc.url} target="_blank" rel="noreferrer" className={styles.link}>Ansehen</a>
-                             <form action={deleteContent}>
-                               <input type="hidden" name="id" value={doc.id} />
-                               <Button variant="ghost" size="sm" type="submit" className={styles.deleteBtn}>Löschen</Button>
-                             </form>
-                           </div>
-                         </div>
-                       ))}
-                       {emp.payslips.map((slip) => (
-                         <div key={slip.id} className={styles.listItem}>
-                           <div className={styles.itemInfo}>
-                             <strong className={styles.docName}>Lohnabrechnung {String(slip.month).padStart(2, '0')}/{slip.year}</strong>
-                             <span className={styles.badge}>PAYSLIP</span>
-                           </div>
-                           <div className={styles.itemActions}>
-                             <a href={slip.url} target="_blank" rel="noreferrer" className={styles.link}>Ansehen</a>
-                             {/* Payslips deletion happens in /admin/payslips, but we could add it here too if needed. Kept simple for now. */}
-                           </div>
-                         </div>
-                       ))}
-                       {totalItems === 0 && (
-                         <p className={styles.empty} style={{ padding: '1rem' }}>Keine Dokumente für diesen Mitarbeiter.</p>
-                       )}
-                     </div>
-                   </div>
-                 </details>
-               )
-             })}
-             {employees.length === 0 && <p className={styles.empty}>Keine aktiven Mitarbeiter gefunden.</p>}
-          </div>
 
         </div>
       </div>
