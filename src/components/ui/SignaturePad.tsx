@@ -34,20 +34,29 @@ export function SignaturePad({ onSign }: SignaturePadProps) {
 
   // Effect to handle canvas resizing so that internal resolution matches CSS resolution.
   React.useEffect(() => {
+    const canvas = sigCanvas.current?.getCanvas()
+    const wrapper = canvas?.parentElement
+    if (!canvas || !wrapper) return
+
     const handleResize = () => {
-      const canvas = sigCanvas.current?.getCanvas()
-      if (canvas) {
+      if (wrapper.offsetWidth > 0) {
         const ratio = Math.max(window.devicePixelRatio || 1, 1)
-        canvas.width = canvas.offsetWidth * ratio
-        canvas.height = canvas.offsetHeight * ratio
+        canvas.width = wrapper.offsetWidth * ratio
+        canvas.height = wrapper.offsetHeight * ratio
         canvas.getContext("2d")?.scale(ratio, ratio)
         sigCanvas.current?.clear() // Clear to avoid scaling issues on existing drawing
       }
     }
 
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
+    const observer = new ResizeObserver(() => {
+      handleResize()
+    })
+    
+    observer.observe(wrapper)
+
+    return () => {
+      observer.disconnect()
+    }
   }, [])
 
   return (
