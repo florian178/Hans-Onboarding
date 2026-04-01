@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { uploadPayslip, deletePayslip } from "./actions"
+import BulkPayslipUpload from "@/components/admin/BulkPayslipUpload"
 import styles from "./page.module.css"
 
 export default async function AdminPayslips() {
@@ -40,6 +41,8 @@ export default async function AdminPayslips() {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Lohnzettel Management</h1>
+
+      <BulkPayslipUpload employees={employees.map(e => ({ id: e.id, name: e.name, email: e.email }))} />
 
       <div className={styles.grid}>
         <Card className={styles.uploadCard}>
