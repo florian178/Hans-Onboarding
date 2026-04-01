@@ -205,10 +205,11 @@ export default function BulkPayslipUpload({ employees }: Props) {
   /**
    * Match employee name and PLZ in page text.
    * Auto-assignment: Requires ALL 3 (First Name, Last Name, Zip Code).
-   * Candidate detection: Requires at least First + Last Name.
+   * Overview Detection: If >1 employee matches 3/3, skip auto-assign.
    */
   function findEmployeeMatch(pageText: string): { employee: Employee | null, candidateName: string } {
     const text = pageText.toLowerCase()
+    const matchesAll: Employee[] = []
     let bestCandidate: Employee | null = null
     let maxMatches = 0
     
@@ -226,16 +227,29 @@ export default function BulkPayslipUpload({ employees }: Props) {
       if (lastNameMatch) matches++
       if (zipMatch) matches++
 
-      // Perfect match: Auto-assign
-      if (matches === 3) return { employee: emp, candidateName: emp.name || "" }
-
-      // Potential match: Save as candidate if it's the best so far
-      if (matches > maxMatches) {
+      if (matches === 3) {
+        matchesAll.push(emp)
+      } else if (matches > maxMatches) {
         maxMatches = matches
         bestCandidate = emp
       }
     }
 
+    // Perfect match for EXACTLY one person: Auto-assign
+    if (matchesAll.length === 1) {
+      const emp = matchesAll[0]
+      return { employee: emp, candidateName: emp.name || "" }
+    }
+
+    // Multiple matches: Likely an overview page
+    if (matchesAll.length > 1) {
+      return { 
+        employee: null, 
+        candidateName: `Mehrere Mitarbeiter erkannt (${matchesAll.length}) — Übersichtsseite?` 
+      }
+    }
+
+    // No 3/3 match: Use best candidate
     return { 
       employee: null, 
       candidateName: bestCandidate ? (bestCandidate.name || "") : "" 
