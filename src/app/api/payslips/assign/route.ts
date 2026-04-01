@@ -11,18 +11,25 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const formData = await req.formData()
-    const file = formData.get("file") as File
-    const page = parseInt(formData.get("page") as string)
-    const userId = formData.get("userId") as string
-    const month = parseInt(formData.get("month") as string)
-    const year = parseInt(formData.get("year") as string)
+    const body = await req.json()
+    const { blobUrl, page, userId, month, year } = body as {
+      blobUrl: string
+      page: number
+      userId: string
+      month: number
+      year: number
+    }
 
-    if (!file || !page || !userId || !month || !year) {
+    if (!blobUrl || !page || !userId || !month || !year) {
       return NextResponse.json({ error: "Fehlende Daten" }, { status: 400 })
     }
 
-    const pdfBuffer = Buffer.from(await file.arrayBuffer())
+    // Download PDF from Vercel Blob
+    const pdfResponse = await fetch(blobUrl)
+    if (!pdfResponse.ok) {
+      return NextResponse.json({ error: "PDF konnte nicht geladen werden" }, { status: 400 })
+    }
+    const pdfBuffer = Buffer.from(await pdfResponse.arrayBuffer())
     const pdfDoc = await PDFDocument.load(pdfBuffer)
 
     // Extract the specified page (1-indexed)

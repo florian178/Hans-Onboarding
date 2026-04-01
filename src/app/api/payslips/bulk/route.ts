@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { PDFDocument } from "pdf-lib"
-import { put } from "@vercel/blob"
+import { put, del } from "@vercel/blob"
 import { extractText } from "unpdf"
 
 interface AssignedResult {
@@ -23,16 +23,23 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const formData = await req.formData()
-    const file = formData.get("file") as File
-    const month = parseInt(formData.get("month") as string)
-    const year = parseInt(formData.get("year") as string)
+    const body = await req.json()
+    const { blobUrl, month, year } = body as {
+      blobUrl: string
+      month: number
+      year: number
+    }
 
-    if (!file || !month || !year) {
+    if (!blobUrl || !month || !year) {
       return NextResponse.json({ error: "Fehlende Daten" }, { status: 400 })
     }
 
-    const pdfBuffer = Buffer.from(await file.arrayBuffer())
+    // Download the PDF from Vercel Blob
+    const pdfResponse = await fetch(blobUrl)
+    if (!pdfResponse.ok) {
+      return NextResponse.json({ error: "PDF konnte nicht geladen werden" }, { status: 400 })
+    }
+    const pdfBuffer = Buffer.from(await pdfResponse.arrayBuffer())
 
     // Use pdf-lib for splitting pages
     const pdfLibDoc = await PDFDocument.load(pdfBuffer)
@@ -115,6 +122,13 @@ export async function POST(req: NextRequest) {
           textSnippet: snippet || "(Kein Text erkannt)",
         })
       }
+    }
+
+    // Clean up the temporary bulk PDF from Blob
+    try {
+      await del(blobUrl)
+    } catch {
+      // Non-critical: the temp file will remain but isn't used
     }
 
     return NextResponse.json({ assigned, unassigned, totalPages: pageCount })

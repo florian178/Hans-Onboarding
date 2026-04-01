@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
+import { upload } from "@vercel/blob/client"
 import { Button } from "@/components/ui/Button"
 import styles from "./BulkPayslipUpload.module.css"
 
@@ -33,11 +34,13 @@ interface Props {
 
 export default function BulkPayslipUpload({ employees }: Props) {
   const [isProcessing, setIsProcessing] = useState(false)
+  const [statusText, setStatusText] = useState("")
   const [result, setResult] = useState<BulkResult | null>(null)
   const [assigningPage, setAssigningPage] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const originalFileRef = useRef<File | null>(null)
+  const blobUrlRef = useRef<string | null>(null)
   const monthRef = useRef<HTMLSelectElement>(null)
   const yearRef = useRef<HTMLSelectElement>(null)
 
@@ -76,24 +79,32 @@ export default function BulkPayslipUpload({ employees }: Props) {
     setIsProcessing(true)
 
     try {
-      const formData = new FormData()
-      formData.append("file", file)
-      formData.append("month", month)
-      formData.append("year", year)
+      // Step 1: Upload PDF to Vercel Blob (bypasses 4.5MB serverless limit)
+      setStatusText("PDF wird hochgeladen…")
+      const blob = await upload(`bulk-payslips/${Date.now()}_${file.name}`, file, {
+        access: "public",
+        handleUploadUrl: "/api/payslips/upload",
+      })
+      blobUrlRef.current = blob.url
 
+      // Step 2: Send Blob URL to processing API (small JSON payload)
+      setStatusText("Lohnzettel werden analysiert & zugeordnet…")
       const res = await fetch("/api/payslips/bulk", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          blobUrl: blob.url,
+          month: parseInt(month),
+          year: parseInt(year),
+        }),
       })
 
-      // Read response as text first to handle non-JSON responses (e.g. HTML error pages)
       const responseText = await res.text()
 
       let data
       try {
         data = JSON.parse(responseText)
       } catch {
-        // Response is not JSON (likely an HTML error page or redirect)
         console.error("Non-JSON response:", res.status, responseText.substring(0, 500))
         throw new Error(`Server-Fehler (${res.status}): ${responseText.substring(0, 150)}`)
       }
@@ -107,25 +118,26 @@ export default function BulkPayslipUpload({ employees }: Props) {
       setError(err instanceof Error ? err.message : "Unbekannter Fehler")
     } finally {
       setIsProcessing(false)
+      setStatusText("")
     }
   }
 
   async function handleManualAssign(page: number, userId: string) {
-    if (!originalFileRef.current || !monthRef.current || !yearRef.current) return
+    if (!blobUrlRef.current || !monthRef.current || !yearRef.current) return
 
     setAssigningPage(page)
 
     try {
-      const formData = new FormData()
-      formData.append("file", originalFileRef.current)
-      formData.append("page", String(page))
-      formData.append("userId", userId)
-      formData.append("month", monthRef.current.value)
-      formData.append("year", yearRef.current.value)
-
       const res = await fetch("/api/payslips/assign", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          blobUrl: blobUrlRef.current,
+          page,
+          userId,
+          month: parseInt(monthRef.current.value),
+          year: parseInt(yearRef.current.value),
+        }),
       })
 
       const responseText = await res.text()
@@ -210,7 +222,7 @@ export default function BulkPayslipUpload({ employees }: Props) {
           {isProcessing ? (
             <span className={styles.loadingText}>
               <span className={styles.spinner} />
-              Verarbeite PDF…
+              {statusText || "Verarbeite PDF…"}
             </span>
           ) : (
             "PDF analysieren & zuordnen"
