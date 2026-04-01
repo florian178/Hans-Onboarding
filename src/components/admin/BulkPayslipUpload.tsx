@@ -8,6 +8,9 @@ interface Employee {
   id: string
   name: string | null
   email: string | null
+  firstName?: string
+  lastName?: string
+  zipCode?: string
 }
 
 interface AssignedResult {
@@ -198,16 +201,30 @@ export default function BulkPayslipUpload({ employees }: Props) {
   }
 
   /**
-   * Match employee name in page text.
+   * Match employee name and PLZ in page text.
+   * Requires at least 2 out of 3 to match (First Name, Last Name, Zip Code).
    */
   function findEmployee(pageText: string): Employee | null {
+    const text = pageText.toLowerCase()
+    
     for (const emp of employees) {
-      if (!emp.name) continue
-      const nameParts = emp.name.trim().split(/\s+/)
-      const allPartsFound = nameParts.every((part) =>
-        pageText.toLowerCase().includes(part.toLowerCase())
-      )
-      if (allPartsFound) return emp
+      let matches = 0
+      
+      const fName = emp.firstName?.toLowerCase()
+      const lName = emp.lastName?.toLowerCase()
+      const zCode = emp.zipCode?.toLowerCase()
+
+      // 1. Check First Name
+      if (fName && text.includes(fName)) matches++
+      
+      // 2. Check Last Name
+      if (lName && text.includes(lName)) matches++
+      
+      // 3. Check Zip Code (PLZ)
+      if (zCode && text.includes(zCode)) matches++
+
+      // At least 2 out of 3 must match
+      if (matches >= 2) return emp
     }
     return null
   }

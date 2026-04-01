@@ -7,9 +7,47 @@ import BulkPayslipUpload from "@/components/admin/BulkPayslipUpload"
 import styles from "./page.module.css"
 
 export default async function AdminPayslips() {
-  const employees = await prisma.user.findMany({
+  const rawEmployees = await prisma.user.findMany({
     where: { role: 'EMPLOYEE' },
+    include: {
+      stepProgresses: {
+        where: { stepId: 'personal-data' }
+      }
+    },
     orderBy: { name: 'asc' }
+  })
+
+  // Parse personal data to get zipCode and separate name parts
+  const employees = rawEmployees.map(e => {
+    let firstName = ""
+    let lastName = ""
+    let zipCode = ""
+    
+    const progress = e.stepProgresses.find(p => p.stepId === 'personal-data')
+    if (progress?.data) {
+      try {
+        const pd = JSON.parse(progress.data)
+        firstName = pd.firstName || ""
+        lastName = pd.lastName || ""
+        zipCode = pd.zipCode || ""
+      } catch (e) {}
+    }
+
+    // Fallback to split name if step data is missing
+    if (!firstName && !lastName && e.name) {
+      const parts = e.name.split(" ")
+      firstName = parts[0]
+      lastName = parts.slice(1).join(" ")
+    }
+
+    return {
+      id: e.id,
+      name: e.name,
+      email: e.email,
+      firstName,
+      lastName,
+      zipCode
+    }
   })
 
   const payslips = await prisma.payslip.findMany({
@@ -42,7 +80,7 @@ export default async function AdminPayslips() {
     <div className={styles.container}>
       <h1 className={styles.title}>Lohnzettel Management</h1>
 
-      <BulkPayslipUpload employees={employees.map(e => ({ id: e.id, name: e.name, email: e.email }))} />
+      <BulkPayslipUpload employees={employees} />
 
       <div className={styles.grid}>
         <Card className={styles.uploadCard}>
