@@ -105,7 +105,7 @@ export default function BulkPayslipUpload({ employees }: Props) {
   async function splitPages(data: ArrayBuffer, onProgress: (cur: number, total: number) => void): Promise<Map<number, Uint8Array>> {
     console.log("Starting PDF split...")
     const { PDFDocument } = await import("pdf-lib")
-    const srcDoc = await PDFDocument.load(data)
+    const srcDoc = await PDFDocument.load(data, { ignoreEncryption: true })
     const totalPages = srcDoc.getPageCount()
     const pages = new Map<number, Uint8Array>()
 
