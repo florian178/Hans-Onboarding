@@ -78,6 +78,7 @@ export default function BulkPayslipUpload({ employees }: Props) {
       data: new Uint8Array(data),
       useWorkerFetch: false,
       isEvalSupported: false,
+      enableXfa: true,
     })
     
     const doc = await loadingTask.promise
@@ -111,7 +112,11 @@ export default function BulkPayslipUpload({ employees }: Props) {
     const version = pdfjsLib.version || "5.4.296"
     pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`
 
-    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(data.slice(0)) }).promise
+    const loadingTask = pdfjsLib.getDocument({ 
+      data: new Uint8Array(data.slice(0)),
+      enableXfa: true,
+    })
+    const pdf = await loadingTask.promise
     const totalPages = pdf.numPages
     const pagesMap = new Map<number, Uint8Array>()
 
@@ -128,10 +133,12 @@ export default function BulkPayslipUpload({ employees }: Props) {
 
       if (context) {
         // Render PDF page to canvas
+        console.log(`Rendering page ${i} to canvas: ${canvas.width}x${canvas.height}`)
         await page.render({ canvasContext: context, viewport } as any).promise
         
         // Convert to high-quality JPEG
         const imgDataUrl = canvas.toDataURL("image/jpeg", 0.9)
+        console.log(`Page ${i} image data length: ${imgDataUrl.length}`)
         const base64 = imgDataUrl.split(",")[1]
         const binStr = atob(base64)
         const imgBytes = new Uint8Array(binStr.length)
