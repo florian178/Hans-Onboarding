@@ -185,12 +185,12 @@ export default function BulkPayslipUpload({ employees }: Props) {
 
       // Step 1: Extract text from each page (in browser)
       setStatusText("Bibliotheken werden geladen…")
-      const pageTexts = await extractTextPerPage(arrayBuffer, (cur, total) => {
+      const pageTexts = await extractTextPerPage(arrayBuffer.slice(0), (cur, total) => {
         setStatusText(`Analysiere Seite ${cur} von ${total}…`)
       })
 
       // Step 2: Split PDF into individual pages (in browser)
-      const pages = await splitPages(arrayBuffer, (cur, total) => {
+      const pages = await splitPages(arrayBuffer.slice(0), (cur, total) => {
         setStatusText(`Teile Seite ${cur} von ${total}…`)
       })
       splitPagesRef.current = pages
