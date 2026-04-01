@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { upload } from "@vercel/blob/client"
 import { Button } from "@/components/ui/Button"
 import styles from "./BulkPayslipUpload.module.css"
 
@@ -39,10 +38,10 @@ export default function BulkPayslipUpload({ employees }: Props) {
   const [assigningPage, setAssigningPage] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
-  const originalFileRef = useRef<File | null>(null)
-  const blobUrlRef = useRef<string | null>(null)
   const monthRef = useRef<HTMLSelectElement>(null)
   const yearRef = useRef<HTMLSelectElement>(null)
+  // Store split page PDFs for manual assignment later
+  const splitPagesRef = useRef<Map<number, Uint8Array>>(new Map())
 
   const currentYear = new Date().getFullYear()
   const years = [currentYear - 1, currentYear, currentYear + 1]
@@ -61,6 +60,91 @@ export default function BulkPayslipUpload({ employees }: Props) {
     { value: 12, label: "Dezember" },
   ]
 
+  /**
+   * Extract text from each page using pdfjs-dist (runs in browser).
+   */
+  async function extractTextPerPage(data: ArrayBuffer): Promise<string[]> {
+    const pdfjsLib = await import("pdfjs-dist")
+    // Use the bundled worker for browser
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`
+
+    const doc = await pdfjsLib.getDocument({ data: new Uint8Array(data) }).promise
+    const texts: string[] = []
+    for (let i = 1; i <= doc.numPages; i++) {
+      const page = await doc.getPage(i)
+      const content = await page.getTextContent()
+      const text = content.items
+        .filter((item): item is { str: string } & typeof item => "str" in item)
+        .map((item) => item.str)
+        .join(" ")
+      texts.push(text)
+    }
+    await doc.destroy()
+    return texts
+  }
+
+  /**
+   * Split PDF into single-page PDFs using pdf-lib (runs in browser).
+   */
+  async function splitPages(data: ArrayBuffer): Promise<Map<number, Uint8Array>> {
+    const { PDFDocument } = await import("pdf-lib")
+    const srcDoc = await PDFDocument.load(data)
+    const pages = new Map<number, Uint8Array>()
+
+    for (let i = 0; i < srcDoc.getPageCount(); i++) {
+      const newDoc = await PDFDocument.create()
+      const [page] = await newDoc.copyPages(srcDoc, [i])
+      newDoc.addPage(page)
+      const bytes = await newDoc.save()
+      pages.set(i + 1, bytes) // 1-indexed
+    }
+    return pages
+  }
+
+  /**
+   * Upload a single-page PDF to the server.
+   */
+  async function uploadPage(pageBytes: Uint8Array, userId: string, month: number, year: number): Promise<string> {
+    const blob = new Blob([pageBytes.buffer as ArrayBuffer], { type: "application/pdf" })
+    const file = new File([blob], "payslip.pdf", { type: "application/pdf" })
+
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("userId", userId)
+    formData.append("month", String(month))
+    formData.append("year", String(year))
+
+    const res = await fetch("/api/payslips/save", {
+      method: "POST",
+      body: formData,
+    })
+
+    const responseText = await res.text()
+    let data
+    try {
+      data = JSON.parse(responseText)
+    } catch {
+      throw new Error(`Server-Fehler (${res.status})`)
+    }
+    if (!res.ok) throw new Error(data.error || "Upload fehlgeschlagen")
+    return data.employeeName
+  }
+
+  /**
+   * Match employee name in page text.
+   */
+  function findEmployee(pageText: string): Employee | null {
+    for (const emp of employees) {
+      if (!emp.name) continue
+      const nameParts = emp.name.trim().split(/\s+/)
+      const allPartsFound = nameParts.every((part) =>
+        pageText.toLowerCase().includes(part.toLowerCase())
+      )
+      if (allPartsFound) return emp
+    }
+    return null
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
@@ -75,45 +159,52 @@ export default function BulkPayslipUpload({ employees }: Props) {
       return
     }
 
-    originalFileRef.current = file
     setIsProcessing(true)
 
     try {
-      // Step 1: Upload PDF to Vercel Blob (bypasses 4.5MB serverless limit)
-      setStatusText("PDF wird hochgeladen…")
-      const blob = await upload(`bulk-payslips/${Date.now()}_${file.name}`, file, {
-        access: "public",
-        handleUploadUrl: "/api/payslips/upload",
-      })
-      blobUrlRef.current = blob.url
+      const arrayBuffer = await file.arrayBuffer()
 
-      // Step 2: Send Blob URL to processing API (small JSON payload)
-      setStatusText("Lohnzettel werden analysiert & zugeordnet…")
-      const res = await fetch("/api/payslips/bulk", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          blobUrl: blob.url,
-          month: parseInt(month),
-          year: parseInt(year),
-        }),
-      })
+      // Step 1: Extract text from each page (in browser)
+      setStatusText("Text wird aus PDF extrahiert…")
+      const pageTexts = await extractTextPerPage(arrayBuffer)
 
-      const responseText = await res.text()
+      // Step 2: Split PDF into individual pages (in browser)
+      setStatusText("PDF wird aufgeteilt…")
+      const pages = await splitPages(arrayBuffer)
+      splitPagesRef.current = pages
 
-      let data
-      try {
-        data = JSON.parse(responseText)
-      } catch {
-        console.error("Non-JSON response:", res.status, responseText.substring(0, 500))
-        throw new Error(`Server-Fehler (${res.status}): ${responseText.substring(0, 150)}`)
+      const monthNum = parseInt(month)
+      const yearNum = parseInt(year)
+      const assigned: AssignedResult[] = []
+      const unassigned: UnassignedResult[] = []
+
+      // Step 3: Match employees and upload matched pages
+      for (let i = 0; i < pageTexts.length; i++) {
+        const pageNum = i + 1
+        const pageText = pageTexts[i]
+        const emp = findEmployee(pageText)
+
+        if (emp) {
+          setStatusText(`Lade Seite ${pageNum} hoch (${emp.name})…`)
+          const pageBytes = pages.get(pageNum)
+          if (pageBytes) {
+            await uploadPage(pageBytes, emp.id, monthNum, yearNum)
+          }
+          assigned.push({
+            employeeName: emp.name || emp.email || "Unbekannt",
+            employeeId: emp.id,
+            page: pageNum,
+          })
+        } else {
+          const snippet = pageText.substring(0, 200).replace(/\s+/g, " ").trim()
+          unassigned.push({
+            page: pageNum,
+            textSnippet: snippet || "(Kein Text erkannt)",
+          })
+        }
       }
 
-      if (!res.ok) {
-        throw new Error(data.error || `Fehler (${res.status})`)
-      }
-
-      setResult(data)
+      setResult({ assigned, unassigned, totalPages: pageTexts.length })
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unbekannter Fehler")
     } finally {
@@ -123,36 +214,21 @@ export default function BulkPayslipUpload({ employees }: Props) {
   }
 
   async function handleManualAssign(page: number, userId: string) {
-    if (!blobUrlRef.current || !monthRef.current || !yearRef.current) return
+    if (!monthRef.current || !yearRef.current) return
+
+    const pageBytes = splitPagesRef.current.get(page)
+    if (!pageBytes) {
+      setError("Seite nicht mehr verfügbar — bitte PDF erneut hochladen")
+      return
+    }
 
     setAssigningPage(page)
 
     try {
-      const res = await fetch("/api/payslips/assign", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          blobUrl: blobUrlRef.current,
-          page,
-          userId,
-          month: parseInt(monthRef.current.value),
-          year: parseInt(yearRef.current.value),
-        }),
-      })
+      const monthNum = parseInt(monthRef.current.value)
+      const yearNum = parseInt(yearRef.current.value)
+      const employeeName = await uploadPage(pageBytes, userId, monthNum, yearNum)
 
-      const responseText = await res.text()
-      let data
-      try {
-        data = JSON.parse(responseText)
-      } catch {
-        throw new Error(`Server-Fehler (${res.status})`)
-      }
-
-      if (!res.ok) {
-        throw new Error(data.error || "Fehler beim Zuordnen")
-      }
-
-      // Move from unassigned to assigned
       setResult((prev) => {
         if (!prev) return prev
         return {
@@ -160,7 +236,7 @@ export default function BulkPayslipUpload({ employees }: Props) {
           unassigned: prev.unassigned.filter((u) => u.page !== page),
           assigned: [
             ...prev.assigned,
-            { employeeName: data.employeeName, employeeId: userId, page },
+            { employeeName, employeeId: userId, page },
           ].sort((a, b) => a.page - b.page),
         }
       })
