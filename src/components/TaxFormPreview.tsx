@@ -266,7 +266,7 @@ export function TaxFormPreview({ user, personalData, taxData, signatureUrl, taxD
       <div style={{ marginTop: '40px', width: '45%' }}>
           <div style={{ borderBottom: '1px solid #000', height: '60px', position: 'relative' }}>
              <div style={{ position: 'absolute', bottom: '5px', left: 0, fontFamily: 'monospace', fontSize: '10px', fontWeight: 'bold', fontStyle: 'italic', transform: 'rotate(-2deg)', width: '200px' }}>
-               Arbeitgeber HS Event GmbH vertreten durch Geschäftsführer Florian Herbst
+               HS Event GmbH vertreten durch Geschäftsführer Florian Herbst
              </div>
           </div>
           <p style={{ fontSize: '9px', marginTop: '2px' }}>Unterschrift Arbeitgeber</p>

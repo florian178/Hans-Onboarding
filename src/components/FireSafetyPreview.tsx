@@ -11,7 +11,7 @@ export function FireSafetyPreview({
   employeeName, 
   signatureUrl, 
   signatureDate,
-  employerName = "Arbeitgeber HS Event GmbH vertreten durch Geschäftsführer Florian Herbst"
+  employerName = "HS Event GmbH vertreten durch Geschäftsführer Florian Herbst"
 }: FireSafetyPreviewProps) {
   let formattedDate = ''
   if (signatureDate) {

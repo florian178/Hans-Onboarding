@@ -153,7 +153,7 @@ export function RVBefreiungPreview({
                     <div className={styles.underlineSig}>
                         {/* Employer Signature Placeholder */}
                         <div className={styles.employerSigText} style={{ fontSize: '10px' }}>
-                          Arbeitgeber HS Event GmbH vertreten durch Geschäftsführer Florian Herbst
+                          HS Event GmbH vertreten durch Geschäftsführer Florian Herbst
                         </div>
                     </div>
                     <div className={styles.subtext}>(Unterschrift des Arbeitgebers)</div>

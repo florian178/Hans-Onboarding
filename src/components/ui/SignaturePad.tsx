@@ -38,8 +38,15 @@ export function SignaturePad({ onSign }: SignaturePadProps) {
     const wrapper = canvas?.parentElement
     if (!canvas || !wrapper) return
 
+    let prevWidth = 0
+    let prevHeight = 0
+
     const handleResize = () => {
       if (wrapper.offsetWidth > 0) {
+        if (wrapper.offsetWidth === prevWidth && wrapper.offsetHeight === prevHeight) return
+        prevWidth = wrapper.offsetWidth
+        prevHeight = wrapper.offsetHeight
+
         const ratio = Math.max(window.devicePixelRatio || 1, 1)
         canvas.width = wrapper.offsetWidth * ratio
         canvas.height = wrapper.offsetHeight * ratio

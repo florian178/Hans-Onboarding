@@ -257,7 +257,7 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
         <div className={styles.signatureRow}>
            <div className={styles.sigContainer}>
                <div className={styles.employerSigPlaceHolder} style={{ fontSize: '12px' }}>
-                 Arbeitgeber HS Event GmbH vertreten durch Geschäftsführer Florian Herbst
+                 HS Event GmbH vertreten durch Geschäftsführer Florian Herbst
                </div>
              <div className={styles.signatureLine}></div>
              <p className={styles.label}>Unterschrift Arbeitgeber</p>
