@@ -12,7 +12,6 @@ export default async function ContentDashboard() {
     where: { userId: null } // Only admin templates
   })
 
-  // Fetch employees and their specific documents/payslips
   const employees = await prisma.user.findMany({
     where: { role: 'EMPLOYEE', isArchived: false },
     include: {
@@ -20,7 +19,10 @@ export default async function ContentDashboard() {
         orderBy: { uploadedAt: 'desc' }
       },
       payslips: {
-        orderBy: { year: 'desc', month: 'desc' }
+        orderBy: [
+          { year: 'desc' },
+          { month: 'desc' }
+        ]
       }
     },
     orderBy: { name: 'asc' }
