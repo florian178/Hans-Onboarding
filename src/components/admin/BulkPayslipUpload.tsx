@@ -124,7 +124,7 @@ export default function BulkPayslipUpload({ employees }: Props) {
    * Upload a single-page PDF to the server.
    */
   async function uploadPage(pageBytes: Uint8Array, userId: string, month: number, year: number): Promise<string> {
-    const blob = new Blob([pageBytes.buffer as ArrayBuffer], { type: "application/pdf" })
+    const blob = new Blob([pageBytes as any], { type: "application/pdf" })
     const file = new File([blob], "payslip.pdf", { type: "application/pdf" })
 
     const formData = new FormData()

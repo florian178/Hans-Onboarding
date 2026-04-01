@@ -23,7 +23,10 @@ export async function POST(req: NextRequest) {
     // Single-page PDFs are small (< 200KB), well within Vercel's limit
     const buffer = Buffer.from(await file.arrayBuffer())
     const filename = `payslips/${userId}_${year}_${month}_${Date.now()}.pdf`
-    const blob = await put(filename, buffer, { access: "public" })
+    const blob = await put(filename, buffer, { 
+      access: "public",
+      contentType: "application/pdf"
+    })
 
     await prisma.payslip.upsert({
       where: {
