@@ -67,9 +67,9 @@ export default function BulkPayslipUpload({ employees }: Props) {
     console.log("Starting text extraction...")
     const pdfjsLib = await import("pdfjs-dist")
     
-    // Use a fixed version or let it be dynamic, but wrap in try-catch
-    const version = pdfjsLib.version || "4.10.38" // fallback
-    const workerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${version}/pdf.worker.min.mjs`
+    // Use unpkg as fallback if cdnjs is missing versions
+    const version = pdfjsLib.version || "5.4.296"
+    const workerUrl = `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`
     console.log(`Using PDF.js version ${version}, worker: ${workerUrl}`)
     
     pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl
