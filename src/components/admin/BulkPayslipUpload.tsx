@@ -21,13 +21,15 @@ interface AssignedResult {
 
 interface UnassignedResult {
   page: number
-  textSnippet: string
+  candidateName: string
 }
 
 interface BulkResult {
   assigned: AssignedResult[]
   unassigned: UnassignedResult[]
   totalPages: number
+  monthLabel: string
+  yearLabel: string
 }
 
 interface Props {
@@ -202,31 +204,42 @@ export default function BulkPayslipUpload({ employees }: Props) {
 
   /**
    * Match employee name and PLZ in page text.
-   * Requires at least 2 out of 3 to match (First Name, Last Name, Zip Code).
+   * Auto-assignment: Requires ALL 3 (First Name, Last Name, Zip Code).
+   * Candidate detection: Requires at least First + Last Name.
    */
-  function findEmployee(pageText: string): Employee | null {
+  function findEmployeeMatch(pageText: string): { employee: Employee | null, candidateName: string } {
     const text = pageText.toLowerCase()
+    let bestCandidate: Employee | null = null
+    let maxMatches = 0
     
     for (const emp of employees) {
       let matches = 0
-      
       const fName = emp.firstName?.toLowerCase()
       const lName = emp.lastName?.toLowerCase()
       const zCode = emp.zipCode?.toLowerCase()
 
-      // 1. Check First Name
-      if (fName && text.includes(fName)) matches++
-      
-      // 2. Check Last Name
-      if (lName && text.includes(lName)) matches++
-      
-      // 3. Check Zip Code (PLZ)
-      if (zCode && text.includes(zCode)) matches++
+      const firstNameMatch = fName && text.includes(fName)
+      const lastNameMatch = lName && text.includes(lName)
+      const zipMatch = zCode && text.includes(zCode)
 
-      // At least 2 out of 3 must match
-      if (matches >= 2) return emp
+      if (firstNameMatch) matches++
+      if (lastNameMatch) matches++
+      if (zipMatch) matches++
+
+      // Perfect match: Auto-assign
+      if (matches === 3) return { employee: emp, candidateName: emp.name || "" }
+
+      // Potential match: Save as candidate if it's the best so far
+      if (matches > maxMatches) {
+        maxMatches = matches
+        bestCandidate = emp
+      }
     }
-    return null
+
+    return { 
+      employee: null, 
+      candidateName: bestCandidate ? (bestCandidate.name || "") : "" 
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -269,7 +282,7 @@ export default function BulkPayslipUpload({ employees }: Props) {
       for (let i = 0; i < pageTexts.length; i++) {
         const pageNum = i + 1
         const pageText = pageTexts[i]
-        const emp = findEmployee(pageText)
+        const { employee: emp, candidateName } = findEmployeeMatch(pageText)
 
         if (emp) {
           setStatusText(`Lade Seite ${pageNum} hoch (${emp.name})…`)
@@ -283,15 +296,20 @@ export default function BulkPayslipUpload({ employees }: Props) {
             page: pageNum,
           })
         } else {
-          const snippet = pageText.substring(0, 200).replace(/\s+/g, " ").trim()
           unassigned.push({
             page: pageNum,
-            textSnippet: snippet || "(Kein Text erkannt)",
+            candidateName,
           })
         }
       }
 
-      setResult({ assigned, unassigned, totalPages: pageTexts.length })
+      setResult({ 
+        assigned, 
+        unassigned, 
+        totalPages: pageTexts.length,
+        monthLabel: months.find(m => m.value === monthNum)?.label || "",
+        yearLabel: String(yearNum)
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unbekannter Fehler")
     } finally {
@@ -440,9 +458,14 @@ export default function BulkPayslipUpload({ employees }: Props) {
                   <div key={item.page} className={styles.resultItem + " " + styles.warningItem}>
                     <div className={styles.resultInfo}>
                       <span className={styles.pageTag}>Seite {item.page}</span>
-                      <span className={styles.textSnippet}>
-                        {item.textSnippet}
-                      </span>
+                      <div className={styles.unassignedDetails}>
+                        <span className={styles.candidateName}>
+                          {item.candidateName || "(Kein Name erkannt)"}
+                        </span>
+                        <span className={styles.periodTag}>
+                          Lohnzettel {result.monthLabel} {result.yearLabel}
+                        </span>
+                      </div>
                     </div>
                     <div className={styles.assignControls}>
                       <select
