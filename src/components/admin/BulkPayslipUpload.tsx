@@ -100,24 +100,65 @@ export default function BulkPayslipUpload({ employees }: Props) {
   }
 
   /**
-   * Split PDF into single-page PDFs using pdf-lib (runs in browser).
+   * Robustly split PDF by rendering each page to a canvas (flattening).
+   * This handles encrypted or complex PDFs where direct page copying fails.
    */
   async function splitPages(data: ArrayBuffer, onProgress: (cur: number, total: number) => void): Promise<Map<number, Uint8Array>> {
-    console.log("Starting PDF split...")
+    console.log("Starting robust PDF split (flattening)...")
+    const pdfjsLib = await import("pdfjs-dist")
     const { PDFDocument } = await import("pdf-lib")
-    const srcDoc = await PDFDocument.load(data, { ignoreEncryption: true })
-    const totalPages = srcDoc.getPageCount()
-    const pages = new Map<number, Uint8Array>()
+    
+    const version = pdfjsLib.version || "5.4.296"
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${version}/build/pdf.worker.min.mjs`
 
-    for (let i = 0; i < totalPages; i++) {
-      onProgress(i + 1, totalPages)
-      const newDoc = await PDFDocument.create()
-      const [page] = await newDoc.copyPages(srcDoc, [i])
-      newDoc.addPage(page)
-      const bytes = await newDoc.save()
-      pages.set(i + 1, bytes) // 1-indexed
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(data.slice(0)) }).promise
+    const totalPages = pdf.numPages
+    const pagesMap = new Map<number, Uint8Array>()
+
+    for (let i = 1; i <= totalPages; i++) {
+      onProgress(i, totalPages)
+      const page = await pdf.getPage(i)
+      
+      // Use 2.0x scale for good print quality (approx 144 DPI)
+      const viewport = page.getViewport({ scale: 2.0 })
+      const canvas = document.createElement("canvas")
+      const context = canvas.getContext("2d")
+      canvas.height = viewport.height
+      canvas.width = viewport.width
+
+      if (context) {
+        // Render PDF page to canvas
+        await page.render({ canvasContext: context, viewport } as any).promise
+        
+        // Convert to high-quality JPEG
+        const imgDataUrl = canvas.toDataURL("image/jpeg", 0.9)
+        const base64 = imgDataUrl.split(",")[1]
+        const binStr = atob(base64)
+        const imgBytes = new Uint8Array(binStr.length)
+        for (let j = 0; j < binStr.length; j++) {
+          imgBytes[j] = binStr.charCodeAt(j)
+        }
+
+        // Create new 1-page PDF
+        const newDoc = await PDFDocument.create()
+        const jpgImage = await newDoc.embedJpg(imgBytes)
+        
+        // Set page size to match original viewport
+        const newPage = newDoc.addPage([viewport.width, viewport.height])
+        newPage.drawImage(jpgImage, {
+          x: 0,
+          y: 0,
+          width: viewport.width,
+          height: viewport.height,
+        })
+        
+        const bytes = await newDoc.save()
+        pagesMap.set(i, bytes)
+      }
     }
-    return pages
+    
+    await pdf.destroy()
+    return pagesMap
   }
 
   /**
