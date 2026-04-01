@@ -207,13 +207,20 @@ export default function BulkPayslipUpload({ employees }: Props) {
    * Auto-assignment: Requires ALL 3 (First Name, Last Name, Zip Code).
    * Overview Detection: If >1 employee matches 3/3, skip auto-assign.
    * Candidate detection: Suggest name ONLY if exactly one person matches 2/3.
+   * Boilerplate: Ignores employees identified as boilerplate (e.g. company owner).
    */
-  function findEmployeeMatch(pageText: string): { employee: Employee | null, candidateName: string } {
+  function findEmployeeMatch(
+    pageText: string, 
+    boilerplateIds: Set<string>
+  ): { employee: Employee | null, candidateName: string } {
     const text = pageText.toLowerCase()
     const matches3per3: Employee[] = []
     const matches2per3: Employee[] = []
     
     for (const emp of employees) {
+      // Skip if this employee is boilerplate on almost every page
+      if (boilerplateIds.has(emp.id)) continue
+
       let matches = 0
       const fName = emp.firstName?.toLowerCase()
       const lName = emp.lastName?.toLowerCase()
@@ -294,6 +301,32 @@ export default function BulkPayslipUpload({ employees }: Props) {
         setStatusText(`Analysiere Seite ${cur} von ${total}…`)
       })
 
+      // NEW: Frequency Analysis to detect boilerplate (e.g. company owner name in header)
+      const matchCounts = new Map<string, number>()
+      for (const text of pageTexts) {
+        const lowerText = text.toLowerCase()
+        for (const emp of employees) {
+          let matches = 0
+          if (emp.firstName && lowerText.includes(emp.firstName.toLowerCase())) matches++
+          if (emp.lastName && lowerText.includes(emp.lastName.toLowerCase())) matches++
+          if (emp.zipCode && lowerText.includes(emp.zipCode.toLowerCase())) matches++
+          if (matches === 3) {
+            matchCounts.set(emp.id, (matchCounts.get(emp.id) || 0) + 1)
+          }
+        }
+      }
+
+      const boilerplateIds = new Set<string>()
+      if (pageTexts.length > 2) {
+        for (const [id, count] of matchCounts.entries()) {
+          // If a name matches 3/3 on more than 40% of pages, it's likely boilerplate
+          if (count / pageTexts.length > 0.4) {
+            console.log(`Boilerplate detected: ${employees.find(e => e.id === id)?.name}`)
+            boilerplateIds.add(id)
+          }
+        }
+      }
+
       // Step 2: Split PDF into individual pages (in browser)
       const pages = await splitPages(arrayBuffer.slice(0), (cur, total) => {
         setStatusText(`Teile Seite ${cur} von ${total}…`)
@@ -309,7 +342,7 @@ export default function BulkPayslipUpload({ employees }: Props) {
       for (let i = 0; i < pageTexts.length; i++) {
         const pageNum = i + 1
         const pageText = pageTexts[i]
-        const { employee: emp, candidateName } = findEmployeeMatch(pageText)
+        const { employee: emp, candidateName } = findEmployeeMatch(pageText, boilerplateIds)
 
         if (emp) {
           setStatusText(`Lade Seite ${pageNum} hoch (${emp.name})…`)
