@@ -2,8 +2,11 @@ import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { PDFDocument } from "pdf-lib"
-import { PDFParse } from "pdf-parse"
 import { put } from "@vercel/blob"
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf.mjs"
+
+// Disable worker for serverless environment
+GlobalWorkerOptions.workerSrc = ""
 
 interface AssignedResult {
   employeeName: string
@@ -14,6 +17,34 @@ interface AssignedResult {
 interface UnassignedResult {
   page: number
   textSnippet: string
+}
+
+/**
+ * Extract text from a PDF buffer, returning an array of text strings (one per page).
+ */
+async function extractTextPerPage(pdfBuffer: Buffer): Promise<string[]> {
+  const uint8Array = new Uint8Array(pdfBuffer)
+  const loadingTask = getDocument({
+    data: uint8Array,
+    useWorkerFetch: false,
+    isEvalSupported: false,
+    useSystemFonts: true,
+  })
+  const pdfDoc = await loadingTask.promise
+  const pageTexts: string[] = []
+
+  for (let i = 1; i <= pdfDoc.numPages; i++) {
+    const page = await pdfDoc.getPage(i)
+    const textContent = await page.getTextContent()
+    const text = textContent.items
+      .filter((item): item is { str: string } & typeof item => "str" in item)
+      .map((item) => item.str)
+      .join(" ")
+    pageTexts.push(text)
+  }
+
+  await pdfDoc.destroy()
+  return pageTexts
 }
 
 export async function POST(req: NextRequest) {
@@ -33,13 +64,13 @@ export async function POST(req: NextRequest) {
     }
 
     const pdfBuffer = Buffer.from(await file.arrayBuffer())
-    const pdfDoc = await PDFDocument.load(pdfBuffer)
-    const pageCount = pdfDoc.getPageCount()
 
-    // Extract text from all pages using pdf-parse
-    const parser = new PDFParse({ data: new Uint8Array(pdfBuffer) })
-    const textResult = await parser.getText()
-    await parser.destroy()
+    // Use pdf-lib for splitting pages
+    const pdfLibDoc = await PDFDocument.load(pdfBuffer)
+    const pageCount = pdfLibDoc.getPageCount()
+
+    // Use pdfjs-dist for text extraction (worker-free)
+    const pageTexts = await extractTextPerPage(pdfBuffer)
 
     // Get all employees from DB
     const employees = await prisma.user.findMany({
@@ -51,13 +82,11 @@ export async function POST(req: NextRequest) {
     const unassigned: UnassignedResult[] = []
 
     for (let i = 0; i < pageCount; i++) {
-      // Get text for this page (pages in textResult are 1-indexed by num)
-      const pageData = textResult.pages.find(p => p.num === i + 1)
-      const pageText = pageData?.text || ""
+      const pageText = pageTexts[i] || ""
 
       // Create single-page PDF
       const singlePageDoc = await PDFDocument.create()
-      const [copiedPage] = await singlePageDoc.copyPages(pdfDoc, [i])
+      const [copiedPage] = await singlePageDoc.copyPages(pdfLibDoc, [i])
       singlePageDoc.addPage(copiedPage)
       const singlePageBytes = await singlePageDoc.save()
       const singlePageBuffer = Buffer.from(singlePageBytes)
@@ -67,7 +96,6 @@ export async function POST(req: NextRequest) {
 
       for (const emp of employees) {
         if (!emp.name) continue
-        // Split the name into parts and check if all parts exist in the text
         const nameParts = emp.name.trim().split(/\s+/)
         const allPartsFound = nameParts.every((part) =>
           pageText.toLowerCase().includes(part.toLowerCase())
@@ -110,7 +138,6 @@ export async function POST(req: NextRequest) {
           page: i + 1,
         })
       } else {
-        // Truncate text for display
         const snippet = pageText.substring(0, 200).replace(/\s+/g, " ").trim()
         unassigned.push({
           page: i + 1,
