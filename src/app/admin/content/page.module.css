@@ -126,3 +126,93 @@
   text-align: center;
   padding: 2rem;
 }
+
+.categories {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.categoryHeading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.categoryCard {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.cardContentPadded {
+  padding: 1.5rem;
+}
+
+.employeeFolders {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.folder {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.folder[open] {
+  border-color: var(--primary);
+}
+
+.folderSummary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  background-color: var(--card-bg);
+  list-style: none; /* Hide default arrow */
+}
+
+.folderSummary:hover {
+  background-color: var(--surface-hover);
+}
+
+.folderSummary::-webkit-details-marker {
+  display: none;
+}
+
+.folderHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.folderIcon {
+  font-size: 1.25rem;
+}
+
+.folderName {
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--foreground);
+}
+
+.folderBadge {
+  font-size: 0.75rem;
+  background-color: var(--border);
+  color: var(--secondary-foreground);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+.folderContent {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border);
+  background-color: var(--background);
+}

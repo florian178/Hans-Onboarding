@@ -12,6 +12,7 @@
     "@auth/prisma-adapter": "^2.11.1",
     "@prisma/client": "^5.22.0",
     "@types/react-signature-canvas": "^1.0.7",
+    "@vercel/blob": "^2.3.2",
     "clsx": "^2.1.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",

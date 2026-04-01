@@ -2070,3 +2070,9 @@ Compaction failed: Another write batch or compaction is already active (Only a s
 - Experiments (use with caution):
   · serverActions
 
+Persisting failed: Unable to write SST file 00000016.sst
+
+Caused by:
+    No such file or directory (os error 2)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
