@@ -52,8 +52,9 @@ export async function POST(req: NextRequest) {
     })
   } catch (error) {
     console.error("Save payslip error:", error)
+    const errorMessage = error instanceof Error ? error.message : "Unbekannter Fehler"
     return NextResponse.json(
-      { error: "Fehler beim Speichern" },
+      { error: `Fehler beim Speichern: ${errorMessage}` },
       { status: 500 }
     )
   }
