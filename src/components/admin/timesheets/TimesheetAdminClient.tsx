@@ -205,6 +205,30 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
   dailyTimesheets.sort((a,b) => a.startTime.localeCompare(b.startTime))
 
   const renderTimeline = () => {
+    // 1. Determine dynamic timeline scale
+    const hasMidnightShift = dailyTimesheets.some(t => {
+      const startH = parseInt(t.startTime.split(':')[0]) + parseInt(t.startTime.split(':')[1])/60
+      const endH = parseInt(t.endTime.split(':')[0]) + parseInt(t.endTime.split(':')[1])/60
+      return endH < startH;
+    })
+    
+    const maxEndHNextDay = hasMidnightShift ? Math.max(...dailyTimesheets.map(t => {
+      const s = parseInt(t.startTime.split(':')[0]) + parseInt(t.startTime.split(':')[1])/60;
+      const e = parseInt(t.endTime.split(':')[0]) + parseInt(t.endTime.split(':')[1])/60;
+      return e < s ? e : 0;
+    })) : 0;
+
+    // Minimum 24 hours. Extend in 2-hour increments if needed
+    let totalScaleHours = 24;
+    if (maxEndHNextDay > 0) {
+      totalScaleHours = 24 + Math.ceil(maxEndHNextDay / 2) * 2;
+    }
+
+    const scaleTicks = [];
+    for(let i = 0; i <= totalScaleHours; i += 2) {
+      scaleTicks.push(i);
+    }
+
     return (
       <div className={styles.timelineWrapper}>
         <div className={styles.timelineFilters}>
@@ -216,65 +240,47 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
         ) : (
            <div className={styles.ganttContainer}>
              <div className={styles.ganttScale}>
-               {[0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24].map(hour => (
-                 <div key={hour} className={styles.ganttTick} style={{ left: `${(hour / 24) * 100}%`}}>
-                   {hour}:00
-                 </div>
-               ))}
+               {scaleTicks.map(hour => {
+                 const displayHour = hour >= 24 ? hour - 24 : hour;
+                 let label = `${displayHour}:00`;
+                 if (hour === 24) label = "00:00 (Nächster Tag)";
+                 
+                 return (
+                   <div key={hour} className={styles.ganttTick} style={{ left: `${(hour / totalScaleHours) * 100}%`}}>
+                     {label}
+                   </div>
+                 )
+               })}
              </div>
              
              <div className={styles.ganttRows}>
                {dailyTimesheets.map(t => {
-                 const startH = parseInt(t.startTime.split(':')[0]) + parseInt(t.startTime.split(':')[1])/60
-                 const endH = parseInt(t.endTime.split(':')[0]) + parseInt(t.endTime.split(':')[1])/60
+                 let startH = parseInt(t.startTime.split(':')[0]) + parseInt(t.startTime.split(':')[1])/60
+                 let endH = parseInt(t.endTime.split(':')[0]) + parseInt(t.endTime.split(':')[1])/60
                  
-                 const isCrossMidnight = endH < startH;
+                 if (endH < startH) {
+                   endH += 24; // Extend into the next day
+                 }
                  
                  return (
                    <div key={t.id} className={styles.ganttRow}>
                      <div className={styles.ganttUser} title={t.note || undefined}>{t.user?.name || t.user?.email || "Unbekannt"}</div>
                      <div className={styles.ganttBarArea}>
-                       
-                       {/* Render normal bar */}
-                       {!isCrossMidnight && (
-                         <div 
-                           className={styles.ganttBar} 
-                           onClick={() => startEdit(t)}
-                           style={{ 
-                             left: `${(startH / 24) * 100}%`, 
-                             width: `${((endH - startH) / 24) * 100}%`,
-                             backgroundColor: STATUS_MAP[t.status].color + 'f0',
-                             border: `1px solid ${STATUS_MAP[t.status].color}`
-                           }}
-                           title={`${t.startTime} - ${t.endTime} (${t.breakMinutes} Min Pause) - Klicken zum Bearbeiten`}
-                         >
-                           <span className={styles.ganttTimeText}>
-                             {t.startTime}-{t.endTime} {t.breakMinutes > 0 ? `(${t.breakMinutes}m P)` : ''}
-                           </span>
-                         </div>
-                       )}
-
-                       {/* Render split bar for cross midnight shifts */}
-                       {isCrossMidnight && (
-                         <>
-                           <div 
-                             className={styles.ganttBar} 
-                             onClick={() => startEdit(t)}
-                             style={{ left: `${(startH / 24) * 100}%`, width: `${((24 - startH) / 24) * 100}%`, backgroundColor: STATUS_MAP[t.status].color + 'f0', border: `1px solid ${STATUS_MAP[t.status].color}` }}
-                             title={`${t.startTime} - 24:00 (Schicht 1/2) - Klicken zum Bearbeiten`}
-                           >
-                             <span className={styles.ganttTimeText}>{t.startTime}-24:00</span>
-                           </div>
-                           <div 
-                             className={styles.ganttBar} 
-                             onClick={() => startEdit(t)}
-                             style={{ left: `0%`, width: `${(endH / 24) * 100}%`, backgroundColor: STATUS_MAP[t.status].color + 'f0', border: `1px solid ${STATUS_MAP[t.status].color}` }}
-                             title={`00:00 - ${t.endTime} (Schicht 2/2) - Klicken zum Bearbeiten`}
-                           >
-                             <span className={styles.ganttTimeText}>00:00-{t.endTime} {t.breakMinutes > 0 ? `(${t.breakMinutes}m P)` : ''}</span>
-                           </div>
-                         </>
-                       )}
+                       <div 
+                         className={styles.ganttBar} 
+                         onClick={() => startEdit(t)}
+                         style={{ 
+                           left: `${(startH / totalScaleHours) * 100}%`, 
+                           width: `${((endH - startH) / totalScaleHours) * 100}%`,
+                           backgroundColor: STATUS_MAP[t.status].color + 'f0',
+                           border: `1px solid ${STATUS_MAP[t.status].color}`
+                         }}
+                         title={`${t.startTime} - ${t.endTime} (${t.breakMinutes} Min Pause) - Klicken zum Bearbeiten`}
+                       >
+                         <span className={styles.ganttTimeText}>
+                           {t.startTime}-{t.endTime} {t.breakMinutes > 0 ? `(${t.breakMinutes}m P)` : ''}
+                         </span>
+                       </div>
                      </div>
                    </div>
                  )
