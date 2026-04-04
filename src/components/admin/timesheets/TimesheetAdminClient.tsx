@@ -206,26 +206,25 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
 
   const renderTimeline = () => {
     // 1. Determine dynamic timeline scale
-    const hasMidnightShift = dailyTimesheets.some(t => {
+    const times = dailyTimesheets.map(t => {
       const startH = parseInt(t.startTime.split(':')[0]) + parseInt(t.startTime.split(':')[1])/60
-      const endH = parseInt(t.endTime.split(':')[0]) + parseInt(t.endTime.split(':')[1])/60
-      return endH < startH;
+      let endH = parseInt(t.endTime.split(':')[0]) + parseInt(t.endTime.split(':')[1])/60
+      if (endH < startH) endH += 24;
+      return { startH, endH }
     })
-    
-    const maxEndHNextDay = hasMidnightShift ? Math.max(...dailyTimesheets.map(t => {
-      const s = parseInt(t.startTime.split(':')[0]) + parseInt(t.startTime.split(':')[1])/60;
-      const e = parseInt(t.endTime.split(':')[0]) + parseInt(t.endTime.split(':')[1])/60;
-      return e < s ? e : 0;
-    })) : 0;
 
-    // Minimum 24 hours. Extend in 2-hour increments if needed
-    let totalScaleHours = 24;
-    if (maxEndHNextDay > 0) {
-      totalScaleHours = 24 + Math.ceil(maxEndHNextDay / 2) * 2;
-    }
+    const minH = times.length > 0 ? Math.min(...times.map(t => t.startH)) : 0;
+    const maxH = times.length > 0 ? Math.max(...times.map(t => t.endH)) : 24;
+
+    // Start 2 hours before the first shift, but at least at 0 and at an even hour
+    const startScaleH = Math.max(0, Math.floor(minH / 2) * 2 - 2);
+    // End 2 hours after the last shift, but at least startScaleH + 12h (min span)
+    const endScaleH = Math.max(startScaleH + 12, Math.ceil(maxH / 2) * 2 + 2);
+
+    const totalScaleHours = endScaleH - startScaleH;
 
     const scaleTicks = [];
-    for(let i = 0; i <= totalScaleHours; i += 2) {
+    for(let i = startScaleH; i <= endScaleH; i += 2) {
       scaleTicks.push(i);
     }
 
@@ -245,9 +244,9 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
                   const isNextDay = hour === 24;
                   
                   return (
-                    <div key={hour} className={styles.ganttTick} style={{ left: `${(hour / totalScaleHours) * 100}%`}}>
+                    <div key={hour} className={styles.ganttTick} style={{ left: `${((hour - startScaleH) / totalScaleHours) * 100}%`}}>
                       <div className={styles.tickHour}>{displayHour}:00</div>
-                      {isNextDay && <div className={styles.tickDay}>(Nächster Tag)</div>}
+                      {hour >= 24 && hour < 24.1 && <div className={styles.tickDay}>(Nächster Tag)</div>}
                     </div>
                   )
                 })}
@@ -270,7 +269,7 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
                          className={styles.ganttBar} 
                          onClick={() => startEdit(t)}
                          style={{ 
-                           left: `${(startH / totalScaleHours) * 100}%`, 
+                           left: `${((startH - startScaleH) / totalScaleHours) * 100}%`, 
                            width: `${((endH - startH) / totalScaleHours) * 100}%`,
                            backgroundColor: STATUS_MAP[t.status].color + 'f0',
                            border: `1px solid ${STATUS_MAP[t.status].color}`
