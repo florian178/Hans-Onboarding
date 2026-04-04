@@ -45,6 +45,10 @@ const STATUS_MAP = {
 export default function TimesheetAdminClient({ timesheets: initialTimesheets, users }: Props) {
   const [timesheets, setTimesheets] = useState<AdminTimesheet[]>(initialTimesheets)
   
+  // View Modes
+  const [viewMode, setViewMode] = useState<"LIST" | "TIMELINE">("LIST")
+  const [dailyDate, setDailyDate] = useState(new Date().toISOString().split('T')[0])
+  
   // Filters
   const [filterUser, setFilterUser] = useState("")
   const [filterStatus, setFilterStatus] = useState("")
@@ -180,6 +184,89 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
   // Generate exact months that are available in the data
   const months = Array.from(new Set(timesheets.map(t => t.date.substring(0, 7)))).sort().reverse()
 
+  // Timeline processing
+  const dailyTimesheets = timesheets.filter(t => t.date === dailyDate)
+  dailyTimesheets.sort((a,b) => a.startTime.localeCompare(b.startTime))
+
+  const renderTimeline = () => {
+    return (
+      <div className={styles.timelineWrapper}>
+        <div className={styles.timelineFilters}>
+          <input type="date" className={styles.filterSelect} style={{ width: 'auto' }} value={dailyDate} onChange={e => setDailyDate(e.target.value)} />
+        </div>
+
+        {dailyTimesheets.length === 0 ? (
+           <div className={styles.emptyTimeline}>Keine Zeiteinträge für diesen Tag.</div>
+        ) : (
+           <div className={styles.ganttContainer}>
+             <div className={styles.ganttScale}>
+               {[0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24].map(hour => (
+                 <div key={hour} className={styles.ganttTick} style={{ left: `${(hour / 24) * 100}%`}}>
+                   {hour}:00
+                 </div>
+               ))}
+             </div>
+             
+             <div className={styles.ganttRows}>
+               {dailyTimesheets.map(t => {
+                 const startH = parseInt(t.startTime.split(':')[0]) + parseInt(t.startTime.split(':')[1])/60
+                 const endH = parseInt(t.endTime.split(':')[0]) + parseInt(t.endTime.split(':')[1])/60
+                 
+                 const isCrossMidnight = endH < startH;
+                 
+                 return (
+                   <div key={t.id} className={styles.ganttRow}>
+                     <div className={styles.ganttUser} title={t.note || undefined}>{t.user?.name || t.user?.email || "Unbekannt"}</div>
+                     <div className={styles.ganttBarArea}>
+                       
+                       {/* Render normal bar */}
+                       {!isCrossMidnight && (
+                         <div 
+                           className={styles.ganttBar} 
+                           style={{ 
+                             left: `${(startH / 24) * 100}%`, 
+                             width: `${((endH - startH) / 24) * 100}%`,
+                             backgroundColor: STATUS_MAP[t.status].color + 'f0',
+                             border: `1px solid ${STATUS_MAP[t.status].color}`
+                           }}
+                           title={`${t.startTime} - ${t.endTime} (${t.breakMinutes} Min Pause)`}
+                         >
+                           <span className={styles.ganttTimeText}>
+                             {t.startTime}-{t.endTime} {t.breakMinutes > 0 ? `(${t.breakMinutes}m P)` : ''}
+                           </span>
+                         </div>
+                       )}
+
+                       {/* Render split bar for cross midnight shifts */}
+                       {isCrossMidnight && (
+                         <>
+                           <div 
+                             className={styles.ganttBar} 
+                             style={{ left: `${(startH / 24) * 100}%`, width: `${((24 - startH) / 24) * 100}%`, backgroundColor: STATUS_MAP[t.status].color + 'f0', border: `1px solid ${STATUS_MAP[t.status].color}` }}
+                             title={`${t.startTime} - 24:00 (Schicht 1/2)`}
+                           >
+                             <span className={styles.ganttTimeText}>{t.startTime}-24:00</span>
+                           </div>
+                           <div 
+                             className={styles.ganttBar} 
+                             style={{ left: `0%`, width: `${(endH / 24) * 100}%`, backgroundColor: STATUS_MAP[t.status].color + 'f0', border: `1px solid ${STATUS_MAP[t.status].color}` }}
+                             title={`00:00 - ${t.endTime} (Schicht 2/2)`}
+                           >
+                             <span className={styles.ganttTimeText}>00:00-{t.endTime} {t.breakMinutes > 0 ? `(${t.breakMinutes}m P)` : ''}</span>
+                           </div>
+                         </>
+                       )}
+                     </div>
+                   </div>
+                 )
+               })}
+             </div>
+           </div>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -190,58 +277,65 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
         <Button onClick={exportCSV}>CSV Export</Button>
       </div>
 
-      <div className={styles.filters}>
-        <select 
-          className={styles.filterSelect} 
-          value={filterUser} 
-          onChange={e => setFilterUser(e.target.value)}
-        >
-          <option value="">Alle Mitarbeiter</option>
-          {users.map(u => (
-            <option key={u.id} value={u.id}>{u.name || u.email}</option>
-          ))}
-        </select>
-
-        <select 
-          className={styles.filterSelect} 
-          value={filterMonth} 
-          onChange={e => setFilterMonth(e.target.value)}
-        >
-          <option value="">Alle Monate</option>
-          {months.map(m => (
-            <option key={m} value={m}>{m}</option>
-          ))}
-        </select>
-
-        <select 
-          className={styles.filterSelect} 
-          value={filterStatus} 
-          onChange={e => setFilterStatus(e.target.value)}
-        >
-          <option value="">Alle Status</option>
-          <option value="DRAFT">Entwurf</option>
-          <option value="SUBMITTED">Eingereicht</option>
-          <option value="APPROVED">Genehmigt</option>
-          <option value="REJECTED">Abgelehnt</option>
-        </select>
+      <div className={styles.tabs}>
+        <button className={viewMode === "LIST" ? styles.tabActive : styles.tab} onClick={() => setViewMode("LIST")}>📋 Listenansicht</button>
+        <button className={viewMode === "TIMELINE" ? styles.tabActive : styles.tab} onClick={() => setViewMode("TIMELINE")}>⏱️ Tagesübersicht</button>
       </div>
 
-      <div className={styles.stats}>
-        <div className={styles.statsItem}>
-          <span className={styles.statsLabel}>Angezeigte Stunden</span>
-          <span className={styles.statsValue}>{totalHours.toFixed(2)}h</span>
-        </div>
-        <div className={styles.statsItem}>
-          <span className={styles.statsLabel}>Geschätzte Kosten</span>
-          <span className={styles.statsValue}>{totalWage.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</span>
-        </div>
-        <div className={styles.statsItem}>
-          <span className={styles.statsLabel}>Einträge</span>
-          <span className={styles.statsValue}>{filteredTimesheets.length}</span>
-        </div>
-      </div>
+      {viewMode === "LIST" && (
+        <div className={styles.listContainer}>
+          <div className={styles.filters}>
+            <select 
+              className={styles.filterSelect} 
+              value={filterUser} 
+              onChange={e => setFilterUser(e.target.value)}
+            >
+              <option value="">Alle Mitarbeiter</option>
+              {users.map(u => (
+                <option key={u.id} value={u.id}>{u.name || u.email}</option>
+              ))}
+            </select>
 
-      <div className={styles.tableWrapper}>
+            <select 
+              className={styles.filterSelect} 
+              value={filterMonth} 
+              onChange={e => setFilterMonth(e.target.value)}
+            >
+              <option value="">Alle Monate</option>
+              {months.map(m => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
+
+            <select 
+              className={styles.filterSelect} 
+              value={filterStatus} 
+              onChange={e => setFilterStatus(e.target.value)}
+            >
+              <option value="">Alle Status</option>
+              <option value="DRAFT">Entwurf</option>
+              <option value="SUBMITTED">Eingereicht</option>
+              <option value="APPROVED">Genehmigt</option>
+              <option value="REJECTED">Abgelehnt</option>
+            </select>
+          </div>
+
+          <div className={styles.stats}>
+            <div className={styles.statsItem}>
+              <span className={styles.statsLabel}>Angezeigte Stunden</span>
+              <span className={styles.statsValue}>{totalHours.toFixed(2)}h</span>
+            </div>
+            <div className={styles.statsItem}>
+              <span className={styles.statsLabel}>Geschätzte Kosten</span>
+              <span className={styles.statsValue}>{totalWage.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</span>
+            </div>
+            <div className={styles.statsItem}>
+              <span className={styles.statsLabel}>Einträge</span>
+              <span className={styles.statsValue}>{filteredTimesheets.length}</span>
+            </div>
+          </div>
+
+          <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
             <tr>
@@ -338,7 +432,11 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
             )}
           </tbody>
         </table>
-      </div>
+        </div>
+        </div>
+      )}
+
+      {viewMode === "TIMELINE" && renderTimeline()}
     </div>
   )
 }
