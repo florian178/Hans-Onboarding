@@ -223,13 +223,14 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
                        {!isCrossMidnight && (
                          <div 
                            className={styles.ganttBar} 
+                           onClick={() => startEdit(t)}
                            style={{ 
                              left: `${(startH / 24) * 100}%`, 
                              width: `${((endH - startH) / 24) * 100}%`,
                              backgroundColor: STATUS_MAP[t.status].color + 'f0',
                              border: `1px solid ${STATUS_MAP[t.status].color}`
                            }}
-                           title={`${t.startTime} - ${t.endTime} (${t.breakMinutes} Min Pause)`}
+                           title={`${t.startTime} - ${t.endTime} (${t.breakMinutes} Min Pause) - Klicken zum Bearbeiten`}
                          >
                            <span className={styles.ganttTimeText}>
                              {t.startTime}-{t.endTime} {t.breakMinutes > 0 ? `(${t.breakMinutes}m P)` : ''}
@@ -242,15 +243,17 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
                          <>
                            <div 
                              className={styles.ganttBar} 
+                             onClick={() => startEdit(t)}
                              style={{ left: `${(startH / 24) * 100}%`, width: `${((24 - startH) / 24) * 100}%`, backgroundColor: STATUS_MAP[t.status].color + 'f0', border: `1px solid ${STATUS_MAP[t.status].color}` }}
-                             title={`${t.startTime} - 24:00 (Schicht 1/2)`}
+                             title={`${t.startTime} - 24:00 (Schicht 1/2) - Klicken zum Bearbeiten`}
                            >
                              <span className={styles.ganttTimeText}>{t.startTime}-24:00</span>
                            </div>
                            <div 
                              className={styles.ganttBar} 
+                             onClick={() => startEdit(t)}
                              style={{ left: `0%`, width: `${(endH / 24) * 100}%`, backgroundColor: STATUS_MAP[t.status].color + 'f0', border: `1px solid ${STATUS_MAP[t.status].color}` }}
-                             title={`00:00 - ${t.endTime} (Schicht 2/2)`}
+                             title={`00:00 - ${t.endTime} (Schicht 2/2) - Klicken zum Bearbeiten`}
                            >
                              <span className={styles.ganttTimeText}>00:00-{t.endTime} {t.breakMinutes > 0 ? `(${t.breakMinutes}m P)` : ''}</span>
                            </div>
@@ -437,6 +440,28 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
       )}
 
       {viewMode === "TIMELINE" && renderTimeline()}
+
+      {editId && viewMode === "TIMELINE" && (
+        <div className={styles.modalOverlay} onClick={cancelEdit}>
+          <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+            <h3>Zeiten bearbeiten</h3>
+            <p>Eintrag von {timesheets.find(t => t.id === editId)?.user?.name || "Unbekannt"} ({new Date(timesheets.find(t => t.id === editId)?.date || "").toLocaleDateString("de-DE")})</p>
+            
+            <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center', flexWrap: 'wrap' }}>
+              <input type="time" style={{ padding: '0.6rem', border: '1px solid var(--border)', borderRadius: '6px', background: 'var(--background)', color: 'var(--foreground)' }} value={editData.startTime} onChange={e => setEditData({...editData, startTime: e.target.value})} />
+              -
+              <input type="time" style={{ padding: '0.6rem', border: '1px solid var(--border)', borderRadius: '6px', background: 'var(--background)', color: 'var(--foreground)' }} value={editData.endTime} onChange={e => setEditData({...editData, endTime: e.target.value})} />
+              <span style={{ marginLeft: '0.5rem', fontWeight: 600 }}>Pause:</span>
+              <input type="number" style={{ padding: '0.6rem', width: '80px', border: '1px solid var(--border)', borderRadius: '6px', background: 'var(--background)', color: 'var(--foreground)' }} value={editData.breakMinutes} onChange={e => setEditData({...editData, breakMinutes: parseInt(e.target.value)||0})} />
+            </div>
+
+            <div className={styles.modalActions}>
+              <button className={styles.btnReject} onClick={cancelEdit} disabled={loadingId === editId}>Abbrechen</button>
+              <button className={styles.btnApprove} style={{ background: '#0071e3', color: 'white' }} onClick={() => saveEdit(editId)} disabled={loadingId === editId}>Speichern</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
