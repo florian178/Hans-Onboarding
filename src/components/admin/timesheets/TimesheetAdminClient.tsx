@@ -133,6 +133,22 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
     }
   }
 
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Bist du sicher, dass du diesen Eintrag unwiderruflich löschen möchtest? Dies kann nicht rückgängig gemacht werden.")) return;
+    
+    setLoadingId(id)
+    try {
+      const res = await fetch(`/api/timesheets/${id}`, { method: "DELETE" })
+      if (res.ok) {
+        setTimesheets(prev => prev.filter(t => t.id !== id))
+      } else {
+        alert("Fehler beim Löschen des Eintrags.")
+      }
+    } finally {
+      setLoadingId(null)
+    }
+  }
+
   const exportCSV = () => {
     const header = [
       "ID", "Mitarbeiter", "Datum", "Start", "Ende", "Pause (Min)", 
@@ -419,6 +435,15 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
                              onClick={() => handleStatusChange(t.id, "REJECTED", t.note)}
                              disabled={loadingId === t.id}
                            >Revoc.</button>
+                        )}
+                        {t.status === "REJECTED" && (
+                           <button 
+                             className={styles.btnReject} 
+                             style={{ background: 'rgba(217, 48, 37, 0.2)', fontSize: '1.2rem', padding: '0.2rem 0.5rem' }}
+                             onClick={() => handleDelete(t.id)}
+                             disabled={loadingId === t.id}
+                             title="Unwiderruflich löschen"
+                           >🗑️</button>
                         )}
                       </>
                     )}
