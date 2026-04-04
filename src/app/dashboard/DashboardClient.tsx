@@ -65,6 +65,12 @@ export default function DashboardClient({ user, documents, payslips }: Dashboard
         >
           Lohnzettel
         </button>
+        <button 
+          className={styles.tab}
+          onClick={() => window.location.href = '/dashboard/timesheets'}
+        >
+          Zeiterfassung
+        </button>
       </div>
 
       <div className={styles.grid}>
