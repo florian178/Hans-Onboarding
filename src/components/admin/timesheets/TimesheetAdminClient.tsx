@@ -240,17 +240,17 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
         ) : (
            <div className={styles.ganttContainer}>
              <div className={styles.ganttScale}>
-               {scaleTicks.map(hour => {
-                 const displayHour = hour >= 24 ? hour - 24 : hour;
-                 let label = `${displayHour}:00`;
-                 if (hour === 24) label = "00:00 (Nächster Tag)";
-                 
-                 return (
-                   <div key={hour} className={styles.ganttTick} style={{ left: `${(hour / totalScaleHours) * 100}%`}}>
-                     {label}
-                   </div>
-                 )
-               })}
+                {scaleTicks.map(hour => {
+                  const displayHour = hour >= 24 ? hour - 24 : hour;
+                  const isNextDay = hour === 24;
+                  
+                  return (
+                    <div key={hour} className={styles.ganttTick} style={{ left: `${(hour / totalScaleHours) * 100}%`}}>
+                      <div className={styles.tickHour}>{displayHour}:00</div>
+                      {isNextDay && <div className={styles.tickDay}>(Nächster Tag)</div>}
+                    </div>
+                  )
+                })}
              </div>
              
              <div className={styles.ganttRows}>

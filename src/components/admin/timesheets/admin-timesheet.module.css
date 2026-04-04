@@ -273,7 +273,7 @@
 
 .ganttScale {
   position: relative;
-  height: 25px;
+  height: 38px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 1rem;
   margin-left: 140px; /* Offset for user names */
@@ -284,9 +284,24 @@
   position: absolute;
   top: 0;
   transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tickHour {
   font-size: 0.75rem;
   color: var(--secondary-foreground);
   font-weight: 600;
+  white-space: nowrap;
+}
+
+.tickDay {
+  font-size: 0.65rem;
+  color: #0071e3;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1;
 }
 
 .ganttRows {
