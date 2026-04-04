@@ -148,3 +148,46 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: var(--surface);
+    border-color: var(--border);
+  }
+  .title { color: var(--foreground); }
+  .subtitle { color: var(--secondary-foreground); }
+  
+  .filterSelect {
+    background: var(--background);
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+  
+  .stats {
+    background: var(--secondary);
+  }
+  .statsValue { color: var(--foreground); }
+  
+  .tableWrapper {
+    background: var(--secondary);
+    border-color: var(--border);
+  }
+  
+  .table th {
+    background: var(--background);
+    color: var(--secondary-foreground);
+    border-color: var(--border);
+  }
+  
+  .table td {
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+  
+  /* Inputs inside the table during editing */
+  .table input {
+    background: var(--background);
+    color: var(--foreground);
+    border-color: var(--border);
+  }
+}

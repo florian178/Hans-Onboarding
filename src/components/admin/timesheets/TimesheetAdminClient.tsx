@@ -263,11 +263,11 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
                 {editId === t.id ? (
                   <td colSpan={2}>
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <input type="time" style={{ padding: '0.4rem', border: '1px solid #ccc', borderRadius: '4px' }} value={editData.startTime} onChange={e => setEditData({...editData, startTime: e.target.value})} />
+                      <input type="time" style={{ padding: '0.4rem', border: '1px solid var(--border)', borderRadius: '4px', background: 'var(--background)', color: 'var(--foreground)' }} value={editData.startTime} onChange={e => setEditData({...editData, startTime: e.target.value})} />
                       -
-                      <input type="time" style={{ padding: '0.4rem', border: '1px solid #ccc', borderRadius: '4px' }} value={editData.endTime} onChange={e => setEditData({...editData, endTime: e.target.value})} />
+                      <input type="time" style={{ padding: '0.4rem', border: '1px solid var(--border)', borderRadius: '4px', background: 'var(--background)', color: 'var(--foreground)' }} value={editData.endTime} onChange={e => setEditData({...editData, endTime: e.target.value})} />
                       <span style={{ marginLeft: '0.5rem', fontSize: '0.8rem' }}>Pause:</span>
-                      <input type="number" style={{ padding: '0.4rem', width: '60px', border: '1px solid #ccc', borderRadius: '4px' }} value={editData.breakMinutes} onChange={e => setEditData({...editData, breakMinutes: parseInt(e.target.value)||0})} />
+                      <input type="number" style={{ padding: '0.4rem', width: '60px', border: '1px solid var(--border)', borderRadius: '4px', background: 'var(--background)', color: 'var(--foreground)' }} value={editData.breakMinutes} onChange={e => setEditData({...editData, breakMinutes: parseInt(e.target.value)||0})} />
                     </div>
                   </td>
                 ) : (
@@ -277,7 +277,7 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
                   </>
                 )}
 
-                <td><span style={{ fontSize: '0.8rem', color: '#666' }}>{t.note || "-"}</span></td>
+                <td><span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>{t.note || "-"}</span></td>
                 <td>
                   <span 
                     className={styles.statusBadge} 
@@ -331,7 +331,7 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
             ))}
             {filteredTimesheets.length === 0 && (
               <tr>
-                <td colSpan={7} style={{ textAlign: "center", padding: "2rem", color: "#86868b" }}>
+                <td colSpan={7} style={{ textAlign: "center", padding: "2rem", color: "var(--secondary-foreground)" }}>
                   Keine Ergebnisse für diese Filter.
                 </td>
               </tr>
