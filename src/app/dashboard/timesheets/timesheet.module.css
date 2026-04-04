@@ -280,6 +280,37 @@
   
   .emptyState { 
     background: var(--secondary); 
-    border: 1px solid var(--border); 
+    border-color: var(--border); 
+  }
+}
+
+@media (max-width: 768px) {
+  .header { flex-direction: column; gap: 1rem; }
+  .listHeader { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  
+  .timesheetCard { 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 1.2rem; 
+  }
+  
+  .tsSide { 
+    align-items: center; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    width: 100%; 
+    border-top: 1px solid var(--border); 
+    padding-top: 1rem; 
+  }
+  
+  .formRow { grid-template-columns: 1fr; }
+  
+  .actionButtons { 
+    flex-direction: column; 
+    width: 100%; 
+  }
+  
+  .actionButtons button {
+    width: 100%;
   }
 }

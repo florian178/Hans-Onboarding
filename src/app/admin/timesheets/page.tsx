@@ -15,7 +15,7 @@ export default async function AdminTimesheetPage() {
         select: { name: true, email: true }
       }
     },
-    orderBy: { date: "desc" }
+    orderBy: { date: "asc" }
   })
 
   // get distinct users for filter dropdown

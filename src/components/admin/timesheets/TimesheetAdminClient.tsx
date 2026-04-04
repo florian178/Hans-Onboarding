@@ -257,11 +257,11 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
           <tbody>
             {filteredTimesheets.map(t => (
               <tr key={t.id}>
-                <td>{t.user?.name || t.user?.email || "Unbekannt"}</td>
-                <td>{new Date(t.date).toLocaleDateString("de-DE")}</td>
+                <td data-label="Mitarbeiter">{t.user?.name || t.user?.email || "Unbekannt"}</td>
+                <td data-label="Datum">{new Date(t.date).toLocaleDateString("de-DE")}</td>
                 
                 {editId === t.id ? (
-                  <td colSpan={2}>
+                  <td colSpan={2} data-label="Zeiten & Pause anpassen">
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                       <input type="time" style={{ padding: '0.4rem', border: '1px solid var(--border)', borderRadius: '4px', background: 'var(--background)', color: 'var(--foreground)' }} value={editData.startTime} onChange={e => setEditData({...editData, startTime: e.target.value})} />
                       -
@@ -272,13 +272,13 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
                   </td>
                 ) : (
                   <>
-                    <td>{t.startTime} - {t.endTime} ({t.breakMinutes} Min)</td>
-                    <td><strong>{t.totalHours}</strong></td>
+                    <td data-label="Zeit / Pause">{t.startTime} - {t.endTime} ({t.breakMinutes} Min)</td>
+                    <td data-label="Stunden"><strong>{t.totalHours}</strong></td>
                   </>
                 )}
 
-                <td><span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>{t.note || "-"}</span></td>
-                <td>
+                <td data-label="Notiz"><span style={{ fontSize: '0.8rem', color: 'var(--secondary-foreground)' }}>{t.note || "-"}</span></td>
+                <td data-label="Status">
                   <span 
                     className={styles.statusBadge} 
                     style={{ backgroundColor: STATUS_MAP[t.status].bg, color: STATUS_MAP[t.status].color }}
@@ -286,7 +286,7 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
                     {STATUS_MAP[t.status].label}
                   </span>
                 </td>
-                <td>
+                <td data-label="Aktion">
                   <div className={styles.actions}>
                     {editId === t.id ? (
                       <>
