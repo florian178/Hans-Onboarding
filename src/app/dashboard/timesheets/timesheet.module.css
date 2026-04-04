@@ -245,3 +245,41 @@
   background: #f5f5f7;
   border-radius: 12px;
 }
+
+@media (prefers-color-scheme: dark) {
+  .title, .tsDate { color: var(--foreground); }
+  .subtitle, .tsNote, .tsTimes { color: var(--secondary-foreground); }
+  
+  .timesheetCard, .formCard { 
+    background: var(--secondary); 
+    border-color: var(--border); 
+  }
+  
+  .formGroup label, .emptyState { color: var(--secondary-foreground); }
+  
+  .formGroup input { 
+    background: var(--background); 
+    color: var(--foreground); 
+    border-color: var(--border); 
+  }
+  
+  .summaryBox { 
+    background: var(--background); 
+    color: var(--foreground); 
+  }
+  
+  .warningBox { 
+    background: rgba(245, 124, 0, 0.15); 
+    color: #ffb74d; 
+  }
+  
+  .errorBox { 
+    background: rgba(217, 48, 37, 0.15); 
+    color: #ff8a80; 
+  }
+  
+  .emptyState { 
+    background: var(--secondary); 
+    border: 1px solid var(--border); 
+  }
+}

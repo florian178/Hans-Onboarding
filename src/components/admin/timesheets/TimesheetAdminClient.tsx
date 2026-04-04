@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/Button"
 import styles from "./admin-timesheet.module.css"
+import { calculateTotalHours } from "@/lib/timesheet-utils"
 
 interface UserInfo {
   id: string
@@ -50,18 +51,76 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
   const [filterMonth, setFilterMonth] = useState("")
 
   const [loadingId, setLoadingId] = useState<string | null>(null)
+  
+  const [editId, setEditId] = useState<string | null>(null)
+  const [editData, setEditData] = useState({ startTime: "", endTime: "", breakMinutes: 0 })
 
-  const handleStatusChange = async (id: string, newStatus: string) => {
+  const startEdit = (t: AdminTimesheet) => {
+    setEditId(t.id)
+    setEditData({ startTime: t.startTime, endTime: t.endTime, breakMinutes: t.breakMinutes })
+  }
+
+  const cancelEdit = () => {
+    setEditId(null)
+  }
+
+  const saveEdit = async (id: string) => {
+    const totalHours = calculateTotalHours(editData.startTime, editData.endTime, editData.breakMinutes)
+    
     setLoadingId(id)
     try {
       const res = await fetch(`/api/timesheets/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ 
+          startTime: editData.startTime, 
+          endTime: editData.endTime, 
+          breakMinutes: editData.breakMinutes,
+          totalHours
+        })
       })
       if (res.ok) {
         const updated = await res.json()
-        setTimesheets(prev => prev.map(t => t.id === id ? { ...t, status: updated.status, approvedBy: updated.approvedBy } : t))
+        setTimesheets(prev => prev.map(t => t.id === id ? { 
+          ...t, 
+          startTime: updated.startTime, 
+          endTime: updated.endTime, 
+          breakMinutes: updated.breakMinutes,
+          totalHours: updated.totalHours
+        } : t))
+        setEditId(null)
+      } else {
+        alert("Fehler beim Speichern der Zeiten")
+      }
+    } finally {
+      setLoadingId(null)
+    }
+  }
+
+  const handleStatusChange = async (id: string, newStatus: string, existingNote: string | null = null) => {
+    let noteUpdate: string | undefined = undefined;
+
+    if (newStatus === "REJECTED") {
+      const reason = window.prompt("Bitte gib einen Grund für die Ablehnung an (optional):")
+      if (reason === null) return // cancelled
+      if (reason.trim()) {
+        noteUpdate = existingNote ? `${existingNote} | Ablehnung: ${reason}` : `Ablehnung: ${reason}`
+      }
+    }
+
+    setLoadingId(id)
+    try {
+      const res = await fetch(`/api/timesheets/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+           status: newStatus,
+           ...(noteUpdate !== undefined ? { note: noteUpdate } : {})
+        })
+      })
+      if (res.ok) {
+        const updated = await res.json()
+        setTimesheets(prev => prev.map(t => t.id === id ? { ...t, status: updated.status, approvedBy: updated.approvedBy, note: updated.note } : t))
       } else {
         alert("Fehler beim Aktualisieren des Status")
       }
@@ -200,8 +259,24 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
               <tr key={t.id}>
                 <td>{t.user?.name || t.user?.email || "Unbekannt"}</td>
                 <td>{new Date(t.date).toLocaleDateString("de-DE")}</td>
-                <td>{t.startTime} - {t.endTime} ({t.breakMinutes} Min)</td>
-                <td><strong>{t.totalHours}</strong></td>
+                
+                {editId === t.id ? (
+                  <td colSpan={2}>
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                      <input type="time" style={{ padding: '0.4rem', border: '1px solid #ccc', borderRadius: '4px' }} value={editData.startTime} onChange={e => setEditData({...editData, startTime: e.target.value})} />
+                      -
+                      <input type="time" style={{ padding: '0.4rem', border: '1px solid #ccc', borderRadius: '4px' }} value={editData.endTime} onChange={e => setEditData({...editData, endTime: e.target.value})} />
+                      <span style={{ marginLeft: '0.5rem', fontSize: '0.8rem' }}>Pause:</span>
+                      <input type="number" style={{ padding: '0.4rem', width: '60px', border: '1px solid #ccc', borderRadius: '4px' }} value={editData.breakMinutes} onChange={e => setEditData({...editData, breakMinutes: parseInt(e.target.value)||0})} />
+                    </div>
+                  </td>
+                ) : (
+                  <>
+                    <td>{t.startTime} - {t.endTime} ({t.breakMinutes} Min)</td>
+                    <td><strong>{t.totalHours}</strong></td>
+                  </>
+                )}
+
                 <td><span style={{ fontSize: '0.8rem', color: '#666' }}>{t.note || "-"}</span></td>
                 <td>
                   <span 
@@ -213,26 +288,42 @@ export default function TimesheetAdminClient({ timesheets: initialTimesheets, us
                 </td>
                 <td>
                   <div className={styles.actions}>
-                    {t.status === "SUBMITTED" && (
+                    {editId === t.id ? (
                       <>
-                        <button 
-                          className={styles.btnApprove} 
-                          onClick={() => handleStatusChange(t.id, "APPROVED")}
-                          disabled={loadingId === t.id}
-                        >✓</button>
-                        <button 
-                          className={styles.btnReject} 
-                          onClick={() => handleStatusChange(t.id, "REJECTED")}
-                          disabled={loadingId === t.id}
-                        >✗</button>
+                        <button className={styles.btnApprove} onClick={() => saveEdit(t.id)} disabled={loadingId === t.id}>Speichern</button>
+                        <button className={styles.btnReject} onClick={cancelEdit} disabled={loadingId === t.id}>Abbrechen</button>
                       </>
-                    )}
-                    {t.status === "APPROVED" && (
-                       <button 
-                         className={styles.btnReject} 
-                         onClick={() => handleStatusChange(t.id, "REJECTED")}
-                         disabled={loadingId === t.id}
-                       >Revoc.</button>
+                    ) : (
+                      <>
+                        {t.status === "SUBMITTED" && (
+                          <>
+                            <button 
+                              className={styles.btnApprove} 
+                              onClick={() => handleStatusChange(t.id, "APPROVED", t.note)}
+                              disabled={loadingId === t.id}
+                              title="Genehmigen"
+                            >✓</button>
+                            <button 
+                              className={styles.btnReject} 
+                              onClick={() => handleStatusChange(t.id, "REJECTED", t.note)}
+                              disabled={loadingId === t.id}
+                              title="Ablehnen"
+                            >✗</button>
+                            <button 
+                              style={{ border: 'none', background: 'none', color: '#0071e3', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, padding: '0.4rem' }}
+                              onClick={() => startEdit(t)}
+                              disabled={loadingId === t.id}
+                            >Edit</button>
+                          </>
+                        )}
+                        {t.status === "APPROVED" && (
+                           <button 
+                             className={styles.btnReject} 
+                             onClick={() => handleStatusChange(t.id, "REJECTED", t.note)}
+                             disabled={loadingId === t.id}
+                           >Revoc.</button>
+                        )}
+                      </>
                     )}
                   </div>
                 </td>
