@@ -32,7 +32,7 @@ export async function GET(req: Request) {
           select: { name: true, email: true },
         },
       },
-      orderBy: { date: "asc" },
+      orderBy: { date: "desc" },
     })
 
     return NextResponse.json(timesheets)

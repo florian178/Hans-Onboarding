@@ -9,7 +9,7 @@ export default async function TimesheetsPage() {
 
   const timesheets = await prisma.timesheet.findMany({
     where: { userId: session.user.id },
-    orderBy: { date: "asc" }
+    orderBy: { date: "desc" }
   })
 
   return <TimesheetClient initialTimesheets={safeSerializeDates(timesheets)} />
