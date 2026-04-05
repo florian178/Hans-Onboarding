@@ -11,7 +11,7 @@ interface Document {
   name: string
   url: string
   type: string
-  uploadedAt: Date
+  uploadedAt: string
 }
 
 interface Payslip {
@@ -19,14 +19,14 @@ interface Payslip {
   month: number
   year: number
   url: string
-  uploadedAt: Date
+  uploadedAt: string
 }
 
 interface DashboardClientProps {
   user: {
     name: string | null
     email: string | null
-    startDate: Date | null
+    startDate: string | null
   }
   documents: Document[]
   payslips: Payslip[]

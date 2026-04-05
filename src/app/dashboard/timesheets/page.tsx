@@ -12,12 +12,19 @@ export default async function TimesheetsPage() {
     orderBy: { date: "asc" }
   })
 
-  // Convert dates to iso strings to pass safely to Client Component
-  const serialized = timesheets.map(t => ({
-    ...t,
-    createdAt: t.createdAt,
-    updatedAt: t.updatedAt
-  }))
+  return <TimesheetClient initialTimesheets={safeSerializeDates(timesheets)} />
+}
 
-  return <TimesheetClient initialTimesheets={serialized as any} />
+function safeSerializeDates(obj: any): any {
+  if (!obj) return obj;
+  if (Array.isArray(obj)) return obj.map(safeSerializeDates);
+  if (obj instanceof Date) return obj.toISOString();
+  if (typeof obj === 'object') {
+    const newObj: any = {};
+    for (const key in obj) {
+      newObj[key] = safeSerializeDates(obj[key]);
+    }
+    return newObj;
+  }
+  return obj;
 }
