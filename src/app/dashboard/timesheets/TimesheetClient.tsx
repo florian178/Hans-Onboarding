@@ -21,6 +21,16 @@ export default function TimesheetClient({ initialTimesheets }: Props) {
   const [timesheets, setTimesheets] = useState<TimesheetEntry[]>(initialTimesheets)
   const [showForm, setShowForm] = useState(false)
   const [loading, setLoading] = useState(false)
+  
+  // Calculate earnings for the current month (based on approved entries)
+  const now = new Date();
+  const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  
+  const approvedEntries = timesheets.filter(t => t.status === "APPROVED");
+  const currentMonthEntries = approvedEntries.filter(t => t.date.startsWith(currentMonthKey));
+  
+  const monthlyEarnings = currentMonthEntries.reduce((acc, t) => acc + (t.totalHours * (t.hourlyWage || 13.90)), 0);
+  const monthlyHours = currentMonthEntries.reduce((acc, t) => acc + t.totalHours, 0);
 
   const fetchTimesheets = async () => {
     try {
@@ -76,6 +86,17 @@ export default function TimesheetClient({ initialTimesheets }: Props) {
 
       {!showForm ? (
         <div className={styles.listSection}>
+          <div className={styles.monthSummary}>
+            <div className={styles.summaryItem}>
+              <span className={styles.summaryLabel}>Stunden (diesen Monat)</span>
+              <span className={styles.summaryValue}>{monthlyHours.toFixed(2)}h</span>
+            </div>
+            <div className={styles.summaryItem}>
+              <span className={styles.summaryLabel}>Verdienst (diesen Monat)</span>
+              <span className={styles.summaryValue}>{monthlyEarnings.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</span>
+            </div>
+          </div>
+
           <div className={styles.listHeader}>
             <h3>Deine Einträge</h3>
             <Button onClick={() => setShowForm(true)}>+ Neuer Eintrag</Button>
@@ -94,7 +115,14 @@ export default function TimesheetClient({ initialTimesheets }: Props) {
                     <div className={styles.tsTimes}>
                       {ts.startTime} - {ts.endTime} Uhr ({ts.breakMinutes} Min Pause)
                     </div>
-                    <div className={styles.tsTotal}>{ts.totalHours} Stunden</div>
+                    <div className={styles.tsTotalRow}>
+                      <div className={styles.tsTotal}>{ts.totalHours} Stunden</div>
+                      {ts.status === "APPROVED" && (
+                        <div className={styles.tsEarnings}>
+                          Verdienst: {(ts.totalHours * (ts.hourlyWage || 13.90)).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
+                        </div>
+                      )}
+                    </div>
                     {ts.note && <div className={styles.tsNote}>Notiz: {ts.note}</div>}
                   </div>
                   
