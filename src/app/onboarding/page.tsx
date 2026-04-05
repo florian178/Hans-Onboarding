@@ -27,6 +27,15 @@ export default async function OnboardingIndex() {
     }
   }
 
-  // All steps completed
+  // All steps completed - but ensure the status record also says so to avoid loops
+  const status = await prisma.onboardingStatus.findUnique({ where: { userId } })
+  if (status?.status !== "COMPLETED") {
+    await prisma.onboardingStatus.upsert({
+      where: { userId },
+      create: { userId, status: "COMPLETED" },
+      update: { status: "COMPLETED" }
+    })
+  }
+
   redirect("/dashboard")
 }

@@ -17,14 +17,5 @@ export default async function TimesheetsPage() {
 
 function safeSerializeDates(obj: any): any {
   if (!obj) return obj;
-  if (Array.isArray(obj)) return obj.map(safeSerializeDates);
-  if (obj instanceof Date) return obj.toISOString();
-  if (typeof obj === 'object') {
-    const newObj: any = {};
-    for (const key in obj) {
-      newObj[key] = safeSerializeDates(obj[key]);
-    }
-    return newObj;
-  }
-  return obj;
+  return JSON.parse(JSON.stringify(obj));
 }
