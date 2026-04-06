@@ -43,9 +43,13 @@ export default function DashboardClient({ user, documents, payslips }: Dashboard
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <div>
-          <h1 className={styles.title}>Hallo, {user.name}</h1>
-          <p className={styles.subtitle}>Willkommen in deinem Mitarbeiter-Bereich.</p>
+        <div className={styles.headerLeft}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="Hans im Club Logo" className={styles.headerLogo} />
+          <div>
+            <h1 className={styles.title}>Hallo, {user.name}</h1>
+            <p className={styles.subtitle}>Willkommen in deinem Mitarbeiter-Bereich.</p>
+          </div>
         </div>
         <div>
           <Button variant="ghost" onClick={() => signOut({ callbackUrl: "/login" })}>Abmelden</Button>

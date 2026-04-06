@@ -45,6 +45,7 @@
   max-width: 80%;
   width: auto;
   object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 @media (max-width: 480px) {

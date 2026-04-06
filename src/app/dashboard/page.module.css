@@ -11,6 +11,24 @@
   align-items: center;
 }
 
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.headerLogo {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+@media (prefers-color-scheme: dark) {
+  .headerLogo {
+    filter: brightness(0) invert(1);
+  }
+}
+
 .title {
   font-size: 2rem;
   font-weight: 700;
