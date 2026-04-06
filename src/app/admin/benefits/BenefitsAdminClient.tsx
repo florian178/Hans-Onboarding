@@ -66,8 +66,13 @@ export default function BenefitsAdminClient({ initialBenefits }: { initialBenefi
 
       // Handle logo upload if a new file is selected
       if (file && file.size > 0) {
-        const url = await uploadBenefitLogo(formData)
-        if (url) partnerLogo = url
+        const uploadRes = await uploadBenefitLogo(formData)
+        if (uploadRes.error) {
+          alert("Fehler beim Logo Upload: " + uploadRes.error)
+          setIsLoading(false)
+          return
+        }
+        if (uploadRes.url) partnerLogo = uploadRes.url
       }
 
       const payload = {

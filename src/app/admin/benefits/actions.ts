@@ -3,21 +3,23 @@
 import { put, del } from "@vercel/blob"
 import { auth } from "@/auth"
 
-export async function uploadBenefitLogo(formData: FormData): Promise<string | null> {
+export async function uploadBenefitLogo(formData: FormData): Promise<{ url: string | null; error?: string }> {
   const session = await auth()
-  if (!session?.user || (session.user as any).role !== "ADMIN") return null
+  if (!session?.user || (session.user as any).role !== "ADMIN") {
+    return { url: null, error: "Unauthorized" }
+  }
 
   const file = formData.get("logoFile") as File
-  if (!file || file.size === 0) return null
+  if (!file || file.size === 0) return { url: null, error: "No file provided" }
 
   const filename = `benefits/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_")}`
   
   try {
     const blob = await put(filename, file, { access: 'public' })
-    return blob.url
-  } catch (e) {
+    return { url: blob.url }
+  } catch (e: any) {
     console.error("Vercel Blob Upload error", e)
-    return null
+    return { url: null, error: e.message || "Unknown Blob Error" }
   }
 }
 
