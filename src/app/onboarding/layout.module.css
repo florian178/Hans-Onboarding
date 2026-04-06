@@ -25,12 +25,12 @@
 }
 
 .logoImage {
-  height: 48px;
+  height: 32px;
   width: auto;
   object-fit: contain;
-  /* Add slight shadow for visibility on light/glass headers */
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
+
+
 
 @media (max-width: 1024px) {
   .header {
