@@ -5,7 +5,8 @@ import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
 import { signOut } from "next-auth/react"
 import styles from "./page.module.css"
-import { LuLayoutDashboard, LuFiles, LuClock, LuCalendar, LuHand, LuStar, LuFileText, LuDollarSign, LuChevronRight } from "react-icons/lu"
+import { LuLayoutDashboard, LuFiles, LuClock, LuCalendar, LuHand, LuStar, LuFileText, LuDollarSign, LuChevronRight, LuMenu, LuX, LuLogOut } from "react-icons/lu"
+import { clsx } from "clsx"
 
 interface Document {
   id: string
@@ -47,6 +48,7 @@ type TabKey = "home" | "docs" | "shifts"
 
 export default function DashboardClient({ user, documents, payslips, summary }: DashboardClientProps) {
   const [activeTab, setActiveTab] = useState<TabKey>("home")
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [docSection, setDocSection] = useState<"general" | "payslips">("general")
   const [myShifts, setMyShifts] = useState<any[]>([])
 
@@ -64,222 +66,250 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
 
   const firstName = user.name?.split(" ")[0] || user.name
 
+  const navItems = [
+    { id: "home", label: "Home", icon: <LuLayoutDashboard />, path: null },
+    { id: "docs", label: "Dokumente", icon: <LuFiles />, path: null },
+    { id: "timesheets", label: "Zeiterfassung", icon: <LuClock />, path: "/dashboard/timesheets" },
+    { id: "shifts", label: "Einsatzpläne", icon: <LuCalendar />, path: null },
+    { id: "availability", label: "Verfügbarkeiten", icon: <LuHand />, path: "/dashboard/availability" },
+    { id: "benefits", label: "Benefits", icon: <LuStar />, path: "/dashboard/benefits" },
+  ]
+
+  const handleTabClick = (item: any) => {
+    if (item.path) {
+      handleNavClick(item.path)
+    } else {
+      setActiveTab(item.id)
+    }
+    setIsMenuOpen(false)
+  }
+
   return (
     <div className={styles.container}>
-      {/* Compact header */}
-      <header className={styles.header}>
-        <div className={styles.headerLeft}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Hans im Club" className={styles.headerLogo} />
-          <div>
-            <h1 className={styles.title}>Hallo, {firstName}</h1>
-            <p className={styles.subtitle}>Dein Mitarbeiter-Bereich</p>
-          </div>
+      {/* Overlay for mobile menu */}
+      {isMenuOpen && <div className={styles.overlay} onClick={() => setIsMenuOpen(false)} />}
+
+      <aside className={clsx(styles.sidebar, isMenuOpen && styles.sidebarOpen)}>
+        <div className={styles.sidebarHeader}>
+          <img src="/logo.png" alt="Logo" className={styles.sidebarLogo} />
+          <button className={styles.closeBtn} onClick={() => setIsMenuOpen(false)}>
+            <LuX />
+          </button>
         </div>
-        <Button variant="ghost" onClick={() => signOut({ callbackUrl: "/login" })} className={styles.logoutBtn}>Abmelden</Button>
-      </header>
 
-      {/* Navigation tabs — scrollable on mobile */}
-      <nav className={styles.nav}>
-        <button
-          className={`${styles.navItem} ${activeTab === "home" ? styles.navItemActive : ""}`}
-          onClick={() => setActiveTab("home")}
-        >
-          <LuLayoutDashboard className={styles.navIcon} /> Home
-        </button>
-        <button
-          className={`${styles.navItem} ${activeTab === "docs" ? styles.navItemActive : ""}`}
-          onClick={() => setActiveTab("docs")}
-        >
-          <LuFiles className={styles.navIcon} /> Dokumente
-        </button>
-        <button
-          className={styles.navItem}
-          onClick={() => handleNavClick("/dashboard/timesheets")}
-        >
-          <LuClock className={styles.navIcon} /> Zeiterfassung
-        </button>
-        <button
-          className={`${styles.navItem} ${activeTab === "shifts" ? styles.navItemActive : ""}`}
-          onClick={() => setActiveTab("shifts")}
-        >
-          <LuCalendar className={styles.navIcon} /> Einsatzpläne
-        </button>
-        <button
-          className={styles.navItem}
-          onClick={() => handleNavClick("/dashboard/availability")}
-        >
-          <LuHand className={styles.navIcon} /> Verfügbarkeiten
-        </button>
-        <button
-          className={styles.navItem}
-          onClick={() => handleNavClick("/dashboard/benefits")}
-        >
-          <LuStar className={styles.navIcon} /> Benefits
-        </button>
-      </nav>
+        <nav className={styles.sideNav}>
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              className={clsx(styles.sideNavItem, activeTab === item.id && styles.sideNavItemActive)}
+              onClick={() => handleTabClick(item)}
+            >
+              <span className={styles.sideNavIcon}>{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
+        </nav>
 
-      {/* Content Area */}
-      <div className={styles.content}>
-        {activeTab === "home" && (
-          <div className={styles.homeContent}>
-            {/* Quick Stats / Motivation */}
-            <div className={styles.heroSummary}>
-              <Card className={styles.earningsCard}>
-                <div className={styles.earningsLabel}>Verdienst diesen Monat</div>
-                <div className={styles.earningsValue}>
-                  {summary?.currentMonthEarnings.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
-                </div>
-                <div className={styles.earningsSub}>Basierend auf deinen genehmigten/eingereichten Zeiten</div>
-              </Card>
+        <div className={styles.sidebarFooter}>
+          <button onClick={() => signOut({ callbackUrl: "/login" })} className={styles.logoutAction}>
+            <LuLogOut /> Abmelden
+          </button>
+        </div>
+      </aside>
 
-              <div className={styles.newsTicker}>
-                 <h2 className={styles.sectionHeading}>Neuigkeiten & Highlights</h2>
-                 <p className={styles.newsText}>Willkommen zurück im Hans! Wir freuen uns, dass du Teil des Teams bist. Schaue regelmäßig hier vorbei für Updates zu deinen Dokumenten und Einsatzplänen.</p>
-              </div>
-            </div>
-
-            {/* Action Items / Notifications */}
-            <div className={styles.actionGrid}>
-              {/* Next Shift */}
-              <Card className={styles.actionCard} onClick={() => setActiveTab("shifts")}>
-                <div className={styles.actionIcon}><LuCalendar /></div>
-                <div className={styles.actionContent}>
-                  <h3 className={styles.actionTitle}>Nächster Einsatz</h3>
-                  {summary?.nextShift ? (
-                    <>
-                      <p className={styles.actionText}>
-                        <strong>{new Date(summary.nextShift.plan.date).toLocaleDateString('de-DE', { weekday: 'long', day: '2-digit', month: '2-digit' })}</strong>
-                        <br />
-                        {summary.nextShift.plan.eventName || 'Veranstaltung'} · {summary.nextShift.startTime} Uhr
-                      </p>
-                      <div className={styles.actionArrow}><LuChevronRight /></div>
-                    </>
-                  ) : (
-                    <p className={styles.actionText}>Aktuell kein geplanter Einsatz.</p>
-                  )}
-                </div>
-              </Card>
-
-              {/* Open Availability Requests */}
-              <Card className={styles.actionCard} onClick={() => handleNavClick("/dashboard/availability")}>
-                <div className={styles.actionIcon}><LuHand /></div>
-                <div className={styles.actionContent}>
-                  <h3 className={styles.actionTitle}>Fristen & Abfragen</h3>
-                  {summary?.openRequests && summary.openRequests.length > 0 ? (
-                    <>
-                      <p className={styles.actionText}>Es gibt {summary.openRequests.length} offene Verfügbarkeitsabfrage(n).</p>
-                      <div className={styles.actionArrow}><LuChevronRight /></div>
-                    </>
-                  ) : (
-                    <p className={styles.actionText}>Alle Abfragen erledigt. Top!</p>
-                  )}
-                </div>
-              </Card>
-
-              {/* Latest Payslip */}
-              <Card className={styles.actionCard} onClick={() => { setActiveTab("docs"); setDocSection("payslips"); }}>
-                <div className={styles.actionIcon}><LuDollarSign /></div>
-                <div className={styles.actionContent}>
-                  <h3 className={styles.actionTitle}>Lohnzettel</h3>
-                  {payslips.length > 0 ? (
-                    <>
-                      <p className={styles.actionText}>Dein neuester Lohnzettel ({MONTHS[payslips[0].month - 1]}) ist online.</p>
-                      <div className={styles.actionArrow}><LuChevronRight /></div>
-                    </>
-                  ) : (
-                    <p className={styles.actionText}>Bisher keine Lohnzettel hochgeladen.</p>
-                  )}
-                </div>
-              </Card>
+      <div className={styles.mainWrapper}>
+        <header className={styles.header}>
+          <div className={styles.headerLeft}>
+            <button className={styles.menuBtn} onClick={() => setIsMenuOpen(true)}>
+              <LuMenu />
+            </button>
+            <div>
+              <h1 className={styles.title}>Hallo, {firstName}</h1>
+              <p className={styles.subtitle}>Dashboard</p>
             </div>
           </div>
-        )}
+          <div className={styles.headerRight}>
+             <img src="/logo.png" alt="Hans im Club" className={styles.headerLogo} />
+          </div>
+        </header>
 
-        {activeTab === "docs" && (
-          <>
-            {/* Sub-section toggle for docs */}
-            <div className={styles.subTabs}>
-              <button
-                className={`${styles.subTab} ${docSection === "general" ? styles.subTabActive : ""}`}
-                onClick={() => setDocSection("general")}
-              >
-                Allgemeine Dokumente
-              </button>
-              <button
-                className={`${styles.subTab} ${docSection === "payslips" ? styles.subTabActive : ""}`}
-                onClick={() => setDocSection("payslips")}
-              >
-                Lohnzettel
-              </button>
-            </div>
+        {/* Desktop Nav - visible only on large screens, or we can keep it as secondary */}
+        <nav className={styles.desktopNav}>
+           {navItems.map((item) => (
+            <button
+              key={item.id}
+              className={clsx(styles.navItem, activeTab === item.id && styles.navItemActive)}
+              onClick={() => handleTabClick(item)}
+            >
+              <span className={styles.navIcon}>{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
+        </nav>
 
-            {docSection === "general" ? (
-              <div className={styles.grid}>
-                {documents.length > 0 ? (
-                  documents.map((doc) => (
-                    <Card key={doc.id} className={styles.docCard}>
-                      <span className={styles.docIcon}><LuFileText /></span>
-                      <h3 className={styles.docTitle}>{doc.name}</h3>
-                      <p className={styles.docInfo}>Hochgeladen am {new Date(doc.uploadedAt).toLocaleDateString("de-DE")}</p>
-                      <a href={doc.type === "CONTRACT_SIGNED" ? "/dashboard/contract" : doc.url} target={doc.type === "CONTRACT_SIGNED" ? undefined : "_blank"} rel="noopener noreferrer">
-                        <Button fullWidth variant="outline">Anschauen / Download</Button>
-                      </a>
-                    </Card>
-                  ))
-                ) : (
-                  <div className={styles.emptyState}>
-                    <p>Noch keine Dokumente verfügbar.</p>
+        {/* Content Area */}
+        <div className={styles.content}>
+          {activeTab === "home" && (
+            <div className={styles.homeContent}>
+              {/* Quick Stats / Motivation */}
+              <div className={styles.heroSummary}>
+                <Card className={styles.earningsCard}>
+                  <div className={styles.earningsLabel}>Verdienst diesen Monat</div>
+                  <div className={styles.earningsValue}>
+                    {summary?.currentMonthEarnings.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                   </div>
-                )}
-              </div>
-            ) : (
-              <div className={styles.grid}>
-                {payslips.length > 0 ? (
-                  payslips.sort((a, b) => b.year - a.year || b.month - a.month).map((slip) => (
-                    <Card key={slip.id} className={styles.docCard}>
-                      <span className={styles.docIcon}><LuDollarSign /></span>
-                      <h3 className={styles.docTitle}>Lohnzettel {MONTHS[slip.month - 1]} {slip.year}</h3>
-                      <p className={styles.docInfo}>Bereitgestellt am {new Date(slip.uploadedAt).toLocaleDateString("de-DE")}</p>
-                      <a href={slip.url} target="_blank" rel="noopener noreferrer">
-                        <Button fullWidth variant="outline">Herunterladen</Button>
-                      </a>
-                    </Card>
-                  ))
-                ) : (
-                  <div className={styles.emptyState}>
-                    <p>Noch keine Lohnzettel verfügbar.</p>
-                  </div>
-                )}
-              </div>
-            )}
-          </>
-        )}
+                  <div className={styles.earningsSub}>Basierend auf deinen genehmigten/eingereichten Zeiten</div>
+                </Card>
 
-        {activeTab === "shifts" && (
-          <div className={styles.grid}>
-            {myShifts.length > 0 ? (
-              myShifts.map((a: any) => (
-                <Card key={a.id} className={styles.docCard}>
-                  <div className={styles.shiftCard}>
-                    <h3 className={styles.shiftDate}>{new Date(a.plan.date).toLocaleDateString("de-DE", { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })}</h3>
-                    <div className={styles.shiftEvent}>{a.plan.eventName || 'Veranstaltung'}</div>
-                    <div className={styles.shiftDetails}>
-                      <div><span className={styles.shiftLabel}>Bereich</span><div className={styles.shiftValue}>{a.area}</div></div>
-                      <div><span className={styles.shiftLabel}>Rolle</span><div className={styles.shiftValue}>{a.role || '-'}</div></div>
-                      <div><span className={styles.shiftLabel}>Beginn</span><div className={styles.shiftValue}>{a.startTime || '??:??'}</div></div>
-                    </div>
+                <div className={styles.newsTicker}>
+                   <h2 className={styles.sectionHeading}>Neuigkeiten & Highlights</h2>
+                   <p className={styles.newsText}>Willkommen zurück im Hans! Wir freuen uns, dass du Teil des Teams bist. Schaue regelmäßig hier vorbei für Updates zu deinen Dokumenten und Einsatzplänen.</p>
+                </div>
+              </div>
+
+              {/* Action Items / Notifications */}
+              <div className={styles.actionGrid}>
+                {/* Next Shift */}
+                <Card className={styles.actionCard} onClick={() => setActiveTab("shifts")}>
+                  <div className={styles.actionIcon}><LuCalendar /></div>
+                  <div className={styles.actionContent}>
+                    <h3 className={styles.actionTitle}>Nächster Einsatz</h3>
+                    {summary?.nextShift ? (
+                      <>
+                        <p className={styles.actionText}>
+                          <strong>{new Date(summary.nextShift.plan.date).toLocaleDateString('de-DE', { weekday: 'long', day: '2-digit', month: '2-digit' })}</strong>
+                          <br />
+                          {summary.nextShift.plan.eventName || 'Veranstaltung'} · {summary.nextShift.startTime} Uhr
+                        </p>
+                        <div className={styles.actionArrow}><LuChevronRight /></div>
+                      </>
+                    ) : (
+                      <p className={styles.actionText}>Aktuell kein geplanter Einsatz.</p>
+                    )}
                   </div>
                 </Card>
-              ))
-            ) : (
-              <div className={styles.emptyState}>
-                <p>Du bist aktuell in keinem veröffentlichten Einsatzplan eingeteilt.</p>
+
+                {/* Open Availability Requests */}
+                <Card className={styles.actionCard} onClick={() => handleNavClick("/dashboard/availability")}>
+                  <div className={styles.actionIcon}><LuHand /></div>
+                  <div className={styles.actionContent}>
+                    <h3 className={styles.actionTitle}>Fristen & Abfragen</h3>
+                    {summary?.openRequests && summary.openRequests.length > 0 ? (
+                      <>
+                        <p className={styles.actionText}>Es gibt {summary.openRequests.length} offene Verfügbarkeitsabfrage(n).</p>
+                        <div className={styles.actionArrow}><LuChevronRight /></div>
+                      </>
+                    ) : (
+                      <p className={styles.actionText}>Alle Abfragen erledigt. Top!</p>
+                    )}
+                  </div>
+                </Card>
+
+                {/* Latest Payslip */}
+                <Card className={styles.actionCard} onClick={() => { setActiveTab("docs"); setDocSection("payslips"); }}>
+                  <div className={styles.actionIcon}><LuDollarSign /></div>
+                  <div className={styles.actionContent}>
+                    <h3 className={styles.actionTitle}>Lohnzettel</h3>
+                    {payslips.length > 0 ? (
+                      <>
+                        <p className={styles.actionText}>Dein neuester Lohnzettel ({MONTHS[payslips[0].month - 1]}) ist online.</p>
+                        <div className={styles.actionArrow}><LuChevronRight /></div>
+                      </>
+                    ) : (
+                      <p className={styles.actionText}>Bisher keine Lohnzettel hochgeladen.</p>
+                    )}
+                  </div>
+                </Card>
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          )}
+
+          {activeTab === "docs" && (
+            <>
+              {/* Sub-section toggle for docs */}
+              <div className={styles.subTabs}>
+                <button
+                  className={`${styles.subTab} ${docSection === "general" ? styles.subTabActive : ""}`}
+                  onClick={() => setDocSection("general")}
+                >
+                  Allgemeine Dokumente
+                </button>
+                <button
+                  className={`${styles.subTab} ${docSection === "payslips" ? styles.subTabActive : ""}`}
+                  onClick={() => setDocSection("payslips")}
+                >
+                  Lohnzettel
+                </button>
+              </div>
+
+              {docSection === "general" ? (
+                <div className={styles.grid}>
+                  {documents.length > 0 ? (
+                    documents.map((doc) => (
+                      <Card key={doc.id} className={styles.docCard}>
+                        <span className={styles.docIcon}><LuFileText /></span>
+                        <h3 className={styles.docTitle}>{doc.name}</h3>
+                        <p className={styles.docInfo}>Hochgeladen am {new Date(doc.uploadedAt).toLocaleDateString("de-DE")}</p>
+                        <a href={doc.type === "CONTRACT_SIGNED" ? "/dashboard/contract" : doc.url} target={doc.type === "CONTRACT_SIGNED" ? undefined : "_blank"} rel="noopener noreferrer">
+                          <Button fullWidth variant="outline">Anschauen / Download</Button>
+                        </a>
+                      </Card>
+                    ))
+                  ) : (
+                    <div className={styles.emptyState}>
+                      <p>Noch keine Dokumente verfügbar.</p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className={styles.grid}>
+                  {payslips.length > 0 ? (
+                    payslips.sort((a, b) => b.year - a.year || b.month - a.month).map((slip) => (
+                      <Card key={slip.id} className={styles.docCard}>
+                        <span className={styles.docIcon}><LuDollarSign /></span>
+                        <h3 className={styles.docTitle}>Lohnzettel {MONTHS[slip.month - 1]} {slip.year}</h3>
+                        <p className={styles.docInfo}>Bereitgestellt am {new Date(slip.uploadedAt).toLocaleDateString("de-DE")}</p>
+                        <a href={slip.url} target="_blank" rel="noopener noreferrer">
+                          <Button fullWidth variant="outline">Herunterladen</Button>
+                        </a>
+                      </Card>
+                    ))
+                  ) : (
+                    <div className={styles.emptyState}>
+                      <p>Noch keine Lohnzettel verfügbar.</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+
+          {activeTab === "shifts" && (
+            <div className={styles.grid}>
+              {myShifts.length > 0 ? (
+                myShifts.map((a: any) => (
+                  <Card key={a.id} className={styles.docCard}>
+                    <div className={styles.shiftCard}>
+                      <h3 className={styles.shiftDate}>{new Date(a.plan.date).toLocaleDateString("de-DE", { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })}</h3>
+                      <div className={styles.shiftEvent}>{a.plan.eventName || 'Veranstaltung'}</div>
+                      <div className={styles.shiftDetails}>
+                        <div><span className={styles.shiftLabel}>Bereich</span><div className={styles.shiftValue}>{a.area}</div></div>
+                        <div><span className={styles.shiftLabel}>Rolle</span><div className={styles.shiftValue}>{a.role || '-'}</div></div>
+                        <div><span className={styles.shiftLabel}>Beginn</span><div className={styles.shiftValue}>{a.startTime || '??:??'}</div></div>
+                      </div>
+                    </div>
+                  </Card>
+                ))
+              ) : (
+                <div className={styles.emptyState}>
+                  <p>Du bist aktuell in keinem veröffentlichten Einsatzplan eingeteilt.</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
 }
+
