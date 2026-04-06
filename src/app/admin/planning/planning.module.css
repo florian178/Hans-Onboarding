@@ -202,8 +202,8 @@
 .schedulerWrapper {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 220px);
-  min-height: 500px;
+  height: calc(100vh - 180px);
+  min-height: 600px;
 }
 
 .schedulerHeader {
@@ -292,19 +292,23 @@
 .schedulerAreas {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
   overflow-y: auto;
+  padding-right: 0.5rem; /* for scrollbar */
 }
 
 /* Drop Zone */
 .dropZone {
-  background: var(--surface);
-  border: 2px dashed var(--border);
-  border-radius: 10px;
-  padding: 0.75rem;
-  min-height: 100px;
-  transition: all 0.15s;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  min-height: 120px;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .dropZoneOver {
@@ -343,7 +347,8 @@
 .dropZoneContent {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 0.5rem;
+  flex: 1;
 }
 
 /* Employee Chip */
@@ -351,16 +356,20 @@
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  padding: 0.6rem;
-  margin-bottom: 0.4rem;
-  background: var(--background);
+  padding: 0.75rem;
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   border-left: 4px solid;
   font-size: 0.85rem;
   cursor: grab;
   touch-action: none;
   user-select: none;
+  transition: box-shadow 0.2s, transform 0.1s;
+}
+
+.empChip:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .empChip:active {

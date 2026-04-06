@@ -22,12 +22,8 @@ function DraggableChip({ emp, area, onUpdate }: { emp: any, area: string, onUpda
 
   // Apply the transform from useDraggable directly to the element
   const style: React.CSSProperties = {
-    opacity: isDragging ? 0.3 : 1,
+    opacity: isDragging ? 0.4 : 1,
     borderLeftColor: statusColor,
-    // Apply transform so the item follows the mouse precisely
-    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-    zIndex: isDragging ? 999 : 'auto',
-    position: isDragging ? 'relative' as const : undefined,
   }
 
   return (
@@ -264,6 +260,15 @@ export default function SchedulerClient({ requests }: { requests: any[] }) {
             ))}
           </div>
         </div>
+
+        <DragOverlay adjustScale={false}>
+          {activeDragEmp ? (
+            <div className={styles.dragOverlayChip} style={{ borderLeftColor: activeDragEmp.availability === 'YES' ? '#34c759' : activeDragEmp.availability === 'MAYBE' ? '#ff9500' : '#86868b' }}>
+              <strong>{activeDragEmp.name}</strong>
+              {activeDragEmp.comment && <div style={{ fontSize: '10px', opacity: 0.7 }}>{activeDragEmp.comment}</div>}
+            </div>
+          ) : null}
+        </DragOverlay>
       </DndContext>
     </div>
   )
