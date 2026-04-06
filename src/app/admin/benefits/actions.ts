@@ -7,7 +7,7 @@ export async function uploadBenefitLogo(formData: FormData): Promise<string | nu
   const session = await auth()
   if (!session?.user || (session.user as any).role !== "ADMIN") return null
 
-  const file = formData.get("file") as File
+  const file = formData.get("logoFile") as File
   if (!file || file.size === 0) return null
 
   const filename = `benefits/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_")}`

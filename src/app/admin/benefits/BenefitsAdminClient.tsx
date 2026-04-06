@@ -158,7 +158,7 @@ export default function BenefitsAdminClient({ initialBenefits }: { initialBenefi
                     <img src={existingLogoUrl} alt="Vorschau" height={40} />
                   </div>
                 )}
-                <input type="file" name="file" accept="image/*" className={styles.fileInput} />
+                <input type="file" name="logoFile" accept="image/*" className={styles.fileInput} />
               </div>
 
               <div className={styles.formActions}>
