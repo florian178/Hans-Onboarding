@@ -1,87 +1,212 @@
-.adminLayout {
+.container {
   min-height: 100vh;
+  background-color: var(--background);
+  display: flex;
+}
+
+.mainWrapper {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
-.header {
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border-right: 1px solid var(--glass-border);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   position: sticky;
   top: 0;
-  z-index: 1000;
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border);
+  z-index: 1100;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (max-width: 1024px) {
-  .header {
-    height: auto;
-    padding: 1rem;
-  }
-}
-
-.headerContent {
-  width: 100%;
-  max-width: 1200px;
+.sidebarHeader {
+  padding: 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.logoImage {
+.sidebarLogo {
   height: 32px;
+  width: auto;
+}
+
+.closeBtn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--foreground);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.sideNav {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sideNavItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: none;
+  background: none;
+  color: var(--secondary-foreground);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  text-decoration: none;
+}
+
+.sideNavItem:hover {
+  background: var(--secondary);
+  color: var(--foreground);
+}
+
+.sideNavItemActive {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.sideNavIcon {
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.sidebarFooter {
+  padding: 1.5rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.logoutAction {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.8rem;
+  background: none;
+  border: none;
+  color: var(--error);
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.logoutAction:hover {
+  background: rgba(255, 59, 48, 0.1);
+}
+
+/* Header */
+.header {
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border-bottom: 1px solid var(--glass-border);
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.headerTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.menuBtn {
+  display: none;
+  background: var(--secondary);
+  border: none;
+  color: var(--foreground);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.headerLogo {
+  height: 28px;
   width: auto;
   object-fit: contain;
 }
 
-@media (prefers-color-scheme: dark) {
-  .logoImage {
-    filter: brightness(0) invert(1);
-  }
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--secondary-foreground);
+.main {
+  flex: 1;
+  padding: 2.5rem;
+  min-width: 0;
 }
 
 @media (max-width: 1024px) {
-  .headerContent {
-    flex-direction: column;
-    gap: 1.25rem;
-    align-items: center;
-    text-align: center;
+  .sidebar {
+    position: fixed;
+    left: 0;
+    transform: translateX(-100%);
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .closeBtn {
+    display: flex;
+  }
+
+  .menuBtn {
+    display: flex;
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 1rem 1.5rem;
   }
   
-  .nav {
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
+  .headerTitle {
+    font-size: 1.1rem;
   }
-}
 
-.nav a:hover {
-  color: var(--foreground);
-}
-
-.main {
-  flex-grow: 1;
-  padding: 2rem 1.5rem;
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-@media (max-width: 768px) {
   .main {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem;
   }
 }
