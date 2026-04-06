@@ -337,7 +337,13 @@
   color: #86868b;
   font-size: 0.8rem;
   text-align: center;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
+}
+
+.dropZoneContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 /* Employee Chip */
@@ -345,22 +351,20 @@
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.6rem;
   margin-bottom: 0.4rem;
   background: var(--background);
   border: 1px solid var(--border);
   border-radius: 6px;
   border-left: 4px solid;
   font-size: 0.85rem;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
 }
 
-.empDragHandle {
-  cursor: grab;
-  color: #86868b;
-  user-select: none;
-  padding: 0 0.2rem;
-  font-size: 1rem;
-  line-height: 1;
+.empChip:active {
+  cursor: grabbing;
 }
 
 .empChipContent {

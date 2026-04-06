@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect, useCallback } from "react"
-import { DndContext, useDraggable, useDroppable, DragOverlay, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core"
-import { Card, CardContent } from "@/components/ui/Card"
+import { DndContext, useDroppable, DragOverlay, closestCenter, PointerSensor, useSensor, useSensors, useDraggable } from "@dnd-kit/core"
 import { Button } from "@/components/ui/Button"
 import styles from "./planning.module.css"
 
@@ -14,25 +13,36 @@ const AREAS = [
 ]
 
 function DraggableChip({ emp, area, onUpdate }: { emp: any, area: string, onUpdate: (id: string, field: string, value: string) => void }) {
-  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: emp.id,
     data: { ...emp, sourceArea: area }
   })
 
   const statusColor = emp.availability === 'YES' ? '#34c759' : emp.availability === 'MAYBE' ? '#ff9500' : '#86868b'
 
+  // Apply the transform from useDraggable directly to the element
+  const style: React.CSSProperties = {
+    opacity: isDragging ? 0.3 : 1,
+    borderLeftColor: statusColor,
+    // Apply transform so the item follows the mouse precisely
+    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+    zIndex: isDragging ? 999 : 'auto',
+    position: isDragging ? 'relative' as const : undefined,
+  }
+
   return (
     <div
       ref={setNodeRef}
       className={styles.empChip}
-      style={{ opacity: isDragging ? 0.4 : 1, borderLeftColor: statusColor }}
+      style={style}
+      {...listeners}
+      {...attributes}
     >
-      <div {...listeners} {...attributes} className={styles.empDragHandle}>⠿</div>
       <div className={styles.empChipContent}>
         <span className={styles.empName}>{emp.name}</span>
         {emp.comment && <span className={styles.empComment}>{emp.comment}</span>}
         {area !== "POOL" && (
-          <div className={styles.empInputs} onClick={e => e.stopPropagation()} onPointerDown={e => e.stopPropagation()}>
+          <div className={styles.empInputs} onPointerDown={e => e.stopPropagation()} onClick={e => e.stopPropagation()}>
             <input
               type="text"
               placeholder="Rolle"
@@ -63,10 +73,12 @@ function DropZone({ id, title, employees, onUpdate }: { id: string, title: strin
       className={`${styles.dropZone} ${isOver ? styles.dropZoneOver : ''}`}
     >
       <div className={styles.dropZoneHeader}>{title} <span className={styles.dropZoneCount}>{employees.length}</span></div>
-      {employees.map(emp => (
-        <DraggableChip key={emp.id} emp={emp} area={id} onUpdate={onUpdate} />
-      ))}
-      {employees.length === 0 && <div className={styles.dropZoneEmpty}>Mitarbeiter hierher ziehen</div>}
+      <div className={styles.dropZoneContent}>
+        {employees.map(emp => (
+          <DraggableChip key={emp.id} emp={emp} area={id} onUpdate={onUpdate} />
+        ))}
+        {employees.length === 0 && <div className={styles.dropZoneEmpty}>Mitarbeiter hierher ziehen</div>}
+      </div>
     </div>
   )
 }
@@ -77,10 +89,10 @@ export default function SchedulerClient({ requests }: { requests: any[] }) {
   const [employees, setEmployees] = useState<any[]>([])
   const [planStatus, setPlanStatus] = useState<string>("DRAFT")
   const [isSaving, setIsSaving] = useState(false)
-  const [activeDragEmp, setActiveDragEmp] = useState<any>(null)
+  const [activeDragId, setActiveDragId] = useState<string | null>(null)
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
   )
 
   useEffect(() => {
@@ -106,7 +118,6 @@ export default function SchedulerClient({ requests }: { requests: any[] }) {
         const planData = await resPlan.json()
 
         const dayResponses = allResponses.filter((r: any) => r.dayId === selectedDayId && (r.status === 'YES' || r.status === 'MAYBE'))
-
         setPlanStatus(planData ? planData.status : "DRAFT")
 
         const empList: any[] = []
@@ -126,14 +137,7 @@ export default function SchedulerClient({ requests }: { requests: any[] }) {
         if (planData?.assignments) {
           planData.assignments.forEach((a: any) => {
             if (!empList.find(e => e.id === a.employeeId)) {
-              empList.push({
-                id: a.employeeId,
-                name: a.user.name,
-                availability: "UNKNOWN",
-                area: a.area,
-                role: a.role,
-                startTime: a.startTime
-              })
+              empList.push({ id: a.employeeId, name: a.user.name, availability: "UNKNOWN", area: a.area, role: a.role, startTime: a.startTime })
             }
           })
         }
@@ -153,24 +157,17 @@ export default function SchedulerClient({ requests }: { requests: any[] }) {
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event
-    setActiveDragEmp(null)
+    setActiveDragId(null)
     if (!over) return
 
     const targetArea = over.id as string
     const empId = active.id as string
-
-    // Only move if we're dropping onto a valid area and not onto another employee
     const validAreas = ["POOL", ...AREAS.map(a => a.id)]
     if (!validAreas.includes(targetArea)) return
 
     setEmployees(emps => emps.map(emp => {
       if (emp.id === empId) {
-        return {
-          ...emp,
-          area: targetArea,
-          role: targetArea === 'POOL' ? '' : emp.role,
-          startTime: targetArea === 'POOL' ? '' : emp.startTime
-        }
+        return { ...emp, area: targetArea, role: targetArea === 'POOL' ? '' : emp.role, startTime: targetArea === 'POOL' ? '' : emp.startTime }
       }
       return emp
     }))
@@ -178,10 +175,7 @@ export default function SchedulerClient({ requests }: { requests: any[] }) {
 
   const handleSavePlan = async (status: string) => {
     setIsSaving(true)
-    const assignments = employees
-      .filter(e => e.area !== "POOL")
-      .map(e => ({ employeeId: e.id, area: e.area, role: e.role, startTime: e.startTime }))
-
+    const assignments = employees.filter(e => e.area !== "POOL").map(e => ({ employeeId: e.id, area: e.area, role: e.role, startTime: e.startTime }))
     try {
       const activeDay = requests.find(r => r.id === selectedRequestId)?.days.find((d: any) => d.id === selectedDayId)
       const res = await fetch("/api/planning/admin/shifts", {
@@ -189,17 +183,10 @@ export default function SchedulerClient({ requests }: { requests: any[] }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ dayId: selectedDayId, date: activeDay?.date, eventName: activeDay?.eventName, status, assignments })
       })
-      if (res.ok) {
-        setPlanStatus(status)
-        alert("Einsatzplan gespeichert!")
-      } else {
-        alert("Fehler beim Speichern")
-      }
-    } catch (e) {
-      alert("Fehler aufgetreten")
-    } finally {
-      setIsSaving(false)
-    }
+      if (res.ok) { setPlanStatus(status); alert("Einsatzplan gespeichert!") }
+      else { alert("Fehler beim Speichern") }
+    } catch (e) { alert("Fehler aufgetreten") }
+    finally { setIsSaving(false) }
   }
 
   const handleExportCSV = () => {
@@ -211,7 +198,7 @@ export default function SchedulerClient({ requests }: { requests: any[] }) {
     const url = URL.createObjectURL(blob)
     const link = document.createElement("a")
     link.href = url
-    link.setAttribute("download", `Einsatzplan_${formatDate(activeDayObj?.date || "")}.csv`)
+    link.setAttribute("download", `Einsatzplan.csv`)
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -219,6 +206,7 @@ export default function SchedulerClient({ requests }: { requests: any[] }) {
 
   const currentRequest = requests.find(r => r.id === selectedRequestId)
   const activeDayObj = currentRequest?.days.find((d: any) => d.id === selectedDayId)
+  const activeDragEmp = activeDragId ? employees.find(e => e.id === activeDragId) : null
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("de-DE", { weekday: 'short', day: '2-digit', month: '2-digit' })
@@ -230,25 +218,15 @@ export default function SchedulerClient({ requests }: { requests: any[] }) {
     <div className={styles.schedulerWrapper}>
       {/* Header bar */}
       <div className={styles.schedulerHeader}>
-        <select
-          value={selectedRequestId}
-          onChange={e => setSelectedRequestId(e.target.value)}
-          className={styles.selectInput}
-        >
+        <select value={selectedRequestId} onChange={e => setSelectedRequestId(e.target.value)} className={styles.selectInput}>
           <option value="" disabled>Abfrage wählen</option>
-          {requests.map(r => (
-            <option key={r.id} value={r.id}>{r.title}</option>
-          ))}
+          {requests.map(r => <option key={r.id} value={r.id}>{r.title}</option>)}
         </select>
 
         {currentRequest && (
           <div className={styles.dayButtons}>
             {currentRequest.days.map((d: any) => (
-              <button
-                key={d.id}
-                className={`${styles.dayBtn} ${selectedDayId === d.id ? styles.dayBtnActive : ''}`}
-                onClick={() => setSelectedDayId(d.id)}
-              >
+              <button key={d.id} className={`${styles.dayBtn} ${selectedDayId === d.id ? styles.dayBtnActive : ''}`} onClick={() => setSelectedDayId(d.id)}>
                 {formatDate(d.date)}
               </button>
             ))}
@@ -269,40 +247,23 @@ export default function SchedulerClient({ requests }: { requests: any[] }) {
         </div>
       )}
 
-      {/* DnD Area: Single screen, no excessive scrolling */}
+      {/* DnD Area — no DragOverlay, items move in-place for direct feedback */}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
-        onDragStart={e => setActiveDragEmp(e.active.data.current)}
+        onDragStart={e => setActiveDragId(e.active.id as string)}
         onDragEnd={handleDragEnd}
       >
         <div className={styles.schedulerBody}>
-          {/* Left: Pool */}
           <div className={styles.schedulerPool}>
             <DropZone id="POOL" title="Pool" employees={poolEmps} onUpdate={handleUpdateEmp} />
           </div>
-
-          {/* Right: Areas in compact grid */}
           <div className={styles.schedulerAreas}>
             {AREAS.map(area => (
-              <DropZone
-                key={area.id}
-                id={area.id}
-                title={area.title}
-                employees={employees.filter(e => e.area === area.id)}
-                onUpdate={handleUpdateEmp}
-              />
+              <DropZone key={area.id} id={area.id} title={area.title} employees={employees.filter(e => e.area === area.id)} onUpdate={handleUpdateEmp} />
             ))}
           </div>
         </div>
-
-        <DragOverlay>
-          {activeDragEmp ? (
-            <div className={styles.dragOverlayChip}>
-              <strong>{activeDragEmp.name}</strong>
-            </div>
-          ) : null}
-        </DragOverlay>
       </DndContext>
     </div>
   )
