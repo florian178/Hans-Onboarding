@@ -70,3 +70,16 @@ export async function sendDocumentsToAdvisor(
     return { success: false, error: error.message || "Unbekannter Fehler beim Versand" }
   }
 }
+
+export async function updateEmployeeWage(userId: string, wage: number) {
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { hourlyWage: wage }
+    })
+    return { success: true }
+  } catch (error: any) {
+    console.error("[updateEmployeeWage] Error:", error)
+    return { success: false, error: error.message || "Fehler beim Aktualisieren des Lohns" }
+  }
+}

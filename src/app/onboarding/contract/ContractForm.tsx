@@ -28,9 +28,10 @@ interface PersonalData {
 interface ContractFormProps {
   personalData: PersonalData | null
   startDate?: Date | null
+  hourlyWage: number
 }
 
-function ContractText({ name, addressLine, today, startDate, personalData }: { name: string, addressLine: string, today: string, startDate: string | null, personalData: PersonalData | null }) {
+function ContractText({ name, addressLine, today, startDate, personalData, hourlyWage }: { name: string, addressLine: string, today: string, startDate: string | null, personalData: PersonalData | null, hourlyWage: number }) {
   return (
     <div className={styles.contractText} id="contract-content">
       <div className={styles.documentLogo}>
@@ -59,7 +60,7 @@ function ContractText({ name, addressLine, today, startDate, personalData }: { n
       <p>Der Arbeitnehmer/ die Arbeitnehmerin wird als Servicekraft/ Barkraft im “Hans im Club”, Wallstraße 11, 01067 Dresden, eingestellt.</p>
 
       <h3>§ 4 Arbeitsvergütung</h3>
-      <p>Der Arbeitnehmer/ die Arbeitnehmerin erhält einen Stundenlohn von 13,90€/h (höchstens 603 Euro). Die Vergütung wird jeweils am 15. des Folgemonats zahlbar auf das vom Arbeitnehmer angegebene Konto überwiesen: IBAN {personalData?.iban || '_______________________'}.</p>
+      <p>Der Arbeitnehmer/ die Arbeitnehmerin erhält einen Stundenlohn von {hourlyWage.toFixed(2).replace('.', ',')}€/h (höchstens 603 Euro). Die Vergütung wird jeweils am 15. des Folgemonats zahlbar auf das vom Arbeitnehmer angegebene Konto überwiesen: IBAN {personalData?.iban || '_______________________'}.</p>
       <p>Der Arbeitgeber leistet die Pauschalabgabe in der jeweils gesetzlich geschuldeten Höhe an die zentrale Einzugsstelle (Bundesknappschaft).</p>
 
       <h3>§ 5 Arbeitszeit</h3>
@@ -96,7 +97,7 @@ function ContractText({ name, addressLine, today, startDate, personalData }: { n
   )
 }
 
-export function ContractForm({ personalData, startDate }: ContractFormProps) {
+export function ContractForm({ personalData, startDate, hourlyWage }: ContractFormProps) {
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [signedUrl, setSignedUrl] = useState<string | null>(null)
@@ -215,7 +216,7 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
 
         <ZoomableDocument id="contract-preview">
           <div style={{ padding: '4rem 3.5rem' }}>
-          <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} personalData={personalData} />
+          <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} personalData={personalData} hourlyWage={hourlyWage} />
           
           <div className={styles.signatureRow}>
              <div className={styles.sigContainer}>
@@ -243,7 +244,7 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
       {error && <div className={styles.error}>{error}</div>}
       
       <div className={styles.contractPreview}>
-        <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} personalData={personalData} />
+        <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} personalData={personalData} hourlyWage={hourlyWage} />
       </div>
 
       <div className={styles.signatureSection}>

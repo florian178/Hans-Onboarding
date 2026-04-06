@@ -6,6 +6,7 @@ import { TaxFormPreview } from "@/components/TaxFormPreview"
 import { RVBefreiungPreview } from "@/components/RVBefreiungPreview"
 import { FireSafetyPreview } from "@/components/FireSafetyPreview"
 import { SendToAdvisorButtonClient as SendToAdvisorButton } from "@/components/ui/SendToAdvisorButtonClient"
+import { UserWageEditor } from "@/components/admin/UserWageEditor"
 import styles from "./page.module.css"
 
 const getEndDate = (start?: Date | null | string) => {
@@ -72,7 +73,7 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { startDate: true }
+    select: { startDate: true, hourlyWage: true }
   })
 
   return (
@@ -126,6 +127,11 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
             </tbody>
           </table>
         </div>
+      </div>
+      
+      <div className={styles.wageEditorArea}>
+        <h2>Vergütung anpassen</h2>
+        <UserWageEditor userId={userId} currentWage={user?.hourlyWage || 13.90} />
       </div>
 
       <div className={styles.contractHeader}>
@@ -219,7 +225,7 @@ export default async function ContractPage(props: { params: Promise<{ userId: st
           <p>Der Arbeitnehmer/ die Arbeitnehmerin wird als Servicekraft/ Barkraft im “Hans im Club”, Wallstraße 11, 01067 Dresden, eingestellt.</p>
 
           <h3>§ 4 Arbeitsvergütung</h3>
-          <p>Der Arbeitnehmer/ die Arbeitnehmerin erhält einen Stundenlohn von 13,90€/h (höchstens 603 Euro). Die Vergütung wird jeweils am 15. des Folgemonats zahlbar auf das vom Arbeitnehmer angegebene Konto überwiesen: IBAN {personalData?.iban || '_______________________'}.</p>
+          <p>Der Arbeitnehmer/ die Arbeitnehmerin erhält einen Stundenlohn von {(user?.hourlyWage || 13.90).toFixed(2).replace('.', ',')}€/h (höchstens 603 Euro). Die Vergütung wird jeweils am 15. des Folgemonats zahlbar auf das vom Arbeitnehmer angegebene Konto überwiesen: IBAN {personalData?.iban || '_______________________'}.</p>
           <p>Der Arbeitgeber leistet die Pauschalabgabe in der jeweils gesetzlich geschuldeten Höhe an die zentrale Einzugsstelle (Bundesknappschaft).</p>
 
           <h3>§ 5 Arbeitszeit</h3>

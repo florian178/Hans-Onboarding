@@ -1,24 +1,28 @@
 .container {
   max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+  min-height: 100vh;
 }
 
+/* Header */
 .header {
-  margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .headerLeft {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .headerLogo {
-  height: 50px;
+  height: 40px;
   width: auto;
   object-fit: contain;
 }
@@ -30,93 +34,280 @@
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: #1d1d1f;
+  margin: 0;
+  color: var(--foreground);
 }
 
-.tabs {
+.subtitle {
+  font-size: 0.85rem;
+  color: #86868b;
+  margin: 0.15rem 0 0;
+}
+
+.logoutBtn {
+  white-space: nowrap;
+}
+
+/* Navigation */
+.nav {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #d2d2d7;
-  padding-bottom: 0.5rem;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0.25rem;
 }
 
-.tab {
-  background: none;
-  border: none;
-  font-size: 1.1rem;
+.nav::-webkit-scrollbar {
+  display: none;
+}
+
+.navItem {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
   color: #86868b;
   cursor: pointer;
-  padding: 0.5rem 1rem;
-  transition: color 0.2s;
-  position: relative;
+  transition: all 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.tab:hover {
-  color: #1d1d1f;
+.navItem:hover {
+  background: var(--surface-hover);
+  color: var(--foreground);
 }
 
-.activeTab {
-  color: #1d1d1f;
-  font-weight: 600;
+.navItemActive {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
 }
 
-.activeTab::after {
-  content: "";
-  position: absolute;
-  bottom: -0.6rem;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background-color: #0071e3;
+.navItemActive:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Sub-tabs for document sections */
+.subTabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  width: fit-content;
+}
+
+.subTab {
+  background: transparent;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #86868b;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.subTab:hover {
+  background: var(--surface-hover);
+  color: var(--foreground);
+}
+
+.subTabActive {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Content area */
+.content {
+  min-height: 200px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
+/* Doc Card */
 .docCard {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  padding: 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 16px;
+  padding: 1.25rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .docCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .docIcon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
   display: block;
 }
 
 .docTitle {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .docInfo {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #86868b;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .emptyState {
   text-align: center;
-  padding: 4rem 2.5rem;
+  padding: 3rem 2rem;
   color: #86868b;
   background: rgba(255, 255, 255, 0.5);
-  border-radius: 20px;
+  border-radius: 16px;
   grid-column: 1 / -1;
+}
+
+/* Shift cards */
+.shiftCard {
+  padding: 0;
+}
+
+.shiftDate {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.3rem;
+}
+
+.shiftEvent {
+  color: #0071e3;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.shiftDetails {
+  display: flex;
+  gap: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.shiftLabel {
+  font-size: 0.7rem;
+  color: #86868b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+}
+
+.shiftValue {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ===================== */
+/* Mobile Responsive     */
+/* ===================== */
+@media (max-width: 640px) {
+  .container {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .header {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .headerLeft {
+    gap: 0.75rem;
+  }
+
+  .headerLogo {
+    height: 32px;
+  }
+
+  .title {
+    font-size: 1.15rem;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+  }
+
+  .logoutBtn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  /* Nav: horizontal scrollable pills */
+  .nav {
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .navItem {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+
+  .subTabs {
+    width: 100%;
+  }
+
+  .subTab {
+    flex: 1;
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .docCard {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .docIcon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .docTitle {
+    font-size: 1rem;
+  }
+
+  .shiftDetails {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .emptyState {
+    padding: 2rem 1rem;
+  }
 }

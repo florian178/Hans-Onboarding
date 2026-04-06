@@ -29,6 +29,7 @@ export default async function AdminDashboard() {
     const email = formData.get("email") as string
     const name = formData.get("name") as string
     const startDateRaw = formData.get("startDate") as string
+    const hourlyWage = parseFloat(formData.get("hourlyWage") as string) || 13.90
     
     if (!email || !name) return
 
@@ -47,6 +48,7 @@ export default async function AdminDashboard() {
           name,
           role: 'EMPLOYEE',
           startDate,
+          hourlyWage,
           password: hashedPassword,
           onboardingStatus: {
             create: { status: 'INVITED' }
@@ -58,6 +60,7 @@ export default async function AdminDashboard() {
         where: { id: user.id },
         data: { 
           startDate: startDate || user.startDate,
+          hourlyWage: hourlyWage || user.hourlyWage,
           password: hashedPassword
         }
       })
@@ -133,6 +136,7 @@ export default async function AdminDashboard() {
               <Input label="Name" name="name" placeholder="Max Mustermann" required />
               <Input label="E-Mail" name="email" type="email" placeholder="max@beispiel.de" required />
               <Input label="Arbeitsbeginn" name="startDate" type="date" required />
+              <Input label="Stundenlohn (€)" name="hourlyWage" type="number" step="0.01" defaultValue="13.90" required />
               <Button type="submit">Einladung senden</Button>
             </form>
           </CardContent>

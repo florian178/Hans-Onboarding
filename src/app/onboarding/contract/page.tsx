@@ -13,7 +13,7 @@ export default async function ContractStep() {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { startDate: true }
+    select: { startDate: true, hourlyWage: true }
   })
 
   const existingProgress = await prisma.stepProgress.findUnique({
@@ -51,7 +51,7 @@ export default async function ContractStep() {
              </div>
            </div>
         ) : (
-          <ContractFormClient personalData={personalData} startDate={user?.startDate} />
+           <ContractFormClient personalData={personalData} startDate={user?.startDate} hourlyWage={user?.hourlyWage || 13.90} />
         )}
       </CardContent>
     </Card>

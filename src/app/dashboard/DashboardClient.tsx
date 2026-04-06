@@ -37,8 +37,11 @@ const MONTHS = [
   "Juli", "August", "September", "Oktober", "November", "Dezember"
 ]
 
+type TabKey = "docs" | "shifts"
+
 export default function DashboardClient({ user, documents, payslips }: DashboardClientProps) {
-  const [activeTab, setActiveTab] = useState<"docs" | "payslips" | "shifts">("docs")
+  const [activeTab, setActiveTab] = useState<TabKey>("docs")
+  const [docSection, setDocSection] = useState<"general" | "payslips">("general")
   const [myShifts, setMyShifts] = useState<any[]>([])
 
   React.useEffect(() => {
@@ -49,134 +52,145 @@ export default function DashboardClient({ user, documents, payslips }: Dashboard
     }
   }, [activeTab])
 
+  const handleNavClick = (path: string) => {
+    window.location.href = path
+  }
+
+  const firstName = user.name?.split(" ")[0] || user.name
+
   return (
     <div className={styles.container}>
+      {/* Compact header */}
       <header className={styles.header}>
         <div className={styles.headerLeft}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Hans im Club Logo" className={styles.headerLogo} />
+          <img src="/logo.png" alt="Hans im Club" className={styles.headerLogo} />
           <div>
-            <h1 className={styles.title}>Hallo, {user.name}</h1>
-            <p className={styles.subtitle}>Willkommen in deinem Mitarbeiter-Bereich.</p>
+            <h1 className={styles.title}>Hallo, {firstName}</h1>
+            <p className={styles.subtitle}>Dein Mitarbeiter-Bereich</p>
           </div>
         </div>
-        <div>
-          <Button variant="ghost" onClick={() => signOut({ callbackUrl: "/login" })}>Abmelden</Button>
-        </div>
+        <Button variant="ghost" onClick={() => signOut({ callbackUrl: "/login" })} className={styles.logoutBtn}>Abmelden</Button>
       </header>
 
-      <div className={styles.tabs}>
-        <button 
-          className={`${styles.tab} ${activeTab === "docs" ? styles.activeTab : ""}`}
+      {/* Navigation tabs — scrollable on mobile */}
+      <nav className={styles.nav}>
+        <button
+          className={`${styles.navItem} ${activeTab === "docs" ? styles.navItemActive : ""}`}
           onClick={() => setActiveTab("docs")}
         >
-          Meine Dokumente
+          📄 Dokumente
         </button>
-        <button 
-          className={`${styles.tab} ${activeTab === "payslips" ? styles.activeTab : ""}`}
-          onClick={() => setActiveTab("payslips")}
+        <button
+          className={styles.navItem}
+          onClick={() => handleNavClick("/dashboard/timesheets")}
         >
-          Lohnzettel
+          ⏱ Zeiterfassung
         </button>
-        <button 
-          className={`${styles.tab} ${activeTab === "shifts" ? styles.activeTab : ""}`}
+        <button
+          className={`${styles.navItem} ${activeTab === "shifts" ? styles.navItemActive : ""}`}
           onClick={() => setActiveTab("shifts")}
         >
-          Einsatzpläne
+          📋 Einsatzpläne
         </button>
-        <button 
-          className={styles.tab}
-          onClick={() => window.location.href = '/dashboard/timesheets'}
+        <button
+          className={styles.navItem}
+          onClick={() => handleNavClick("/dashboard/availability")}
         >
-          Zeiterfassung
+          ✋ Verfügbarkeiten
         </button>
-        <button 
-          className={styles.tab}
-          onClick={() => window.location.href = '/dashboard/benefits'}
+        <button
+          className={styles.navItem}
+          onClick={() => handleNavClick("/dashboard/benefits")}
         >
-          Member Benefits
+          ⭐ Benefits
         </button>
-        <button 
-          className={styles.tab}
-          onClick={() => window.location.href = '/dashboard/availability'}
-        >
-          Verfügbarkeiten
-        </button>
-      </div>
+      </nav>
 
-      <div className={styles.grid}>
-        {activeTab === "shifts" ? (
-          <div style={{ gridColumn: '1 / -1' }}>
-            {myShifts.length > 0 ? (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-                {myShifts.map((a: any) => (
-                  <Card key={a.id} className={styles.docCard}>
-                    <div style={{ padding: '1.5rem' }}>
-                      <h3 style={{ margin: '0 0 0.5rem 0' }}>{new Date(a.plan.date).toLocaleDateString("de-DE", { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })}</h3>
-                      <div style={{ color: '#0071e3', fontWeight: 600, marginBottom: '0.5rem' }}>{a.plan.eventName || 'Veranstaltung'}</div>
-                      <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
-                         <div>
-                            <span style={{ fontSize: '0.8rem', color: '#86868b', textTransform: 'uppercase' }}>Bereich</span>
-                            <div style={{ fontWeight: 600 }}>{a.area}</div>
-                         </div>
-                         <div>
-                            <span style={{ fontSize: '0.8rem', color: '#86868b', textTransform: 'uppercase' }}>Rolle</span>
-                            <div style={{ fontWeight: 600 }}>{a.role || '-'}</div>
-                         </div>
-                         <div>
-                            <span style={{ fontSize: '0.8rem', color: '#86868b', textTransform: 'uppercase' }}>Beginn</span>
-                            <div style={{ fontWeight: 600 }}>{a.startTime || '??:??'}</div>
-                         </div>
-                      </div>
-                      {a.note && <p style={{ marginTop: '1rem', fontSize: '0.9rem', fontStyle: 'italic', color: '#86868b' }}>Notiz: {a.note}</p>}
-                    </div>
-                  </Card>
-                ))}
+      {/* Content Area */}
+      <div className={styles.content}>
+        {activeTab === "docs" && (
+          <>
+            {/* Sub-section toggle for docs */}
+            <div className={styles.subTabs}>
+              <button
+                className={`${styles.subTab} ${docSection === "general" ? styles.subTabActive : ""}`}
+                onClick={() => setDocSection("general")}
+              >
+                Allgemeine Dokumente
+              </button>
+              <button
+                className={`${styles.subTab} ${docSection === "payslips" ? styles.subTabActive : ""}`}
+                onClick={() => setDocSection("payslips")}
+              >
+                Lohnzettel
+              </button>
+            </div>
+
+            {docSection === "general" ? (
+              <div className={styles.grid}>
+                {documents.length > 0 ? (
+                  documents.map((doc) => (
+                    <Card key={doc.id} className={styles.docCard}>
+                      <span className={styles.docIcon}>📄</span>
+                      <h3 className={styles.docTitle}>{doc.name}</h3>
+                      <p className={styles.docInfo}>Hochgeladen am {new Date(doc.uploadedAt).toLocaleDateString("de-DE")}</p>
+                      <a href={doc.type === "CONTRACT_SIGNED" ? "/dashboard/contract" : doc.url} target={doc.type === "CONTRACT_SIGNED" ? undefined : "_blank"} rel="noopener noreferrer">
+                        <Button fullWidth variant="outline">Anschauen / Download</Button>
+                      </a>
+                    </Card>
+                  ))
+                ) : (
+                  <div className={styles.emptyState}>
+                    <p>Noch keine Dokumente verfügbar.</p>
+                  </div>
+                )}
               </div>
+            ) : (
+              <div className={styles.grid}>
+                {payslips.length > 0 ? (
+                  payslips.sort((a, b) => b.year - a.year || b.month - a.month).map((slip) => (
+                    <Card key={slip.id} className={styles.docCard}>
+                      <span className={styles.docIcon}>💰</span>
+                      <h3 className={styles.docTitle}>Lohnzettel {MONTHS[slip.month - 1]} {slip.year}</h3>
+                      <p className={styles.docInfo}>Bereitgestellt am {new Date(slip.uploadedAt).toLocaleDateString("de-DE")}</p>
+                      <a href={slip.url} target="_blank" rel="noopener noreferrer">
+                        <Button fullWidth variant="outline">Herunterladen</Button>
+                      </a>
+                    </Card>
+                  ))
+                ) : (
+                  <div className={styles.emptyState}>
+                    <p>Noch keine Lohnzettel verfügbar.</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
+
+        {activeTab === "shifts" && (
+          <div className={styles.grid}>
+            {myShifts.length > 0 ? (
+              myShifts.map((a: any) => (
+                <Card key={a.id} className={styles.docCard}>
+                  <div className={styles.shiftCard}>
+                    <h3 className={styles.shiftDate}>{new Date(a.plan.date).toLocaleDateString("de-DE", { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })}</h3>
+                    <div className={styles.shiftEvent}>{a.plan.eventName || 'Veranstaltung'}</div>
+                    <div className={styles.shiftDetails}>
+                      <div><span className={styles.shiftLabel}>Bereich</span><div className={styles.shiftValue}>{a.area}</div></div>
+                      <div><span className={styles.shiftLabel}>Rolle</span><div className={styles.shiftValue}>{a.role || '-'}</div></div>
+                      <div><span className={styles.shiftLabel}>Beginn</span><div className={styles.shiftValue}>{a.startTime || '??:??'}</div></div>
+                    </div>
+                  </div>
+                </Card>
+              ))
             ) : (
               <div className={styles.emptyState}>
                 <p>Du bist aktuell in keinem veröffentlichten Einsatzplan eingeteilt.</p>
               </div>
             )}
           </div>
-        ) : activeTab === "docs" ? (
-          <>
-            {documents.length > 0 ? (
-              documents.map((doc) => (
-                <Card key={doc.id} className={styles.docCard}>
-                  <span className={styles.docIcon}>📄</span>
-                  <h3 className={styles.docTitle}>{doc.name}</h3>
-                  <p className={styles.docInfo}>Hochgeladen am {new Date(doc.uploadedAt).toLocaleDateString("de-DE")}</p>
-                  <a href={doc.type === "CONTRACT_SIGNED" ? "/dashboard/contract" : doc.url} target={doc.type === "CONTRACT_SIGNED" ? undefined : "_blank"} rel="noopener noreferrer">
-                    <Button fullWidth variant="outline">Anschauen / Download</Button>
-                  </a>
-                </Card>
-              ))
-            ) : (
-              <div className={styles.emptyState}>
-                <p>Noch keine Dokumente verfügbar.</p>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            {payslips.length > 0 ? (
-              payslips.sort((a, b) => b.year - a.year || b.month - a.month).map((slip) => (
-                <Card key={slip.id} className={styles.docCard}>
-                  <span className={styles.docIcon}>💰</span>
-                  <h3 className={styles.docTitle}>Lohnzettel {MONTHS[slip.month - 1]} {slip.year}</h3>
-                  <p className={styles.docInfo}>Bereitgestellt am {new Date(slip.uploadedAt).toLocaleDateString("de-DE")}</p>
-                  <a href={slip.url} target="_blank" rel="noopener noreferrer">
-                    <Button fullWidth variant="outline">Herunterladen</Button>
-                  </a>
-                </Card>
-              ))
-            ) : (
-              <div className={styles.emptyState}>
-                <p>Noch keine Lohnzettel verfügbar.</p>
-              </div>
-            )}
-          </>
         )}
       </div>
     </div>
