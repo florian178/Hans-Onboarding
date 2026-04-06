@@ -12,6 +12,9 @@
   --ring: #0071E3; /* Apple Blue */
   --error: #FF3B30;
   --success: #34C759;
+  --text-tertiary: #86868B;
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(0, 0, 0, 0.1);
   
   --radius-sm: 0.5rem;
   --radius-md: 0.8rem;
@@ -33,9 +36,12 @@
     --primary: #FFFFFF;
     --primary-foreground: #000000;
     --secondary: #1D1D1F;
-    --secondary-foreground: #86868B;
+    --secondary-foreground: #A1A1A6; /* Slightly lighter gray for better contrast */
+    --text-tertiary: #6E6E73;
     --border: rgba(255, 255, 255, 0.12);
     --ring: #007AFF;
+    --glass-bg: rgba(29, 29, 31, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.15);
   }
 }
 

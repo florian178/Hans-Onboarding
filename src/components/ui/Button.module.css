@@ -34,7 +34,7 @@
 }
 
 .secondary:hover:not(:disabled) {
-  background-color: #D2D2D7; /* Slightly darker than E8E8ED */
+  background-color: var(--surface-hover);
 }
 
 .outline {
@@ -64,7 +64,7 @@
 }
 
 .success:hover:not(:disabled) {
-  background-color: #0077ED;
+  filter: brightness(1.1);
 }
 
 /* Sizes */
