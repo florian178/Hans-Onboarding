@@ -25,6 +25,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link href="/admin/content">Inhalte</Link>
             <Link href="/admin/payslips">Lohnzettel</Link>
             <Link href="/admin/timesheets">Zeiterfassung</Link>
+            <Link href="/admin/benefits">Member Benefits</Link>
             <form action={async () => {
                "use server"
                await signOut({ redirectTo: "/login" })
