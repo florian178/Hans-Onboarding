@@ -1,6 +1,7 @@
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
+import Link from "next/link"
 import AvailabilityClient from "./AvailabilityClient"
 import styles from "./availability.module.css"
 
@@ -23,6 +24,7 @@ export default async function AvailabilityPage() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
+        <Link href="/dashboard" className={styles.backLink}>← Zurück zum Dashboard</Link>
         <div>
           <h1 className={styles.title}>Verfügbarkeiten</h1>
           <p className={styles.subtitle}>Trage hier ein, an welchen Tagen du arbeiten kannst.</p>

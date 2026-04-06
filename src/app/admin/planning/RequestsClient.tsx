@@ -7,6 +7,7 @@ import styles from "./planning.module.css"
 
 export default function RequestsClient({ requests, onRefresh }: { requests: any[], onRefresh: () => void }) {
   const [isCreating, setIsCreating] = useState(false)
+  const [editingId, setEditingId] = useState<string | null>(null)
   
   // Form State
   const [title, setTitle] = useState("")
@@ -22,6 +23,16 @@ export default function RequestsClient({ requests, onRefresh }: { requests: any[
   const [newDayNote, setNewDayNote] = useState("")
 
   const [isLoading, setIsLoading] = useState(false)
+
+  const resetForm = () => {
+    setTitle("")
+    setStartDate("")
+    setEndDate("")
+    setDays([])
+    setNewDayDate("")
+    setNewDayEvent("")
+    setNewDayNote("")
+  }
 
   const handleAddDay = () => {
     if (!newDayDate) return
@@ -51,10 +62,7 @@ export default function RequestsClient({ requests, onRefresh }: { requests: any[
 
       if (res.ok) {
         setIsCreating(false)
-        setTitle("")
-        setStartDate("")
-        setEndDate("")
-        setDays([])
+        resetForm()
         onRefresh()
       } else {
         alert("Fehler beim Speichern")
@@ -64,6 +72,52 @@ export default function RequestsClient({ requests, onRefresh }: { requests: any[
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleStartEdit = (req: any) => {
+    setEditingId(req.id)
+    setTitle(req.title)
+    setStartDate(req.startDate.slice(0, 10))
+    setEndDate(req.endDate.slice(0, 10))
+    setDays(req.days.map((d: any) => ({
+      date: typeof d.date === 'string' ? d.date.slice(0, 10) : new Date(d.date).toISOString().slice(0, 10),
+      eventName: d.eventName || "",
+      note: d.note || ""
+    })))
+    setIsCreating(false)
+  }
+
+  const handleSaveEdit = async () => {
+    if (!title || !startDate || !endDate || days.length === 0) {
+      alert("Bitte fülle alle Pflichtfelder aus und füge mindestens einen Tag hinzu.")
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const res = await fetch(`/api/planning/requests/${editingId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, startDate, endDate, days })
+      })
+
+      if (res.ok) {
+        setEditingId(null)
+        resetForm()
+        onRefresh()
+      } else {
+        alert("Fehler beim Speichern")
+      }
+    } catch (e) {
+      alert("Ein Fehler ist aufgetreten.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setEditingId(null)
+    resetForm()
   }
 
   const handleStatusChange = async (id: string, newStatus: string) => {
@@ -96,52 +150,57 @@ export default function RequestsClient({ requests, onRefresh }: { requests: any[
     return new Date(dateString).toLocaleDateString("de-DE", { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })
   }
 
+  const renderForm = (mode: "create" | "edit") => (
+    <div className={styles.formCard}>
+      <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border)' }}>
+        <h3>{mode === "create" ? "Neue Abfrage erstellen" : "Abfrage bearbeiten"}</h3>
+      </div>
+      <div style={{ padding: '1.5rem' }}>
+        <div className={styles.formGrid}>
+          <Input label="Titel (z.B. April 2026)" value={title} onChange={e => setTitle(e.target.value)} required />
+          <div />
+          <Input label="Zeitraum Start" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} required />
+          <Input label="Ende" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} required />
+          
+          <div className={styles.dayBuilder}>
+            <h4 style={{ marginBottom: '1rem' }}>Tage hinzufügen</h4>
+            <div className={styles.dayControls}>
+              <div style={{flex: 1}}><Input label="Datum" type="date" value={newDayDate} onChange={e => setNewDayDate(e.target.value)} /></div>
+              <div style={{flex: 1}}><Input label="Event (optional)" placeholder="z.B. 90/00er Party" value={newDayEvent} onChange={e => setNewDayEvent(e.target.value)} /></div>
+              <div style={{flex: 1}}><Input label="Notiz (optional)" placeholder="Extra Personal benötigt" value={newDayNote} onChange={e => setNewDayNote(e.target.value)} /></div>
+              <Button type="button" variant="outline" onClick={handleAddDay}>Hinzufügen</Button>
+            </div>
+            
+            <div className={styles.dayList}>
+              {days.length === 0 && <p style={{ fontSize: '0.9rem', color: '#86868b' }}>Noch keine Tage hinzugefügt.</p>}
+              {days.map((d) => (
+                <div key={d.date} className={styles.dayItemLine}>
+                  <span><strong>{formatDate(d.date)}</strong> {d.eventName && `– ${d.eventName}`} {d.note && `(${d.note})`}</span>
+                  <Button variant="ghost" size="sm" onClick={() => handleRemoveDay(d.date)}>X</Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className={styles.formActions}>
+          <Button variant="outline" onClick={mode === "create" ? () => { setIsCreating(false); resetForm() } : handleCancelEdit}>Abbrechen</Button>
+          <Button onClick={mode === "create" ? handleCreate : handleSaveEdit} disabled={isLoading}>
+            {isLoading ? 'Speichert...' : mode === "create" ? 'Entwurf erstellen' : 'Änderungen speichern'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <div>
       <div className={styles.actionHeader}>
         <h2>Verfügbarkeitsabfragen</h2>
-        {!isCreating && <Button onClick={() => setIsCreating(true)}>+ Neue Abfrage</Button>}
+        {!isCreating && !editingId && <Button onClick={() => { resetForm(); setIsCreating(true) }}>+ Neue Abfrage</Button>}
       </div>
 
-      {isCreating && (
-        <div className={styles.formCard}>
-          <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border)' }}>
-            <h3>Neue Abfrage erstellen</h3>
-          </div>
-          <div style={{ padding: '1.5rem' }}>
-            <div className={styles.formGrid}>
-              <Input label="Titel (z.B. April 2026)" value={title} onChange={e => setTitle(e.target.value)} required />
-              <div />
-              <Input label="Sichtbar für welchen Zeitraum? Start" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} required />
-              <Input label="Ende" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} required />
-              
-              <div className={styles.dayBuilder}>
-                <h4 style={{ marginBottom: '1rem' }}>Tage hinzufügen</h4>
-                <div className={styles.dayControls}>
-                  <div style={{flex: 1}}><Input label="Datum" type="date" value={newDayDate} onChange={e => setNewDayDate(e.target.value)} /></div>
-                  <div style={{flex: 1}}><Input label="Event (optional)" placeholder="z.B. 90/00er Party" value={newDayEvent} onChange={e => setNewDayEvent(e.target.value)} /></div>
-                  <div style={{flex: 1}}><Input label="Notiz (optional)" placeholder="Extra Personal benötigt" value={newDayNote} onChange={e => setNewDayNote(e.target.value)} /></div>
-                  <Button type="button" variant="outline" onClick={handleAddDay}>Hinzufügen</Button>
-                </div>
-                
-                <div className={styles.dayList}>
-                  {days.length === 0 && <p style={{ fontSize: '0.9rem', color: '#86868b' }}>Noch keine Tage hinzugefügt.</p>}
-                  {days.map((d) => (
-                    <div key={d.date} className={styles.dayItemLine}>
-                      <span><strong>{formatDate(d.date)}</strong> {d.eventName && `– ${d.eventName}`} {d.note && `(${d.note})`}</span>
-                      <Button variant="ghost" size="sm" onClick={() => handleRemoveDay(d.date)}>X</Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className={styles.formActions}>
-              <Button variant="outline" onClick={() => setIsCreating(false)}>Abbrechen</Button>
-              <Button onClick={handleCreate} disabled={isLoading}>{isLoading ? 'Speichert...' : 'Entwurf erstellen'}</Button>
-            </div>
-          </div>
-        </div>
-      )}
+      {isCreating && renderForm("create")}
+      {editingId && renderForm("edit")}
 
       <div className={styles.requestsList}>
         {requests.length === 0 && !isCreating && (
@@ -158,7 +217,7 @@ export default function RequestsClient({ requests, onRefresh }: { requests: any[
                     Zeitraum: {new Date(req.startDate).toLocaleDateString('de-DE')} - {new Date(req.endDate).toLocaleDateString('de-DE')}
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                   <span className={`${styles.statusBadge} ${styles[`status${req.status}`]}`}>
                     {req.status === 'DRAFT' ? 'Entwurf' : req.status === 'PUBLISHED' ? 'Veröffentlicht' : 'Geschlossen'}
                   </span>
@@ -170,6 +229,7 @@ export default function RequestsClient({ requests, onRefresh }: { requests: any[
                     <Button size="sm" variant="outline" onClick={() => handleStatusChange(req.id, 'CLOSED')}>Schließen</Button>
                   )}
                   
+                  <Button size="sm" variant="outline" onClick={() => handleStartEdit(req)} disabled={editingId === req.id}>Bearbeiten</Button>
                   <Button size="sm" variant="ghost" onClick={() => handleDelete(req.id)}>Löschen</Button>
                 </div>
               </div>

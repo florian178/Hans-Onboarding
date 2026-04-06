@@ -199,57 +199,231 @@
 }
 
 /* Scheduler Specific */
-.activeDayCard {
-  margin-bottom: 1.5rem;
+.schedulerWrapper {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 220px);
+  min-height: 500px;
 }
 
-.activeDayContent {
-  padding: 1.5rem !important;
+.schedulerHeader {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.selectInput {
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 0.9rem;
+}
+
+.dayButtons {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.dayBtn {
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  color: var(--foreground);
+  transition: all 0.15s;
+}
+
+.dayBtn:hover {
+  background: var(--surface-hover);
+}
+
+.dayBtnActive {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+.schedulerActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.exportBtn {
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #86868b;
+}
+.exportBtn:hover { background: var(--surface-hover); }
+
+.schedulerStatus {
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #86868b;
+  margin-bottom: 0.5rem;
+}
+
+.schedulerBody {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  overflow: hidden;
+}
+
+.schedulerPool {
+  width: 240px;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.schedulerAreas {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  overflow-y: auto;
+}
+
+/* Drop Zone */
+.dropZone {
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 0.75rem;
+  min-height: 100px;
+  transition: all 0.15s;
+}
+
+.dropZoneOver {
+  border-color: #0071e3;
+  background: rgba(0, 113, 227, 0.03);
+}
+
+.dropZoneHeader {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.activeDayTitle {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.5rem;
+.dropZoneCount {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
 }
 
-.activeDayStatus {
-  margin: 0;
+.dropZoneEmpty {
   color: #86868b;
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 1.5rem 0;
 }
 
-.saveActions {
+/* Employee Chip */
+.empChip {
   display: flex;
-  gap: 1rem;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 0.4rem;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  border-left: 4px solid;
+  font-size: 0.85rem;
 }
 
-.schedulerGrid {
-  display: flex;
-  gap: 1.5rem;
+.empDragHandle {
+  cursor: grab;
+  color: #86868b;
+  user-select: none;
+  padding: 0 0.2rem;
+  font-size: 1rem;
+  line-height: 1;
 }
 
-.poolPanel {
-  width: 300px;
-  flex-shrink: 0;
-}
-
-.areasPanel {
+.empChipContent {
   flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  min-width: 0;
+}
+
+.empName {
+  font-weight: 600;
+  display: block;
+}
+
+.empComment {
+  font-size: 0.75rem;
+  color: #86868b;
+  font-style: italic;
+  display: block;
+}
+
+.empInputs {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+}
+
+.empInput {
+  flex: 1;
+  padding: 0.3rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-size: 0.75rem;
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+.empInputSmall {
+  width: 60px;
+  padding: 0.3rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-size: 0.75rem;
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+.dragOverlayChip {
+  padding: 0.6rem 1rem;
+  background: var(--background);
+  border: 2px solid #0071e3;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
 
 @media (max-width: 1024px) {
-  .schedulerGrid {
+  .schedulerBody {
     flex-direction: column;
+    overflow: auto;
   }
-  .poolPanel {
+  .schedulerPool {
     width: 100%;
   }
-  .areasPanel {
+  .schedulerAreas {
     grid-template-columns: 1fr;
   }
 }
