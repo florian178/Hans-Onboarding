@@ -30,6 +30,11 @@ interface DashboardClientProps {
   }
   documents: Document[]
   payslips: Payslip[]
+  summary?: {
+    currentMonthEarnings: number
+    nextShift: any | null
+    openRequests: any[]
+  }
 }
 
 const MONTHS = [
@@ -37,10 +42,10 @@ const MONTHS = [
   "Juli", "August", "September", "Oktober", "November", "Dezember"
 ]
 
-type TabKey = "docs" | "shifts"
+type TabKey = "home" | "docs" | "shifts"
 
-export default function DashboardClient({ user, documents, payslips }: DashboardClientProps) {
-  const [activeTab, setActiveTab] = useState<TabKey>("docs")
+export default function DashboardClient({ user, documents, payslips, summary }: DashboardClientProps) {
+  const [activeTab, setActiveTab] = useState<TabKey>("home")
   const [docSection, setDocSection] = useState<"general" | "payslips">("general")
   const [myShifts, setMyShifts] = useState<any[]>([])
 
@@ -76,6 +81,12 @@ export default function DashboardClient({ user, documents, payslips }: Dashboard
       {/* Navigation tabs — scrollable on mobile */}
       <nav className={styles.nav}>
         <button
+          className={`${styles.navItem} ${activeTab === "home" ? styles.navItemActive : ""}`}
+          onClick={() => setActiveTab("home")}
+        >
+          🏠 Home
+        </button>
+        <button
           className={`${styles.navItem} ${activeTab === "docs" ? styles.navItemActive : ""}`}
           onClick={() => setActiveTab("docs")}
         >
@@ -109,6 +120,81 @@ export default function DashboardClient({ user, documents, payslips }: Dashboard
 
       {/* Content Area */}
       <div className={styles.content}>
+        {activeTab === "home" && (
+          <div className={styles.homeContent}>
+            {/* Quick Stats / Motivation */}
+            <div className={styles.heroSummary}>
+              <Card className={styles.earningsCard}>
+                <div className={styles.earningsLabel}>Verdienst diesen Monat</div>
+                <div className={styles.earningsValue}>
+                  {summary?.currentMonthEarnings.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
+                </div>
+                <div className={styles.earningsSub}>Basierend auf deinen genehmigten/eingereichten Zeiten</div>
+              </Card>
+
+              <div className={styles.newsTicker}>
+                 <h2 className={styles.sectionHeading}>Neuigkeiten & Highlights</h2>
+                 <p className={styles.newsText}>Willkommen zurück im Hans! Wir freuen uns, dass du Teil des Teams bist. Schaue regelmäßig hier vorbei für Updates zu deinen Dokumenten und Einsatzplänen.</p>
+              </div>
+            </div>
+
+            {/* Action Items / Notifications */}
+            <div className={styles.actionGrid}>
+              {/* Next Shift */}
+              <Card className={styles.actionCard}>
+                <div className={styles.actionIcon}>📅</div>
+                <div className={styles.actionContent}>
+                  <h3 className={styles.actionTitle}>Nächster Einsatz</h3>
+                  {summary?.nextShift ? (
+                    <>
+                      <p className={styles.actionText}>
+                        <strong>{new Date(summary.nextShift.plan.date).toLocaleDateString('de-DE', { weekday: 'long', day: '2-digit', month: '2-digit' })}</strong>
+                        <br />
+                        {summary.nextShift.plan.eventName || 'Veranstaltung'} · {summary.nextShift.startTime} Uhr
+                      </p>
+                      <Button size="sm" variant="outline" onClick={() => setActiveTab("shifts")}>Details ansehen</Button>
+                    </>
+                  ) : (
+                    <p className={styles.actionText}>Aktuell kein geplanter Einsatz.</p>
+                  )}
+                </div>
+              </Card>
+
+              {/* Open Availability Requests */}
+              <Card className={styles.actionCard}>
+                <div className={styles.actionIcon}>✋</div>
+                <div className={styles.actionContent}>
+                  <h3 className={styles.actionTitle}>Fristen & Abfragen</h3>
+                  {summary?.openRequests && summary.openRequests.length > 0 ? (
+                    <>
+                      <p className={styles.actionText}>Es gibt {summary.openRequests.length} offene Verfügbarkeitsabfrage(n).</p>
+                      <Button size="sm" onClick={() => handleNavClick("/dashboard/availability")}>Jetzt antworten</Button>
+                    </>
+                  ) : (
+                    <p className={styles.actionText}>Alle Abfragen sind erledigt. Top!</p>
+                  )}
+                </div>
+              </Card>
+
+              {/* Latest Payslip */}
+              <Card className={styles.actionCard}>
+                <div className={styles.actionIcon}>💰</div>
+                <div className={styles.actionContent}>
+                  <h3 className={styles.actionTitle}>Lohnzettel</h3>
+                  {payslips.length > 0 ? (
+                    <>
+                      <p className={styles.actionText}>Dein neuester Lohnzettel ({MONTHS[payslips[0].month - 1]}) ist online.</p>
+                      <Button size="sm" variant="outline" onClick={() => { setActiveTab("docs"); setDocSection("payslips"); }}>Zum Dokument</Button>
+                    </>
+                  ) : (
+                    <p className={styles.actionText}>Bisher keine Lohnzettel hochgeladen.</p>
+                  )}
+                </div>
+              </Card>
+            </div>
+          </div>
+        )}
+
         {activeTab === "docs" && (
           <>
             {/* Sub-section toggle for docs */}

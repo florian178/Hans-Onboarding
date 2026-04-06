@@ -311,3 +311,136 @@
     padding: 2rem 1rem;
   }
 }
+
+/* Home Tab Content */
+.homeContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.heroSummary {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 1.5rem;
+}
+
+.earningsCard {
+  background: linear-gradient(135deg, #0071e3 0%, #00c6fb 100%);
+  color: white !important;
+  padding: 2rem;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 113, 227, 0.2);
+  border-radius: 20px;
+}
+
+.earningsLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.earningsValue {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.earningsSub {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.newsTicker {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 18px;
+  padding: 1.5rem 2rem;
+}
+
+.sectionHeading {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  color: var(--foreground);
+}
+
+.newsText {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #555;
+  margin: 0;
+}
+
+.actionGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.actionCard {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  align-items: flex-start;
+  transition: transform 0.2s;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 18px;
+}
+
+.actionCard:hover {
+  transform: translateY(-4px);
+}
+
+.actionIcon {
+  font-size: 1.75rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f7;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.actionContent {
+  flex: 1;
+}
+
+.actionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem 0;
+}
+
+.actionText {
+  font-size: 0.85rem;
+  color: #86868b;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+  .heroSummary {
+    grid-template-columns: 1fr;
+  }
+  .actionGrid {
+    grid-template-columns: 1fr;
+  }
+}
