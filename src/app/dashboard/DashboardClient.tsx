@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
 import { signOut } from "next-auth/react"
 import styles from "./page.module.css"
+import { LuLayoutDashboard, LuFiles, LuClock, LuCalendar, LuHand, LuStar, LuFileText, LuDollarSign, LuChevronRight } from "react-icons/lu"
 
 interface Document {
   id: string
@@ -84,37 +85,37 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
           className={`${styles.navItem} ${activeTab === "home" ? styles.navItemActive : ""}`}
           onClick={() => setActiveTab("home")}
         >
-          🏠 Home
+          <LuLayoutDashboard className={styles.navIcon} /> Home
         </button>
         <button
           className={`${styles.navItem} ${activeTab === "docs" ? styles.navItemActive : ""}`}
           onClick={() => setActiveTab("docs")}
         >
-          📄 Dokumente
+          <LuFiles className={styles.navIcon} /> Dokumente
         </button>
         <button
           className={styles.navItem}
           onClick={() => handleNavClick("/dashboard/timesheets")}
         >
-          ⏱ Zeiterfassung
+          <LuClock className={styles.navIcon} /> Zeiterfassung
         </button>
         <button
           className={`${styles.navItem} ${activeTab === "shifts" ? styles.navItemActive : ""}`}
           onClick={() => setActiveTab("shifts")}
         >
-          📋 Einsatzpläne
+          <LuCalendar className={styles.navIcon} /> Einsatzpläne
         </button>
         <button
           className={styles.navItem}
           onClick={() => handleNavClick("/dashboard/availability")}
         >
-          ✋ Verfügbarkeiten
+          <LuHand className={styles.navIcon} /> Verfügbarkeiten
         </button>
         <button
           className={styles.navItem}
           onClick={() => handleNavClick("/dashboard/benefits")}
         >
-          ⭐ Benefits
+          <LuStar className={styles.navIcon} /> Benefits
         </button>
       </nav>
 
@@ -141,8 +142,8 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
             {/* Action Items / Notifications */}
             <div className={styles.actionGrid}>
               {/* Next Shift */}
-              <Card className={styles.actionCard}>
-                <div className={styles.actionIcon}>📅</div>
+              <Card className={styles.actionCard} onClick={() => setActiveTab("shifts")}>
+                <div className={styles.actionIcon}><LuCalendar /></div>
                 <div className={styles.actionContent}>
                   <h3 className={styles.actionTitle}>Nächster Einsatz</h3>
                   {summary?.nextShift ? (
@@ -152,7 +153,7 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
                         <br />
                         {summary.nextShift.plan.eventName || 'Veranstaltung'} · {summary.nextShift.startTime} Uhr
                       </p>
-                      <Button size="sm" variant="outline" onClick={() => setActiveTab("shifts")}>Details ansehen</Button>
+                      <div className={styles.actionArrow}><LuChevronRight /></div>
                     </>
                   ) : (
                     <p className={styles.actionText}>Aktuell kein geplanter Einsatz.</p>
@@ -161,30 +162,30 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
               </Card>
 
               {/* Open Availability Requests */}
-              <Card className={styles.actionCard}>
-                <div className={styles.actionIcon}>✋</div>
+              <Card className={styles.actionCard} onClick={() => handleNavClick("/dashboard/availability")}>
+                <div className={styles.actionIcon}><LuHand /></div>
                 <div className={styles.actionContent}>
                   <h3 className={styles.actionTitle}>Fristen & Abfragen</h3>
                   {summary?.openRequests && summary.openRequests.length > 0 ? (
                     <>
                       <p className={styles.actionText}>Es gibt {summary.openRequests.length} offene Verfügbarkeitsabfrage(n).</p>
-                      <Button size="sm" onClick={() => handleNavClick("/dashboard/availability")}>Jetzt antworten</Button>
+                      <div className={styles.actionArrow}><LuChevronRight /></div>
                     </>
                   ) : (
-                    <p className={styles.actionText}>Alle Abfragen sind erledigt. Top!</p>
+                    <p className={styles.actionText}>Alle Abfragen erledigt. Top!</p>
                   )}
                 </div>
               </Card>
 
               {/* Latest Payslip */}
-              <Card className={styles.actionCard}>
-                <div className={styles.actionIcon}>💰</div>
+              <Card className={styles.actionCard} onClick={() => { setActiveTab("docs"); setDocSection("payslips"); }}>
+                <div className={styles.actionIcon}><LuDollarSign /></div>
                 <div className={styles.actionContent}>
                   <h3 className={styles.actionTitle}>Lohnzettel</h3>
                   {payslips.length > 0 ? (
                     <>
                       <p className={styles.actionText}>Dein neuester Lohnzettel ({MONTHS[payslips[0].month - 1]}) ist online.</p>
-                      <Button size="sm" variant="outline" onClick={() => { setActiveTab("docs"); setDocSection("payslips"); }}>Zum Dokument</Button>
+                      <div className={styles.actionArrow}><LuChevronRight /></div>
                     </>
                   ) : (
                     <p className={styles.actionText}>Bisher keine Lohnzettel hochgeladen.</p>
@@ -218,7 +219,7 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
                 {documents.length > 0 ? (
                   documents.map((doc) => (
                     <Card key={doc.id} className={styles.docCard}>
-                      <span className={styles.docIcon}>📄</span>
+                      <span className={styles.docIcon}><LuFileText /></span>
                       <h3 className={styles.docTitle}>{doc.name}</h3>
                       <p className={styles.docInfo}>Hochgeladen am {new Date(doc.uploadedAt).toLocaleDateString("de-DE")}</p>
                       <a href={doc.type === "CONTRACT_SIGNED" ? "/dashboard/contract" : doc.url} target={doc.type === "CONTRACT_SIGNED" ? undefined : "_blank"} rel="noopener noreferrer">
@@ -237,7 +238,7 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
                 {payslips.length > 0 ? (
                   payslips.sort((a, b) => b.year - a.year || b.month - a.month).map((slip) => (
                     <Card key={slip.id} className={styles.docCard}>
-                      <span className={styles.docIcon}>💰</span>
+                      <span className={styles.docIcon}><LuDollarSign /></span>
                       <h3 className={styles.docTitle}>Lohnzettel {MONTHS[slip.month - 1]} {slip.year}</h3>
                       <p className={styles.docInfo}>Bereitgestellt am {new Date(slip.uploadedAt).toLocaleDateString("de-DE")}</p>
                       <a href={slip.url} target="_blank" rel="noopener noreferrer">

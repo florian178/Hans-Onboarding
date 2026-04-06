@@ -77,6 +77,14 @@
   transition: all 0.15s;
   white-space: nowrap;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navIcon {
+  font-size: 1.1rem;
+  opacity: 0.7;
 }
 
 .navItem:hover {
@@ -397,11 +405,13 @@
   gap: 1rem;
   padding: 1.5rem;
   align-items: flex-start;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
   background: var(--glass-bg);
   backdrop-filter: var(--blur);
   border: 1px solid var(--glass-border);
   border-radius: 18px;
+  position: relative;
+  overflow: hidden;
 }
 
 .actionCard:hover {
@@ -434,8 +444,25 @@
 .actionText {
   font-size: 0.85rem;
   color: var(--secondary-foreground);
-  margin: 0 0 1rem 0;
+  margin: 0;
   line-height: 1.4;
+}
+
+.actionArrow {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-foreground);
+  opacity: 0.5;
+  font-size: 1.25rem;
+  transition: transform 0.2s;
+}
+
+.actionCard:hover .actionArrow {
+  transform: translateY(-50%) translateX(4px);
+  opacity: 1;
+  color: var(--ring);
 }
 
 @media (max-width: 900px) {
