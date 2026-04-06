@@ -268,6 +268,21 @@
   color: #86868b;
 }
 
+.websiteLink {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #0071e3;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.websiteLink:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
 @media (prefers-color-scheme: dark) {
   .title, .sectionTitle, .benefitTitle { color: var(--foreground); }
   .benefitCard { background: var(--secondary); border-color: rgba(255,255,255,0.1); }

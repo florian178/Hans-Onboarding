@@ -126,6 +126,7 @@ model Benefit {
   id          String   @id @default(cuid())
   partnerName String
   partnerLogo String?
+  websiteUrl  String?
   title       String
   description String
   discount    String?

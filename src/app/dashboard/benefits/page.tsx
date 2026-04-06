@@ -85,6 +85,16 @@ export default async function BenefitsPage() {
                   {b.conditions && (
                     <p className={styles.conditions}>* {b.conditions}</p>
                   )}
+                  {b.websiteUrl && (
+                    <a 
+                      href={b.websiteUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className={styles.websiteLink}
+                    >
+                      Webseite besuchen →
+                    </a>
+                  )}
                 </div>
               </div>
             ))

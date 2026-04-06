@@ -11,13 +11,14 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
     }
 
     const body = await req.json()
-    const { partnerName, partnerLogo, title, description, discount, conditions, isActive, sortOrder } = body
+    const { partnerName, partnerLogo, websiteUrl, title, description, discount, conditions, isActive, sortOrder } = body
 
     const benefit = await prisma.benefit.update({
       where: { id: params.id },
       data: {
         partnerName,
         partnerLogo,
+        websiteUrl,
         title,
         description,
         discount,

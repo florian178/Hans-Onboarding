@@ -18,6 +18,7 @@ export default function BenefitsAdminClient({ initialBenefits }: { initialBenefi
   const [description, setDescription] = useState("")
   const [discount, setDiscount] = useState("")
   const [conditions, setConditions] = useState("")
+  const [websiteUrl, setWebsiteUrl] = useState("")
   const [isActive, setIsActive] = useState(true)
   const [sortOrder, setSortOrder] = useState(0)
   const [existingLogoUrl, setExistingLogoUrl] = useState("")
@@ -28,6 +29,7 @@ export default function BenefitsAdminClient({ initialBenefits }: { initialBenefi
     setDescription("")
     setDiscount("")
     setConditions("")
+    setWebsiteUrl("")
     setIsActive(true)
     setSortOrder(0)
     setExistingLogoUrl("")
@@ -41,6 +43,7 @@ export default function BenefitsAdminClient({ initialBenefits }: { initialBenefi
     setDescription(b.description)
     setDiscount(b.discount || "")
     setConditions(b.conditions || "")
+    setWebsiteUrl(b.websiteUrl || "")
     setIsActive(b.isActive)
     setSortOrder(b.sortOrder)
     setExistingLogoUrl(b.partnerLogo || "")
@@ -81,6 +84,7 @@ export default function BenefitsAdminClient({ initialBenefits }: { initialBenefi
         description,
         discount,
         conditions,
+        websiteUrl,
         isActive,
         sortOrder,
         partnerLogo
@@ -148,6 +152,7 @@ export default function BenefitsAdminClient({ initialBenefits }: { initialBenefi
                 <Input label="Bedingungen / Hinweise" value={conditions} onChange={e => setConditions(e.target.value)} placeholder="Nur Di-Do einlösbar" />
                 
                 <Input label="Sortierung (Zahl, 0 ist ganz oben)" type="number" value={sortOrder} onChange={e => setSortOrder(Number(e.target.value))} />
+                <Input label="Webseite (URL)" value={websiteUrl} onChange={e => setWebsiteUrl(e.target.value)} placeholder="https://partner-website.de" />
                 
                 <div className={styles.checkboxGroup}>
                   <input type="checkbox" id="isActive" checked={isActive} onChange={e => setIsActive(e.target.checked)} />
