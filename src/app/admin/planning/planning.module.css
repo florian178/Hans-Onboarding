@@ -1,0 +1,255 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.headerArea {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--foreground);
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  color: #86868b;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  background: var(--surface-hover);
+  color: var(--foreground);
+}
+
+.activeTab {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.activeTab:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.contentArea {
+  padding-top: 1rem;
+}
+
+/* Common UI Elements */
+.actionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.formCard {
+  margin-bottom: 2rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Requests List */
+.requestsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.requestCard {
+  border: 1px solid var(--border);
+}
+
+.cardContentPadded {
+  padding: 1.5rem !important;
+}
+
+.requestHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.requestMeta {
+  color: #86868b;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.statusBadge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.statusDRAFT { background: #f5f5f7; color: #555; }
+.statusPUBLISHED { background: rgba(52, 199, 89, 0.1); color: #248a3d; }
+.statusCLOSED { background: rgba(255, 59, 48, 0.1); color: #d70015; }
+
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+}
+
+.dayCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.dayDate {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.dayEvent {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #0071e3;
+  margin-bottom: 0.25rem;
+}
+
+.dayNote {
+  font-size: 0.8rem;
+  color: #86868b;
+  font-style: italic;
+}
+
+/* Day Builder in Form */
+.dayBuilder {
+  grid-column: 1 / -1;
+  background: var(--surface-hover);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+.dayControls {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.dayList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dayItemLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--background);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+/* Scheduler Specific */
+.activeDayCard {
+  margin-bottom: 1.5rem;
+}
+
+.activeDayContent {
+  padding: 1.5rem !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activeDayTitle {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+}
+
+.activeDayStatus {
+  margin: 0;
+  color: #86868b;
+}
+
+.saveActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.schedulerGrid {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.poolPanel {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.areasPanel {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .schedulerGrid {
+    flex-direction: column;
+  }
+  .poolPanel {
+    width: 100%;
+  }
+  .areasPanel {
+    grid-template-columns: 1fr;
+  }
+}

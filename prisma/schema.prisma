@@ -50,9 +50,11 @@ model User {
   documents        Document[]
   onboardingStatus OnboardingStatus?
   payslips         Payslip[]
-  sessions         Session[]
-  stepProgresses   StepProgress[]
-  timesheets       Timesheet[]
+  sessions              Session[]
+  stepProgresses        StepProgress[]
+  timesheets            Timesheet[]
+  availabilityResponses AvailabilityResponse[]
+  staffPlanAssignments  StaffPlanAssignment[]
 }
 
 model Payslip {
@@ -135,4 +137,69 @@ model Benefit {
   sortOrder   Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model AvailabilityRequest {
+  id        String            @id @default(cuid())
+  title     String
+  startDate DateTime
+  endDate   DateTime
+  status    String            @default("DRAFT") // DRAFT, PUBLISHED, CLOSED
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  days      AvailabilityDay[]
+}
+
+model AvailabilityDay {
+  id          String                 @id @default(cuid())
+  requestId   String
+  date        DateTime
+  eventName   String?
+  note        String?
+  request     AvailabilityRequest    @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  responses   AvailabilityResponse[]
+  staffPlan   StaffPlanDay?
+
+  @@unique([requestId, date])
+}
+
+model AvailabilityResponse {
+  id         String          @id @default(cuid())
+  employeeId String
+  dayId      String
+  status     String          // YES, NO, MAYBE
+  comment    String?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  user       User            @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  day        AvailabilityDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, dayId])
+}
+
+model StaffPlanDay {
+  id          String                @id @default(cuid())
+  dayId       String?               @unique
+  date        DateTime
+  eventName   String?
+  note        String?
+  status      String                @default("DRAFT") // DRAFT, FINAL
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  day         AvailabilityDay?      @relation(fields: [dayId], references: [id], onDelete: SetNull)
+  assignments StaffPlanAssignment[]
+}
+
+model StaffPlanAssignment {
+  id         String       @id @default(cuid())
+  planId     String
+  employeeId String
+  area       String       // CVD, EINLASS, GARDEROBE, BETONBAR, WALDBAR
+  role       String       // z. B. BARCHEF, KRAFT_2
+  startTime  String       // z. B. "22:00"
+  note       String?
+  plan       StaffPlanDay @relation(fields: [planId], references: [id], onDelete: Cascade)
+  user       User         @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, employeeId, area, role]) // Simplified unique constraint to prevent massive overlaps, but can be adjusted.
 }

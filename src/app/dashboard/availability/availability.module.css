@@ -1,0 +1,147 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.header {
+  margin-bottom: 2.5rem;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  color: var(--foreground);
+}
+
+.subtitle {
+  color: #86868b;
+  margin: 0;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: #86868b;
+}
+
+.requestSection {
+  margin-bottom: 3rem;
+}
+
+.requestTitle {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+.dayCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.dayHeader {
+  margin-bottom: 1rem;
+}
+
+.dayDate {
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.dayEvent {
+  font-size: 0.9rem;
+  color: #0071e3;
+  display: block;
+}
+
+.dayNote {
+  font-size: 0.85rem;
+  color: #86868b;
+  font-style: italic;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.selectBtn {
+  flex: 1;
+  padding: 0.8rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--foreground);
+}
+
+.selectBtn.yes { border-color: rgba(52, 199, 89, 0.4); }
+.selectBtn.no { border-color: rgba(255, 59, 48, 0.4); }
+.selectBtn.maybe { border-color: rgba(255, 149, 0, 0.4); }
+
+.selectBtn.yes.selected { background: #34c759; color: white; border-color: #34c759; }
+.selectBtn.no.selected { background: #ff3b30; color: white; border-color: #ff3b30; }
+.selectBtn.maybe.selected { background: #ff9500; color: white; border-color: #ff9500; }
+
+.commentInput {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  font-size: 0.9rem;
+  color: var(--foreground);
+}
+
+.commentInput:focus {
+  outline: none;
+  border-color: #0071e3;
+}
+
+.saveArea {
+  position: sticky;
+  bottom: 2rem;
+  background: var(--surface);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  border: 1px solid var(--border);
+  z-index: 10;
+}
+
+.saveBtn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 600px) {
+  .buttonGroup {
+    flex-direction: column;
+  }
+}

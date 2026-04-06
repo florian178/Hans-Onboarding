@@ -38,7 +38,16 @@ const MONTHS = [
 ]
 
 export default function DashboardClient({ user, documents, payslips }: DashboardClientProps) {
-  const [activeTab, setActiveTab] = useState<"docs" | "payslips">("docs")
+  const [activeTab, setActiveTab] = useState<"docs" | "payslips" | "shifts">("docs")
+  const [myShifts, setMyShifts] = useState<any[]>([])
+
+  React.useEffect(() => {
+    if (activeTab === "shifts") {
+      fetch("/api/planning/my-shifts")
+        .then(res => res.json())
+        .then(setMyShifts)
+    }
+  }, [activeTab])
 
   return (
     <div className={styles.container}>
@@ -70,6 +79,12 @@ export default function DashboardClient({ user, documents, payslips }: Dashboard
           Lohnzettel
         </button>
         <button 
+          className={`${styles.tab} ${activeTab === "shifts" ? styles.activeTab : ""}`}
+          onClick={() => setActiveTab("shifts")}
+        >
+          Einsatzpläne
+        </button>
+        <button 
           className={styles.tab}
           onClick={() => window.location.href = '/dashboard/timesheets'}
         >
@@ -81,10 +96,50 @@ export default function DashboardClient({ user, documents, payslips }: Dashboard
         >
           Member Benefits
         </button>
+        <button 
+          className={styles.tab}
+          onClick={() => window.location.href = '/dashboard/availability'}
+        >
+          Verfügbarkeiten
+        </button>
       </div>
 
       <div className={styles.grid}>
-        {activeTab === "docs" ? (
+        {activeTab === "shifts" ? (
+          <div style={{ gridColumn: '1 / -1' }}>
+            {myShifts.length > 0 ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                {myShifts.map((a: any) => (
+                  <Card key={a.id} className={styles.docCard}>
+                    <div style={{ padding: '1.5rem' }}>
+                      <h3 style={{ margin: '0 0 0.5rem 0' }}>{new Date(a.plan.date).toLocaleDateString("de-DE", { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })}</h3>
+                      <div style={{ color: '#0071e3', fontWeight: 600, marginBottom: '0.5rem' }}>{a.plan.eventName || 'Veranstaltung'}</div>
+                      <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+                         <div>
+                            <span style={{ fontSize: '0.8rem', color: '#86868b', textTransform: 'uppercase' }}>Bereich</span>
+                            <div style={{ fontWeight: 600 }}>{a.area}</div>
+                         </div>
+                         <div>
+                            <span style={{ fontSize: '0.8rem', color: '#86868b', textTransform: 'uppercase' }}>Rolle</span>
+                            <div style={{ fontWeight: 600 }}>{a.role || '-'}</div>
+                         </div>
+                         <div>
+                            <span style={{ fontSize: '0.8rem', color: '#86868b', textTransform: 'uppercase' }}>Beginn</span>
+                            <div style={{ fontWeight: 600 }}>{a.startTime || '??:??'}</div>
+                         </div>
+                      </div>
+                      {a.note && <p style={{ marginTop: '1rem', fontSize: '0.9rem', fontStyle: 'italic', color: '#86868b' }}>Notiz: {a.note}</p>}
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className={styles.emptyState}>
+                <p>Du bist aktuell in keinem veröffentlichten Einsatzplan eingeteilt.</p>
+              </div>
+            )}
+          </div>
+        ) : activeTab === "docs" ? (
           <>
             {documents.length > 0 ? (
               documents.map((doc) => (
