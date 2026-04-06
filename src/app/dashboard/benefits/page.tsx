@@ -15,20 +15,30 @@ export default async function BenefitsPage() {
     select: { name: true }
   })
   
-  const stepProgress = await prisma.stepProgress.findUnique({
+  const personalProgress = await prisma.stepProgress.findUnique({
     where: { userId_stepId: { userId, stepId: "personal-data" } }
+  })
+
+  const taxProgress = await prisma.stepProgress.findUnique({
+    where: { userId_stepId: { userId, stepId: "tax-data" } }
   })
 
   let birthDate = null
   let firstName = ""
   let lastName = ""
 
-  if (stepProgress && stepProgress.data) {
+  if (personalProgress && personalProgress.data) {
     try {
-      const pData = JSON.parse(stepProgress.data)
+      const pData = JSON.parse(personalProgress.data)
       firstName = pData.firstName || ""
       lastName = pData.lastName || ""
-      birthDate = pData.birthDate || null // e.g., "YYYY-MM-DD"
+    } catch(e) {}
+  }
+
+  if (taxProgress && taxProgress.data) {
+    try {
+      const tData = JSON.parse(taxProgress.data)
+      birthDate = tData.birthDate || null // e.g., "YYYY-MM-DD"
     } catch(e) {}
   }
 
