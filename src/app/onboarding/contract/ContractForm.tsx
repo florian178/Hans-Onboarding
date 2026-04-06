@@ -242,7 +242,9 @@ export function ContractForm({ personalData, startDate }: ContractFormProps) {
     <div className={styles.container}>
       {error && <div className={styles.error}>{error}</div>}
       
-      <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} personalData={personalData} />
+      <div className={styles.contractPreview}>
+        <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} personalData={personalData} />
+      </div>
 
       <div className={styles.signatureSection}>
         <div className={styles.sectionHeader}>

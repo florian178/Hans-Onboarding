@@ -4,6 +4,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   background-color: white;
+  color: #1a1a1a;
   box-shadow: var(--shadow-premium);
   margin-bottom: 3rem;
   /* Width is governed by parent, height is set via inline style on React side if scaled */

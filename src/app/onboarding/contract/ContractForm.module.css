@@ -1,13 +1,7 @@
 .contractText {
   line-height: 1.7;
-  color: var(--foreground);
+  color: #1a1a1a !important; /* Always dark text for contract */
   font-family: var(--font-sans), system-ui, sans-serif;
-}
-
-.contractPreview .contractText,
-:global(.scaledInner) .contractText,
-:global(.overlayDocument) .contractText {
-  color: #1a1a1a;
 }
 
 .documentLogo {
