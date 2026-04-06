@@ -136,13 +136,16 @@ export default function AvailabilityClient({ requests }: { requests: any[] }) {
         </div>
       ))}
       
-      {hasChanges && (
-        <div className={styles.saveArea}>
+      <div className={styles.saveArea}>
+        <Button variant="outline" onClick={() => window.location.href = "/dashboard"}>
+          Abbrechen / Zurück
+        </Button>
+        {hasChanges && (
           <Button className={styles.saveBtn} onClick={handleSave} disabled={isSaving}>
             {isSaving ? "Speichere..." : "Änderungen speichern"}
           </Button>
-        </div>
-      )}
+        )}
+      </div>
     </>
   )
 }

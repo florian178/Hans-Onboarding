@@ -133,20 +133,6 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
           </div>
         </header>
 
-        {/* Desktop Nav - visible only on large screens, or we can keep it as secondary */}
-        <nav className={styles.desktopNav}>
-           {navItems.map((item) => (
-            <button
-              key={item.id}
-              className={clsx(styles.navItem, activeTab === item.id && styles.navItemActive)}
-              onClick={() => handleTabClick(item)}
-            >
-              <span className={styles.navIcon}>{item.icon}</span>
-              {item.label}
-            </button>
-          ))}
-        </nav>
-
         {/* Content Area */}
         <div className={styles.content}>
           {activeTab === "home" && (

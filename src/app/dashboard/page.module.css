@@ -26,14 +26,15 @@
 .sidebar {
   width: 280px;
   background: var(--glass-bg);
-  backdrop-filter: var(--blur);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   border-right: 1px solid var(--glass-border);
   height: 100vh;
   display: flex;
   flex-direction: column;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1100; /* Higher than header and overlay */
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
