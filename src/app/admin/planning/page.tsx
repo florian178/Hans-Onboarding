@@ -7,7 +7,7 @@ import RequestsClient from "./RequestsClient"
 import ResponsesClient from "./ResponsesClient"
 import dynamic from "next/dynamic"
 
-const SchedulerClient = dynamic(() => import("./SchedulerClient"), { ssr: false })
+const DayPlanBuilder = dynamic(() => import("./DayPlanBuilder"), { ssr: false })
 
 import styles from "./planning.module.css"
 
@@ -65,7 +65,7 @@ export default function PlanningPage() {
           <>
             {activeTab === "REQUESTS" && <RequestsClient requests={requests} onRefresh={fetchRequests} />}
             {activeTab === "RESPONSES" && <ResponsesClient requests={requests} />}
-            {activeTab === "SCHEDULER" && <SchedulerClient requests={requests} />}
+            {activeTab === "SCHEDULER" && <DayPlanBuilder requests={requests} />}
           </>
         )}
       </div>

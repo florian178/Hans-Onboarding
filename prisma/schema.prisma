@@ -54,7 +54,7 @@ model User {
   stepProgresses        StepProgress[]
   timesheets            Timesheet[]
   availabilityResponses AvailabilityResponse[]
-  staffPlanAssignments  StaffPlanAssignment[]
+  staffPlanRows         StaffPlanRow[]
 }
 
 model Payslip {
@@ -187,19 +187,35 @@ model StaffPlanDay {
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
   day         AvailabilityDay?      @relation(fields: [dayId], references: [id], onDelete: SetNull)
-  assignments StaffPlanAssignment[]
+  rows        StaffPlanRow[]
 }
 
-model StaffPlanAssignment {
-  id         String       @id @default(cuid())
-  planId     String
-  employeeId String
-  area       String       // CVD, EINLASS, GARDEROBE, BETONBAR, WALDBAR
-  role       String       // z. B. BARCHEF, KRAFT_2
-  startTime  String       // z. B. "22:00"
-  note       String?
-  plan       StaffPlanDay @relation(fields: [planId], references: [id], onDelete: Cascade)
-  user       User         @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+model StaffPlanRow {
+  id              String        @id @default(cuid())
+  planId          String
+  sortOrder       Int           @default(0)
+  assignmentLabel String        // z.B. "Beton Bar (Bar-Chef)", "Einlass", "CvD"
+  employeeId      String?       // null = unbesetzte Position
+  startTime       String?       // z.B. "22:00"
+  endTime         String?       // z.B. "06:00"
+  note            String?
+  plan            StaffPlanDay  @relation(fields: [planId], references: [id], onDelete: Cascade)
+  user            User?         @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+}
 
-  @@unique([planId, employeeId, area, role]) // Simplified unique constraint to prevent massive overlaps, but can be adjusted.
+model ShiftTemplate {
+  id        String              @id @default(cuid())
+  name      String              @unique
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  rows      ShiftTemplateRow[]
+}
+
+model ShiftTemplateRow {
+  id               String        @id @default(cuid())
+  templateId       String
+  sortOrder        Int           @default(0)
+  assignmentLabel  String
+  defaultStartTime String?
+  template         ShiftTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
 }

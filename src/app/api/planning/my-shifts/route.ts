@@ -9,8 +9,8 @@ export async function GET(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
-    // Find all FINAL staff plans where the user is assigned
-    const assignments = await prisma.staffPlanAssignment.findMany({
+    // Find all FINAL staff plan rows where the user is assigned
+    const rows = await prisma.staffPlanRow.findMany({
       where: {
         employeeId: session.user.id,
         plan: {
@@ -27,7 +27,7 @@ export async function GET(req: Request) {
       }
     })
 
-    return NextResponse.json(assignments)
+    return NextResponse.json(rows)
   } catch (error) {
     console.error("GET /api/planning/my-shifts", error)
     return new NextResponse("Internal Error", { status: 500 })

@@ -84,7 +84,7 @@ export default async function DashboardPage() {
       },
       select: { totalHours: true, hourlyWage: true }
     }),
-    prisma.staffPlanAssignment.findFirst({
+    prisma.staffPlanRow.findFirst({
       where: {
         employeeId: userId,
         plan: { status: 'FINAL', date: { gte: now } }

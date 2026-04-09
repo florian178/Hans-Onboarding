@@ -16,14 +16,14 @@ export async function GET(req: Request) {
       return new NextResponse("Missing dayId", { status: 400 })
     }
 
-    // Try to find an existing plan for this day
     const plan = await prisma.staffPlanDay.findUnique({
       where: { dayId },
       include: {
-        assignments: {
+        rows: {
           include: {
             user: { select: { id: true, name: true } }
-          }
+          },
+          orderBy: { sortOrder: "asc" }
         }
       }
     })
@@ -43,43 +43,40 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json()
-    const { dayId, date, eventName, note, status, assignments } = body
+    const { dayId, date, eventName, note, status, rows } = body
 
     if (!dayId) return new NextResponse("Missing dayId", { status: 400 })
 
-    // Find existing plan to see if we need to update or create
     const existingPlan = await prisma.staffPlanDay.findUnique({
       where: { dayId }
     })
 
-    let plan: any;
+    let plan: any
     if (existingPlan) {
-      // Update plan and recreate assignments
       plan = await prisma.staffPlanDay.update({
         where: { id: existingPlan.id },
         data: { status, note, eventName },
       })
-      
-      // Delete old assignments
-      await prisma.staffPlanAssignment.deleteMany({
+
+      // Delete old rows and recreate
+      await prisma.staffPlanRow.deleteMany({
         where: { planId: plan.id }
       })
-      
-      // Create new assignments
-      if (assignments && assignments.length > 0) {
-        await prisma.staffPlanAssignment.createMany({
-          data: assignments.map((a: any) => ({
+
+      if (rows && rows.length > 0) {
+        await prisma.staffPlanRow.createMany({
+          data: rows.map((r: any, i: number) => ({
             planId: plan.id,
-            employeeId: a.employeeId,
-            area: a.area,
-            role: a.role || "",
-            startTime: a.startTime || "",
-            note: a.note || ""
+            sortOrder: i,
+            assignmentLabel: r.assignmentLabel,
+            employeeId: r.employeeId || null,
+            startTime: r.startTime || null,
+            endTime: r.endTime || null,
+            note: r.note || null,
           }))
         })
       }
     } else {
-      // Create new plan with assignments
       plan = await prisma.staffPlanDay.create({
         data: {
           dayId,
@@ -87,14 +84,15 @@ export async function POST(req: Request) {
           eventName,
           note,
           status,
-          assignments: {
-            create: assignments?.map((a: any) => ({
-              employeeId: a.employeeId,
-              area: a.area,
-              role: a.role || "",
-              startTime: a.startTime || "",
-              note: a.note || ""
-            })) || []
+          rows: {
+            create: (rows || []).map((r: any, i: number) => ({
+              sortOrder: i,
+              assignmentLabel: r.assignmentLabel,
+              employeeId: r.employeeId || null,
+              startTime: r.startTime || null,
+              endTime: r.endTime || null,
+              note: r.note || null,
+            }))
           }
         }
       })
