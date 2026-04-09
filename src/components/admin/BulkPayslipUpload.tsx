@@ -13,6 +13,8 @@ interface Employee {
   zipCode?: string
 }
 
+type PageType = 'PAYSLIP' | 'SKIP'
+
 interface AssignedResult {
   employeeName: string
   employeeId: string
@@ -24,9 +26,15 @@ interface UnassignedResult {
   candidateName: string
 }
 
+interface SkippedResult {
+  page: number
+  reason: string
+}
+
 interface BulkResult {
   assigned: AssignedResult[]
   unassigned: UnassignedResult[]
+  skipped: SkippedResult[]
   totalPages: number
   monthLabel: string
   yearLabel: string
@@ -203,77 +211,104 @@ export default function BulkPayslipUpload({ employees }: Props) {
   }
 
   /**
-   * Match employee name and PLZ in page text.
-   * Auto-assignment: Requires ALL 3 (First Name, Last Name, Zip Code).
-   * Overview Detection: If >1 employee matches 3/3, skip auto-assign.
-   * Candidate detection: Suggest name ONLY if exactly one person matches 2/3.
-   * Boilerplate: Ignores employees identified as boilerplate (e.g. company owner).
+   * Classify the page type based on known DATEV document headers.
+   * Only "Abrechnung" pages are actual individual payslips.
+   */
+  function classifyPage(pageText: string): { type: PageType; reason: string } {
+    const text = pageText.toLowerCase()
+    
+    if (text.includes("abrechnung der brutto") || text.includes("brutto/netto-bez")) {
+      return { type: 'PAYSLIP', reason: '' }
+    }
+    if (text.includes("lohnjournal")) {
+      return { type: 'SKIP', reason: 'Lohnjournal (Übersicht)' }
+    }
+    if (text.includes("meldebescheinigung")) {
+      return { type: 'SKIP', reason: 'Meldebescheinigung (SV)' }
+    }
+    if (text.includes("übersicht zahlungen")) {
+      return { type: 'SKIP', reason: 'Zahlungsübersicht' }
+    }
+    if (text.includes("dü-protokoll") || text.includes("lohnsteuer-anmeldung")) {
+      return { type: 'SKIP', reason: 'DÜ-Protokoll / Steueranmeldung' }
+    }
+    if (text.includes("beitragsnachweis")) {
+      return { type: 'SKIP', reason: 'Beitragsnachweis' }
+    }
+    // Unknown page type — don't skip, let the matcher try
+    return { type: 'PAYSLIP', reason: '' }
+  }
+
+  /**
+   * Match employee on an individual payslip page.
+   * Strategy:
+   *   1. Check if "Vorname Nachname" (full name combo) appears in the text.
+   *   2. Prefer exact full-name matches over partial matches.
+   *   3. Use zipCode as tiebreaker when multiple last-name matches exist.
    */
   function findEmployeeMatch(
-    pageText: string, 
-    boilerplateIds: Set<string>
+    pageText: string
   ): { employee: Employee | null, candidateName: string } {
     const text = pageText.toLowerCase()
-    const matches3per3: Employee[] = []
-    const matches2per3: Employee[] = []
+    
+    // Score each employee
+    const scored: { emp: Employee; score: number }[] = []
     
     for (const emp of employees) {
-      // Skip if this employee is boilerplate on almost every page
-      if (boilerplateIds.has(emp.id)) continue
-
-      let matches = 0
-      const fName = emp.firstName?.toLowerCase()
-      const lName = emp.lastName?.toLowerCase()
-      const zCode = emp.zipCode?.toLowerCase()
-
-      const firstNameMatch = fName && text.includes(fName)
-      const lastNameMatch = lName && text.includes(lName)
-      const zipMatch = zCode && text.includes(zCode)
-
-      if (firstNameMatch) matches++
-      if (lastNameMatch) matches++
-      if (zipMatch) matches++
-
-      if (matches === 3) {
-        matches3per3.push(emp)
-      } else if (matches === 2) {
-        matches2per3.push(emp)
+      const fName = emp.firstName?.toLowerCase()?.trim()
+      const lName = emp.lastName?.toLowerCase()?.trim()
+      const zCode = emp.zipCode?.toLowerCase()?.trim()
+      
+      if (!fName && !lName) continue
+      
+      let score = 0
+      
+      // Check if the full name combo appears (strongest signal for payslip pages)
+      // On DATEV payslips, the name appears as "Vorname Nachname" on one line
+      if (fName && lName) {
+        const fullNameCombo = `${fName} ${lName}`
+        if (text.includes(fullNameCombo)) {
+          score += 10 // Very strong match
+        } else {
+          // Check individual parts
+          if (text.includes(fName)) score += 2
+          if (text.includes(lName)) score += 2
+        }
+      } else {
+        if (fName && text.includes(fName)) score += 2
+        if (lName && text.includes(lName)) score += 2
+      }
+      
+      // Zip code as bonus confirmation
+      if (zCode && zCode.length >= 4 && text.includes(zCode)) score += 3
+      
+      if (score >= 4) {
+        scored.push({ emp, score })
       }
     }
-
-    // 1. Perfect match for EXACTLY one person: Auto-assign
-    if (matches3per3.length === 1) {
-      const emp = matches3per3[0]
-      return { employee: emp, candidateName: emp.name || "" }
-    }
-
-    // 2. Multiple perfect matches: Overview page
-    if (matches3per3.length > 1) {
-      return { 
-        employee: null, 
-        candidateName: `Mehrere Mitarbeiter erkannt (${matches3per3.length}) — Übersichtsseite?` 
+    
+    // Sort by score descending
+    scored.sort((a, b) => b.score - a.score)
+    
+    // If exactly one top-scorer with score >= 10, auto-assign (full name match)
+    if (scored.length >= 1 && scored[0].score >= 10) {
+      // Check for ambiguity: two people with same top score
+      if (scored.length === 1 || scored[0].score > scored[1].score) {
+        return { employee: scored[0].emp, candidateName: scored[0].emp.name || '' }
       }
     }
-
-    // 3. Exactly one 2/3 match: Suggest as candidate
-    if (matches2per3.length === 1) {
-      const emp = matches2per3[0]
-      return { employee: null, candidateName: emp.name || "" }
+    
+    // If exactly one match with score >= 7 (name parts + zip), auto-assign
+    if (scored.length === 1 && scored[0].score >= 7) {
+      return { employee: scored[0].emp, candidateName: scored[0].emp.name || '' }
     }
-
-    // 4. Multiple 2/3 matches: Ambiguous
-    if (matches2per3.length > 1) {
-      return { 
-        employee: null, 
-        candidateName: "Mehrere Kandidaten (2/3 Match)" 
-      }
+    
+    // If there are candidates, suggest the best one
+    if (scored.length >= 1) {
+      return { employee: null, candidateName: scored[0].emp.name || '' }
     }
-
-    // 5. No strong match
-    return { 
-      employee: null, 
-      candidateName: "" 
-    }
+    
+    return { employee: null, candidateName: '' }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -301,33 +336,18 @@ export default function BulkPayslipUpload({ employees }: Props) {
         setStatusText(`Analysiere Seite ${cur} von ${total}…`)
       })
 
-      // NEW: Frequency Analysis to detect boilerplate (e.g. company owner name in header)
-      const matchCounts = new Map<string, number>()
-      for (const text of pageTexts) {
-        const lowerText = text.toLowerCase()
-        for (const emp of employees) {
-          let matches = 0
-          if (emp.firstName && lowerText.includes(emp.firstName.toLowerCase())) matches++
-          if (emp.lastName && lowerText.includes(emp.lastName.toLowerCase())) matches++
-          if (emp.zipCode && lowerText.includes(emp.zipCode.toLowerCase())) matches++
-          if (matches === 3) {
-            matchCounts.set(emp.id, (matchCounts.get(emp.id) || 0) + 1)
-          }
-        }
-      }
+      // Step 2: Classify pages by document type
+      const pageClassifications = pageTexts.map((text, i) => {
+        const result = classifyPage(text)
+        console.log(`Page ${i + 1}: type=${result.type}, reason=${result.reason}`)
+        return result
+      })
 
-      const boilerplateIds = new Set<string>()
-      if (pageTexts.length > 2) {
-        for (const [id, count] of matchCounts.entries()) {
-          // If a name matches 3/3 on more than 40% of pages, it's likely boilerplate
-          if (count / pageTexts.length > 0.4) {
-            console.log(`Boilerplate detected: ${employees.find(e => e.id === id)?.name}`)
-            boilerplateIds.add(id)
-          }
-        }
-      }
+      const payslipPages = pageClassifications.filter(c => c.type === 'PAYSLIP').length
+      const skippedPages = pageClassifications.filter(c => c.type === 'SKIP').length
+      console.log(`Classification: ${payslipPages} payslips, ${skippedPages} skipped`)
 
-      // Step 2: Split PDF into individual pages (in browser)
+      // Step 3: Split ONLY payslip pages into individual PDFs (in browser)
       const pages = await splitPages(arrayBuffer.slice(0), (cur, total) => {
         setStatusText(`Teile Seite ${cur} von ${total}…`)
       })
@@ -337,12 +357,21 @@ export default function BulkPayslipUpload({ employees }: Props) {
       const yearNum = parseInt(year)
       const assigned: AssignedResult[] = []
       const unassigned: UnassignedResult[] = []
+      const skipped: SkippedResult[] = []
 
-      // Step 3: Match employees and upload matched pages
+      // Step 4: Match employees and upload matched pages
       for (let i = 0; i < pageTexts.length; i++) {
         const pageNum = i + 1
         const pageText = pageTexts[i]
-        const { employee: emp, candidateName } = findEmployeeMatch(pageText, boilerplateIds)
+        const classification = pageClassifications[i]
+
+        // Skip non-payslip pages entirely
+        if (classification.type === 'SKIP') {
+          skipped.push({ page: pageNum, reason: classification.reason })
+          continue
+        }
+
+        const { employee: emp, candidateName } = findEmployeeMatch(pageText)
 
         if (emp) {
           setStatusText(`Lade Seite ${pageNum} hoch (${emp.name})…`)
@@ -366,6 +395,7 @@ export default function BulkPayslipUpload({ employees }: Props) {
       setResult({ 
         assigned, 
         unassigned, 
+        skipped,
         totalPages: pageTexts.length,
         monthLabel: months.find(m => m.value === monthNum)?.label || "",
         yearLabel: String(yearNum)
@@ -491,6 +521,11 @@ export default function BulkPayslipUpload({ employees }: Props) {
                 ⚠️ {result.unassigned.length} offen
               </span>
             )}
+            {result.skipped.length > 0 && (
+              <span className={styles.summaryItem}>
+                ⏭️ {result.skipped.length} übersprungen
+              </span>
+            )}
           </div>
 
           {result.assigned.length > 0 && (
@@ -550,6 +585,26 @@ export default function BulkPayslipUpload({ employees }: Props) {
                         <span className={styles.spinner} />
                       )}
                     </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {result.skipped.length > 0 && (
+            <div className={styles.resultSection}>
+              <h4 className={styles.sectionTitle}>Automatisch übersprungen</h4>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginBottom: '0.5rem' }}>
+                Diese Seiten sind keine individuellen Lohnzettel und wurden nicht zugeordnet.
+              </p>
+              <div className={styles.resultList}>
+                {result.skipped.map((item) => (
+                  <div key={item.page} className={styles.resultItem} style={{ opacity: 0.6 }}>
+                    <div className={styles.resultInfo}>
+                      <span className={styles.pageTag}>Seite {item.page}</span>
+                      <span style={{ fontSize: '0.85rem' }}>{item.reason}</span>
+                    </div>
+                    <span>⏭️</span>
                   </div>
                 ))}
               </div>
