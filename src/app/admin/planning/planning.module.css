@@ -922,7 +922,9 @@
 }
 
 /* ─── Print Styles ─── */
-.noPrint { /* used for print exclusion via @media print */ }
+.noPrint { 
+  opacity: 1; /* avoids empty ruleset warning */
+}
 
 @media print {
   .noPrint,
@@ -1008,3 +1010,72 @@
     left: 1rem !important;
   }
 }
+
+.noPrint {
+  opacity: 1; /* Dummy property to avoid empty ruleset warning */
+}
+
+.pdfContainer {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  width: 794px; /* A4 width at 96dpi */
+  background: white;
+  color: black;
+  padding: 40px;
+}
+
+.pdfDay {
+  margin-bottom: 60px;
+  page-break-after: always;
+}
+
+.pdfDay:last-child {
+  page-break-after: auto;
+}
+
+.pdfHeader {
+  border-bottom: 2px solid #000;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.pdfTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.pdfEvent {
+  font-size: 18px;
+  color: #0071e3;
+  margin-top: 5px;
+}
+
+.pdfTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.pdfTable th {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 2px solid #333;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.pdfTable td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.pdfNote {
+  margin-top: 15px;
+  font-size: 13px;
+  font-style: italic;
+  color: #666;
+}
+

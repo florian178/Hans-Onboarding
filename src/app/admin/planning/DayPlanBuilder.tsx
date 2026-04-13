@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useCallback, useRef } from "react"
 import { Button } from "@/components/ui/Button"
 import styles from "./planning.module.css"
+import { jsPDF } from "jspdf"
+import html2canvas from "html2canvas"
 
 /* ─── Types ─── */
 interface PlanRow {
@@ -143,6 +145,8 @@ export default function DayPlanBuilder({ requests }: { requests: any[] }) {
   const [showMultiDay, setShowMultiDay] = useState(false)
   const [templateName, setTemplateName] = useState("")
   const [showTemplateSave, setShowTemplateSave] = useState(false)
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+  const [weeklyPlans, setWeeklyPlans] = useState<any[]>([])
 
   // Load templates once
   useEffect(() => {
@@ -323,6 +327,67 @@ export default function DayPlanBuilder({ requests }: { requests: any[] }) {
   /* ─── Print ─── */
   const handlePrint = () => window.print()
 
+  /* ─── Weekly PDF Export ─── */
+  const handleWeeklyPDF = async () => {
+    if (!selectedRequestId || !currentRequest) return
+    setIsGeneratingPDF(true)
+    try {
+      // Fetch all plans for this request
+      const res = await fetch(`/api/planning/admin/shifts?requestId=${selectedRequestId}`)
+      const plans = await res.json()
+      setWeeklyPlans(plans)
+
+      // Give React a moment to render the hidden pdfContainer
+      await new Promise(resolve => setTimeout(resolve, 500))
+
+      const element = document.getElementById("weekly-pdf-content")
+      if (!element) throw new Error("PDF content element not found")
+
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff",
+        windowWidth: 794,
+      })
+      
+      const imgData = canvas.toDataURL("image/png")
+      const pdf = new jsPDF("p", "mm", "a4")
+      
+      const margin = 10
+      const pageWidth = pdf.internal.pageSize.getWidth()
+      const pageHeight = pdf.internal.pageSize.getHeight()
+      const usableWidth = pageWidth - 2 * margin
+      const usableHeight = pageHeight - 2 * margin
+      
+      const imgHeight = (canvas.height * usableWidth) / canvas.width
+      
+      let position = margin
+      let heightLeft = imgHeight
+
+      // Page 1
+      pdf.addImage(imgData, "PNG", margin, position, usableWidth, imgHeight)
+      heightLeft -= usableHeight
+
+      // Additional Pages
+      while (heightLeft > 0) {
+        position = position - usableHeight
+        pdf.addPage()
+        pdf.addImage(imgData, "PNG", margin, position, usableWidth, imgHeight)
+        heightLeft -= usableHeight
+      }
+      
+      const requestTitle = currentRequest.title.replace(/\s+/g, "_")
+      pdf.save(`Personalplan_${requestTitle}.pdf`)
+    } catch (e) {
+      console.error("PDF generation error", e)
+      alert("Fehler bei der PDF-Erzeugung.")
+    } finally {
+      setIsGeneratingPDF(false)
+      setWeeklyPlans([])
+    }
+  }
+
   const formatDate = (d: string) => new Date(d).toLocaleDateString("de-DE", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" })
 
   /* ─── Employee picker ─── */
@@ -481,6 +546,9 @@ export default function DayPlanBuilder({ requests }: { requests: any[] }) {
         <div className={styles.footerLeft}>
           <Button variant="outline" onClick={handleCSV}>CSV Export</Button>
           <Button variant="outline" onClick={handlePrint}>🖨️ Drucken</Button>
+          <Button variant="outline" onClick={handleWeeklyPDF} disabled={isGeneratingPDF}>
+            {isGeneratingPDF ? "PDF wird generiert…" : "📄 Wochenplan (PDF)"}
+          </Button>
         </div>
         <div className={styles.footerRight}>
           <Button variant="outline" onClick={() => handleSave("DRAFT")} disabled={isSaving}>
@@ -491,6 +559,59 @@ export default function DayPlanBuilder({ requests }: { requests: any[] }) {
           </Button>
         </div>
       </div>
+
+      {/* ─── Hidden PDF Container ─── */}
+      {weeklyPlans.length > 0 && (
+        <div className={styles.pdfContainer} id="weekly-pdf-content">
+          <div style={{ marginBottom: '30px', borderBottom: '3px solid #000', paddingBottom: '10px' }}>
+            <h1 style={{ margin: 0, fontSize: '28px' }}>Personal Einsatzplan</h1>
+            <p style={{ margin: '5px 0 0 0', fontSize: '18px', color: '#666' }}>{currentRequest?.title}</p>
+          </div>
+
+          {weeklyPlans.map((plan: any) => (
+            <div key={plan.id} className={styles.pdfDay}>
+              <div className={styles.pdfHeader}>
+                <h2 className={styles.pdfTitle}>{formatDate(plan.date)}</h2>
+                {plan.eventName && <div className={styles.pdfEvent}>{plan.eventName}</div>}
+              </div>
+              
+              <table className={styles.pdfTable}>
+                <thead>
+                  <tr>
+                    <th style={{ width: '40px' }}>#</th>
+                    <th style={{ width: '180px' }}>Einteilung</th>
+                    <th style={{ width: '180px' }}>Mitarbeiter</th>
+                    <th style={{ width: '80px' }}>Beginn</th>
+                    <th style={{ width: '80px' }}>Ende</th>
+                    <th>Notiz</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {plan.rows.map((row: any, idx: number) => (
+                    <tr key={row.id}>
+                      <td>{idx + 1}</td>
+                      <td>{row.assignmentLabel}</td>
+                      <td><strong>{row.user?.name || "—"}</strong></td>
+                      <td>{row.startTime || "—"}</td>
+                      <td>{row.endTime || "—"}</td>
+                      <td><small>{row.note || ""}</small></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {plan.note && (
+                <div className={styles.pdfNote}>
+                  <strong>Tagesnotiz:</strong> {plan.note}
+                </div>
+              )}
+            </div>
+          ))}
+          
+          <div style={{ marginTop: '40px', fontSize: '10px', color: '#999', textAlign: 'center' }}>
+            Generiert am {new Date().toLocaleString('de-DE')} • Hans im Club Onboarding System
+          </div>
+        </div>
+      )}
 
       {/* ─── Employee picker popover ─── */}
       {pickerRowId && (

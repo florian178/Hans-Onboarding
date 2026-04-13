@@ -11,18 +11,33 @@ export async function GET(req: Request) {
 
     const { searchParams } = new URL(req.url)
     const dayId = searchParams.get("dayId")
+    const requestId = searchParams.get("requestId")
+
+    if (requestId) {
+      const plans = await prisma.staffPlanDay.findMany({
+        where: {
+          day: { requestId }
+        },
+        include: {
+          rows: {
+            include: { user: { select: { id: true, name: true } } },
+            orderBy: { sortOrder: "asc" }
+          }
+        },
+        orderBy: { date: 'asc' }
+      })
+      return NextResponse.json(plans)
+    }
 
     if (!dayId) {
-      return new NextResponse("Missing dayId", { status: 400 })
+      return new NextResponse("Missing dayId or requestId", { status: 400 })
     }
 
     const plan = await prisma.staffPlanDay.findUnique({
       where: { dayId },
       include: {
         rows: {
-          include: {
-            user: { select: { id: true, name: true } }
-          },
+          include: { user: { select: { id: true, name: true } } },
           orderBy: { sortOrder: "asc" }
         }
       }
