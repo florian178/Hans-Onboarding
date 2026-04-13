@@ -111,31 +111,7 @@
   font-size: 0.8rem;
 }
 
-.contractPreview {
-  border: 1px solid var(--border);
-  padding: 4rem 3.5rem;
-  background-color: white;
-  color: black;
-  border-radius: var(--radius-xl);
-  margin-bottom: 3rem;
-  box-shadow: var(--shadow-premium);
-  position: relative;
-  overflow: hidden;
-}
-
-@media (max-width: 640px) {
-  .contractPreview {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 0;
-    border-radius: var(--radius-lg);
-  }
-
-  /* Innerer Inhalt behält lesbares A4-Format */
-  .contractPreview > * {
-    min-width: 700px;
-  }
-}
+/* contractPreview is now handled by ZoomableDocument */
 
 .signatureRow {
   margin-top: 4rem;

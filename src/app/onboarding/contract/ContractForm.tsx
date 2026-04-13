@@ -243,9 +243,11 @@ export function ContractForm({ personalData, startDate, hourlyWage }: ContractFo
     <div className={styles.container}>
       {error && <div className={styles.error}>{error}</div>}
       
-      <div className={styles.contractPreview}>
-        <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} personalData={personalData} hourlyWage={hourlyWage} />
-      </div>
+      <ZoomableDocument id="contract-preview">
+        <div style={{ padding: '4rem 3.5rem' }}>
+          <ContractText name={name} addressLine={addressLine} today={today} startDate={startDateStr} personalData={personalData} hourlyWage={hourlyWage} />
+        </div>
+      </ZoomableDocument>
 
       <div className={styles.signatureSection}>
         <div className={styles.sectionHeader}>
