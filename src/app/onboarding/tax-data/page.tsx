@@ -107,44 +107,44 @@ export default async function TaxDataStep() {
 
             <div className={`${styles.selectWrapper} ${styles.fullWidth}`}>
                 <label className={styles.selectLabel}>Schulabschluss</label>
-                <div className={styles.verticalRadios}>
-                    <label><input type="radio" name="schoolDegree" value="kein" defaultChecked={d.schoolDegree === "kein"} required /> ohne Schulabschluss</label>
-                    <label><input type="radio" name="schoolDegree" value="haupt" defaultChecked={d.schoolDegree === "haupt"} /> Haupt-/Volksschulabschluss</label>
-                    <label><input type="radio" name="schoolDegree" value="reife" defaultChecked={d.schoolDegree === "reife"} /> Mittlere Reife/gleichwertiger Abschluss</label>
-                    <label><input type="radio" name="schoolDegree" value="abitur" defaultChecked={d.schoolDegree === "abitur" || !d.schoolDegree} /> Abitur/Fachabitur</label>
-                </div>
+                <select name="schoolDegree" defaultValue={d.schoolDegree || "abitur"} className={styles.select} required>
+                    <option value="kein">ohne Schulabschluss</option>
+                    <option value="haupt">Haupt-/Volksschulabschluss</option>
+                    <option value="reife">Mittlere Reife / gleichwertiger Abschluss</option>
+                    <option value="abitur">Abitur / Fachabitur</option>
+                </select>
             </div>
 
             <div className={`${styles.selectWrapper} ${styles.fullWidth}`}>
                 <label className={styles.selectLabel}>Berufsausbildung</label>
-                <div className={styles.verticalRadios}>
-                    <label><input type="radio" name="vocationalTraining" value="keine" defaultChecked={d.vocationalTraining === "keine" || !d.vocationalTraining} required /> ohne beruflichen Ausbildungsabschluss</label>
-                    <label><input type="radio" name="vocationalTraining" value="anerkannt" defaultChecked={d.vocationalTraining === "anerkannt"} /> Anerkannte Berufsausbildung</label>
-                    <label><input type="radio" name="vocationalTraining" value="meister" defaultChecked={d.vocationalTraining === "meister"} /> Meister/Techniker/gleichwertiger Fachschulabschluss</label>
-                    <label><input type="radio" name="vocationalTraining" value="bachelor" defaultChecked={d.vocationalTraining === "bachelor"} /> Bachelor</label>
-                    <label><input type="radio" name="vocationalTraining" value="master" defaultChecked={d.vocationalTraining === "master"} /> Diplom/Magister/Master/Staatsexamen</label>
-                    <label><input type="radio" name="vocationalTraining" value="promotion" defaultChecked={d.vocationalTraining === "promotion"} /> Promotion</label>
-                </div>
+                <select name="vocationalTraining" defaultValue={d.vocationalTraining || "keine"} className={styles.select} required>
+                    <option value="keine">ohne beruflichen Ausbildungsabschluss</option>
+                    <option value="anerkannt">Anerkannte Berufsausbildung</option>
+                    <option value="meister">Meister/Techniker/gleichwertiger Fachschulabschluss</option>
+                    <option value="bachelor">Bachelor</option>
+                    <option value="master">Diplom/Magister/Master/Staatsexamen</option>
+                    <option value="promotion">Promotion</option>
+                </select>
             </div>
 
             <div className={styles.section}>
               <h3 className={styles.sectionTitle}>3. Status bei Beginn der Beschäftigung</h3>
-              <p className={styles.helpText}>Bitte gib an, welche Status auf dich vor Beginn dieser Beschäftigung zutrifft. Dies ist wichtig für die sv- und steuerrechtliche Beurteilung.</p>
+              <p className={styles.helpText}>Wichtig für die sv- und steuerrechtliche Beurteilung.</p>
             </div>
             
             <div className={`${styles.selectWrapper} ${styles.fullWidth}`}>
                 <label className={styles.selectLabel}>Ich bin unmittelbar vor Beginn dieser Beschäftigung:</label>
-                <div className={styles.verticalRadios}>
-                    <label><input type="radio" name="statusAtStart" value="Arbeitnehmer/in" defaultChecked={d.statusAtStart === "Arbeitnehmer/in" || !d.statusAtStart} required /> Arbeitnehmer/in</label>
-                    <label><input type="radio" name="statusAtStart" value="Beamter/in" defaultChecked={d.statusAtStart === "Beamter/in"} /> Beamtin/Beamter</label>
-                    <label><input type="radio" name="statusAtStart" value="Selbständige/r" defaultChecked={d.statusAtStart === "Selbständige/r"} /> Selbständige/r</label>
-                    <label><input type="radio" name="statusAtStart" value="Schüler/in" defaultChecked={d.statusAtStart === "Schüler/in"} /> Schüler/in</label>
-                    <label><input type="radio" name="statusAtStart" value="Student/in" defaultChecked={d.statusAtStart === "Student/in"} /> Student/in</label>
-                    <label><input type="radio" name="statusAtStart" value="Arbeitslose/r" defaultChecked={d.statusAtStart === "Arbeitslose/r"} /> Arbeitslose/r (bei Agentur für Arbeit gemeldet)</label>
-                    <label><input type="radio" name="statusAtStart" value="Hausfrau/Hausmann" defaultChecked={d.statusAtStart === "Hausfrau/Hausmann"} /> Hausfrau/Hausmann (nicht erwerbstätig)</label>
-                    <label><input type="radio" name="statusAtStart" value="Rentner/in" defaultChecked={d.statusAtStart === "Rentner/in"} /> Rentner/in / Pensionär/in</label>
-                    <label><input type="radio" name="statusAtStart" value="Sonstige" defaultChecked={d.statusAtStart === "Sonstige"} /> Sonstige</label>
-                </div>
+                <select name="statusAtStart" defaultValue={d.statusAtStart || "Arbeitnehmer/in"} className={styles.select} required>
+                    <option value="Arbeitnehmer/in">Arbeitnehmer/in</option>
+                    <option value="Beamter/in">Beamtin/Beamter</option>
+                    <option value="Selbständige/r">Selbständige/r</option>
+                    <option value="Schüler/in">Schüler/in</option>
+                    <option value="Student/in">Student/in</option>
+                    <option value="Arbeitslose/r">Arbeitslose/r (bei Agentur für Arbeit gemeldet)</option>
+                    <option value="Hausfrau/Hausmann">Hausfrau/Hausmann (nicht erwerbstätig)</option>
+                    <option value="Rentner/in">Rentner/in / Pensionär/in</option>
+                    <option value="Sonstige">Sonstige</option>
+                </select>
             </div>
 
             <div className={styles.section}>
@@ -191,8 +191,11 @@ export default async function TaxDataStep() {
                     <input type="checkbox" name="pensionExemption" defaultChecked={d.pensionExemption === "on"} />
                     Ich beantrage die Befreiung von der Rentenversicherungspflicht (nur bei Minijobs)
                 </label>
-                <p className={styles.helpText} style={{ marginTop: '5px', fontSize: '12px', color: '#666' }}>
-                    Hinweis: Minijobber sind grundsätzlich rentenversicherungspflichtig (Eigenanteil von i.d.R. 3,6%). Mit diesem Kreuz kannst du dich von dieser Beitragspflicht befreien lassen. <strong>Wir empfehlen die Befreiung, da du ansonsten aktive Abzüge von deinem Lohn hast.</strong>
+                <p className={styles.helpText} style={{ marginTop: '5px', fontSize: '12px' }}>
+                    Hinweis: Minijobber sind grundsätzlich rentenversicherungspflichtig (Eigenanteil von i.d.R. 3,6%). Mit diesem Kreuz kannst du dich von dieser Beitragspflicht befreien lassen.
+                </p>
+                <p style={{ marginTop: '6px', fontSize: '13px', color: '#ff3b30', fontWeight: 700 }}>
+                    ⚠️ Wir empfehlen die Befreiung, da du ansonsten aktive Abzüge von deinem Lohn hast.
                 </p>
             </div>
 
