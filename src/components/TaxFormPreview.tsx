@@ -70,10 +70,18 @@ export function TaxFormPreview({ user, personalData, taxData, signatureUrl, taxD
         </thead>
         <tbody>
           <tr>
-            <td style={{ width: '25%', border: '1px solid #000', padding: '5px' }}>Familienname<br/>{taxData?.maidenName ? `(geb. ${taxData.maidenName})` : ''}</td>
-            <td style={{ width: '25%', border: '1px solid #000', padding: '5px', verticalAlign: 'top' }}>{personalData?.lastName}</td>
-            <td style={{ width: '25%', border: '1px solid #000', padding: '5px' }}>Vorname</td>
-            <td style={{ width: '25%', border: '1px solid #000', padding: '5px', verticalAlign: 'top' }}>{personalData?.firstName}</td>
+            <td style={{ border: '1px solid #000', padding: '5px' }}>Familienname</td>
+            <td style={{ border: '1px solid #000', padding: '5px', verticalAlign: 'top' }}>{personalData?.lastName}</td>
+            <td style={{ border: '1px solid #000', padding: '5px' }}>Vorname</td>
+            <td style={{ border: '1px solid #000', padding: '5px', verticalAlign: 'top' }}>{personalData?.firstName}</td>
+          </tr>
+          <tr>
+            <td style={{ border: '1px solid #000', padding: '5px' }}>Geburtsname</td>
+            <td style={{ border: '1px solid #000', padding: '5px', verticalAlign: 'top' }}>{taxData?.maidenName || '—'}</td>
+            <td style={{ border: '1px solid #000', padding: '5px' }}>Geschlecht</td>
+            <td style={{ border: '1px solid #000', padding: '5px' }}>
+              [ {taxData?.gender === 'männlich' ? 'X' : ' '} ] männlich &nbsp; [ {taxData?.gender === 'weiblich' ? 'X' : ' '} ] weiblich
+            </td>
           </tr>
           <tr>
             <td style={{ border: '1px solid #000', padding: '5px' }}>Straße und Hausnummer</td>
@@ -84,16 +92,14 @@ export function TaxFormPreview({ user, personalData, taxData, signatureUrl, taxD
           <tr>
             <td style={{ border: '1px solid #000', padding: '5px' }}>Geburtsdatum</td>
             <td style={{ border: '1px solid #000', padding: '5px', verticalAlign: 'top' }}>{taxData?.birthDate ? new Date(taxData.birthDate).toLocaleDateString('de-DE') : ''}</td>
-            <td style={{ border: '1px solid #000', padding: '5px' }}>Geschlecht</td>
-            <td style={{ border: '1px solid #000', padding: '5px' }}>
-              [ {taxData?.gender === 'männlich' ? 'X' : ' '} ] männlich &nbsp; [ {taxData?.gender === 'weiblich' ? 'X' : ' '} ] weiblich
-            </td>
+            <td style={{ border: '1px solid #000', padding: '5px' }}>Familienstand</td>
+            <td style={{ border: '1px solid #000', padding: '5px', verticalAlign: 'top' }}>{taxData?.maritalStatus}</td>
           </tr>
           <tr>
             <td style={{ border: '1px solid #000', padding: '5px' }}>Versicherungsnummer<br/><span style={{ fontSize: '9px' }}>gem. Sozialvers.-Ausweis</span></td>
             <td style={{ border: '1px solid #000', padding: '5px', verticalAlign: 'top' }}>{taxData?.svNumber}</td>
-            <td style={{ border: '1px solid #000', padding: '5px' }}>Familienstand</td>
-            <td style={{ border: '1px solid #000', padding: '5px', verticalAlign: 'top' }}>{taxData?.maritalStatus}</td>
+            <td style={{ border: '1px solid #000', padding: '5px' }}>Status bei Beginn</td>
+            <td style={{ border: '1px solid #000', padding: '5px', verticalAlign: 'top' }}>{taxData?.statusAtStart}</td>
           </tr>
           <tr>
             <td style={{ border: '1px solid #000', padding: '5px' }}>Geburtsort, -land</td>
@@ -216,23 +222,66 @@ export function TaxFormPreview({ user, personalData, taxData, signatureUrl, taxD
       <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '15px' }}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '5px', backgroundColor: '#f5f5f5', border: '1px solid #000', fontSize: '12px' }}>Üben Sie weitere Beschäftigungen aus?</th>
+            <th colSpan={4} style={{ textAlign: 'left', padding: '5px', backgroundColor: '#f5f5f5', border: '1px solid #000', fontSize: '12px' }}>Üben Sie neben dieser Beschäftigung noch weitere Beschäftigungen aus oder beziehen Sie eine Rente?</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td style={{ border: '1px solid #000', padding: '5px' }}>
-              [ {taxData?.otherJobs === 'ja' ? 'X' : ' '} ] ja &nbsp; [ {taxData?.otherJobs === 'nein' ? 'X' : ' '} ] nein<br/>
-              {taxData?.otherJobs === 'ja' && <p style={{ marginTop: '5px' }}>Details: {taxData?.otherJobsDetails}</p>}
+            <td colSpan={4} style={{ border: '1px solid #000', padding: '5px' }}>
+              [ {taxData?.otherJobs === 'ja' ? 'X' : ' '} ] ja &nbsp; [ {taxData?.otherJobs === 'nein' ? 'X' : ' '} ] nein
             </td>
           </tr>
+          {taxData?.otherJobs === 'ja' && (
+            <>
+              <tr>
+                <td colSpan={4} style={{ border: '1px solid #000', padding: '5px', backgroundColor: '#f9f9f9', fontWeight: 'bold', fontSize: '10px' }}>1. Weitere Beschäftigung</td>
+              </tr>
+              <tr>
+                <td style={{ border: '1px solid #000', padding: '5px' }}>Arbeitgeber</td>
+                <td style={{ border: '1px solid #000', padding: '5px' }}>{taxData?.otherJob1Employer || '—'}</td>
+                <td style={{ border: '1px solid #000', padding: '5px' }}>Art</td>
+                <td style={{ border: '1px solid #000', padding: '5px' }}>{taxData?.otherJob1Type || '—'}</td>
+              </tr>
+              <tr>
+                <td style={{ border: '1px solid #000', padding: '5px' }}>Monatsverdienst</td>
+                <td style={{ border: '1px solid #000', padding: '5px' }}>{taxData?.otherJob1Income || '—'}</td>
+                <td style={{ border: '1px solid #000', padding: '5px' }}>Zeitraum</td>
+                <td style={{ border: '1px solid #000', padding: '5px' }}>
+                  {taxData?.otherJob1Start ? new Date(taxData.otherJob1Start).toLocaleDateString('de-DE') : '—'}
+                  {taxData?.otherJob1End ? ` bis ${new Date(taxData.otherJob1End).toLocaleDateString('de-DE')}` : ' (unbefristet)'}
+                </td>
+              </tr>
+              {taxData?.otherJob2Employer && (
+                <>
+                  <tr>
+                    <td colSpan={4} style={{ border: '1px solid #000', padding: '5px', backgroundColor: '#f9f9f9', fontWeight: 'bold', fontSize: '10px' }}>2. Weitere Beschäftigung</td>
+                  </tr>
+                  <tr>
+                    <td style={{ border: '1px solid #000', padding: '5px' }}>Arbeitgeber</td>
+                    <td style={{ border: '1px solid #000', padding: '5px' }}>{taxData.otherJob2Employer}</td>
+                    <td style={{ border: '1px solid #000', padding: '5px' }}>Art</td>
+                    <td style={{ border: '1px solid #000', padding: '5px' }}>{taxData?.otherJob2Type || '—'}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ border: '1px solid #000', padding: '5px' }}>Monatsverdienst</td>
+                    <td style={{ border: '1px solid #000', padding: '5px' }}>{taxData?.otherJob2Income || '—'}</td>
+                    <td style={{ border: '1px solid #000', padding: '5px' }}>Zeitraum</td>
+                    <td style={{ border: '1px solid #000', padding: '5px' }}>
+                      {taxData?.otherJob2Start ? new Date(taxData.otherJob2Start).toLocaleDateString('de-DE') : '—'}
+                      {taxData?.otherJob2End ? ` bis ${new Date(taxData.otherJob2End).toLocaleDateString('de-DE')}` : ' (unbefristet)'}
+                    </td>
+                  </tr>
+                </>
+              )}
+              {taxData?.otherJobsDetails && (
+                <tr>
+                  <td colSpan={4} style={{ border: '1px solid #000', padding: '5px' }}>Anmerkungen: {taxData.otherJobsDetails}</td>
+                </tr>
+              )}
+            </>
+          )}
         </tbody>
       </table>
-
-      {/* Bea & Abschluss */}
-      <p style={{ fontSize: '10px', marginBottom: '10px' }}>
-        [ {taxData?.beaContradiction === 'on' ? 'X' : ' '} ] Ich widerspreche der elektronischen Übermittlung von Arbeitsbescheinigungen (Bea).
-      </p>
       
       <p style={{ marginTop: '20px', fontWeight: 'bold' }}>
         Erklärung des Arbeitnehmers: Ich versichere, dass die vorstehenden Angaben der Wahrheit entsprechen.

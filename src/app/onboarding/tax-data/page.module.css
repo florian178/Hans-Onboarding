@@ -209,4 +209,21 @@
   }
 }
 
+.helpText {
+  font-size: 0.85rem;
+  color: var(--secondary-foreground);
+  line-height: 1.4;
+}
 
+.divider {
+  border: none;
+  border-top: 1px dashed var(--border);
+  margin: 1.25rem 0;
+}
+
+.otherJobsBlock {
+  padding: 1rem;
+  background: var(--surface-hover);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}

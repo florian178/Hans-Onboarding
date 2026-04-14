@@ -128,18 +128,22 @@ export default async function TaxDataStep() {
 
             <div className={styles.section}>
               <h3 className={styles.sectionTitle}>3. Status bei Beginn der Beschäftigung</h3>
+              <p className={styles.helpText}>Bitte gib an, welche Status auf dich vor Beginn dieser Beschäftigung zutrifft. Dies ist wichtig für die sv- und steuerrechtliche Beurteilung.</p>
             </div>
             
             <div className={`${styles.selectWrapper} ${styles.fullWidth}`}>
-                <select name="statusAtStart" defaultValue={d.statusAtStart || "Arbeitnehmer/in"} className={styles.select} required>
-                    <option value="Arbeitnehmer/in">Arbeitnehmer/in</option>
-                    <option value="Beamter/in">Beamtin/Beamter</option>
-                    <option value="Schüler/in">Schüler/in</option>
-                    <option value="Student/in">Student/in</option>
-                    <option value="Arbeitslose/r">Arbeitslose/r</option>
-                    <option value="Hausfrau/Hausmann">Hausfrau/Hausmann</option>
-                    <option value="Sonstige">Sonstige</option>
-                </select>
+                <label className={styles.selectLabel}>Ich bin unmittelbar vor Beginn dieser Beschäftigung:</label>
+                <div className={styles.verticalRadios}>
+                    <label><input type="radio" name="statusAtStart" value="Arbeitnehmer/in" defaultChecked={d.statusAtStart === "Arbeitnehmer/in" || !d.statusAtStart} required /> Arbeitnehmer/in</label>
+                    <label><input type="radio" name="statusAtStart" value="Beamter/in" defaultChecked={d.statusAtStart === "Beamter/in"} /> Beamtin/Beamter</label>
+                    <label><input type="radio" name="statusAtStart" value="Selbständige/r" defaultChecked={d.statusAtStart === "Selbständige/r"} /> Selbständige/r</label>
+                    <label><input type="radio" name="statusAtStart" value="Schüler/in" defaultChecked={d.statusAtStart === "Schüler/in"} /> Schüler/in</label>
+                    <label><input type="radio" name="statusAtStart" value="Student/in" defaultChecked={d.statusAtStart === "Student/in"} /> Student/in</label>
+                    <label><input type="radio" name="statusAtStart" value="Arbeitslose/r" defaultChecked={d.statusAtStart === "Arbeitslose/r"} /> Arbeitslose/r (bei Agentur für Arbeit gemeldet)</label>
+                    <label><input type="radio" name="statusAtStart" value="Hausfrau/Hausmann" defaultChecked={d.statusAtStart === "Hausfrau/Hausmann"} /> Hausfrau/Hausmann (nicht erwerbstätig)</label>
+                    <label><input type="radio" name="statusAtStart" value="Rentner/in" defaultChecked={d.statusAtStart === "Rentner/in"} /> Rentner/in / Pensionär/in</label>
+                    <label><input type="radio" name="statusAtStart" value="Sonstige" defaultChecked={d.statusAtStart === "Sonstige"} /> Sonstige</label>
+                </div>
             </div>
 
             <div className={styles.section}>
@@ -196,26 +200,37 @@ export default async function TaxDataStep() {
             </div>
 
             <div className={`${styles.selectWrapper} ${styles.fullWidth}`}>
-                <label className={styles.selectLabel}>Üben Sie weitere Beschäftigungen aus?</label>
+                <label className={styles.selectLabel}>Üben Sie neben dieser Beschäftigung noch weitere Beschäftigungen aus oder beziehen Sie eine Rente?</label>
                 <div className={styles.radioGroup}>
                     <label><input type="radio" name="otherJobs" value="ja" defaultChecked={d.otherJobs === "ja"} required /> ja</label>
                     <label><input type="radio" name="otherJobs" value="nein" defaultChecked={d.otherJobs === "nein" || !d.otherJobs} /> nein</label>
                 </div>
             </div>
 
-            <div className={styles.fullWidth}>
-                <label className={styles.selectLabel}>Falls ja: Details (Zeitraum, Arbeitgeber, Verdienst)</label>
-                <textarea name="otherJobsDetails" className={styles.textarea} defaultValue={d.otherJobsDetails || ""} placeholder="z.B. Minijob bei XY (500€/Monat)"></textarea>
-            </div>
-
-            <div className={`${styles.checkboxWrapper} ${styles.fullWidth}`}>
-                <label className={styles.checkboxLabel}>
-                    <input type="checkbox" name="beaContradiction" defaultChecked={d.beaContradiction === "on"} />
-                    Ich widerspreche der elektronischen Übermittlung von Arbeitsbescheinigungen (Bea)
-                </label>
-                <p className={styles.helpText} style={{ marginTop: '5px', fontSize: '12px', color: '#666' }}>
-                    Hinweis: "Bea" ermöglicht der Agentur für Arbeit, Bescheinigungen digital bei uns abzurufen. Ein Widerspruch führt dazu, dass du sie stattdessen in Papierform erhältst. Wir empfehlen, das Feld leer zu lassen.
+            <div className={`${styles.fullWidth} ${styles.otherJobsBlock}`}>
+                <p className={styles.helpText} style={{ marginBottom: '10px' }}>
+                  Falls ja: Bitte gib <strong>jede weitere Beschäftigung</strong> einzeln an.
                 </p>
+                <Input label="1. Arbeitgeber (Name & Ort)" name="otherJob1Employer" defaultValue={d.otherJob1Employer || ""} />
+                <div className={styles.grid} style={{ marginTop: '8px' }}>
+                  <Input label="Art der Beschäftigung" name="otherJob1Type" defaultValue={d.otherJob1Type || ""} placeholder="z.B. Minijob, sv-pflichtig, selbständig" />
+                  <Input label="Monatsverdienst (brutto)" name="otherJob1Income" defaultValue={d.otherJob1Income || ""} placeholder="z.B. 450€" />
+                </div>
+                <div className={styles.grid} style={{ marginTop: '8px' }}>
+                  <Input label="Beginn" type="date" name="otherJob1Start" defaultValue={d.otherJob1Start || ""} />
+                  <Input label="Ende (falls befristet)" type="date" name="otherJob1End" defaultValue={d.otherJob1End || ""} />
+                </div>
+                <hr className={styles.divider} />
+                <Input label="2. Arbeitgeber (Name & Ort, falls zutreffend)" name="otherJob2Employer" defaultValue={d.otherJob2Employer || ""} />
+                <div className={styles.grid} style={{ marginTop: '8px' }}>
+                  <Input label="Art der Beschäftigung" name="otherJob2Type" defaultValue={d.otherJob2Type || ""} placeholder="z.B. Minijob, sv-pflichtig, selbständig" />
+                  <Input label="Monatsverdienst (brutto)" name="otherJob2Income" defaultValue={d.otherJob2Income || ""} placeholder="z.B. 450€" />
+                </div>
+                <div className={styles.grid} style={{ marginTop: '8px' }}>
+                  <Input label="Beginn" type="date" name="otherJob2Start" defaultValue={d.otherJob2Start || ""} />
+                  <Input label="Ende (falls befristet)" type="date" name="otherJob2End" defaultValue={d.otherJob2End || ""} />
+                </div>
+                <textarea name="otherJobsDetails" className={styles.textarea} defaultValue={d.otherJobsDetails || ""} placeholder="Weitere Anmerkungen zu Beschäftigungen (optional)" style={{ marginTop: '10px' }}></textarea>
             </div>
           </div>
           
