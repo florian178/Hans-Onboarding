@@ -1,6 +1,7 @@
 .card {
   max-width: 800px;
   margin: 0 auto;
+  padding-bottom: 3rem;
 }
 
 .description {
@@ -31,6 +32,7 @@
   border-top: 1px solid var(--border);
   padding-top: 2rem;
   margin-top: 1rem;
+  padding-bottom: 2rem;
 }
 
 .section {
@@ -143,6 +145,7 @@
   .card {
     margin: 0;
     border-radius: 0;
+    padding-bottom: 4rem;
   }
 
   .grid {
