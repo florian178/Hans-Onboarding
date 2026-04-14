@@ -67,6 +67,7 @@
 @media (max-width: 1024px) {
   .main {
     padding: 1.5rem 1rem;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 2rem) + 3rem);
   }
 }
 
