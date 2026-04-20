@@ -152,27 +152,37 @@ export function ContractForm({ personalData, startDate, hourlyWage }: ContractFo
       const usableWidth = pageWidth - 2 * margin
       const usableHeight = pageHeight - 2 * margin
       
-      const imgHeight = (canvas.height * usableWidth) / canvas.width
+      // Calculate total image height in mm
+      const imgHeightMM = (canvas.height * usableWidth) / canvas.width
       
-      let position = margin
-      let heightLeft = imgHeight
-
-      // Page 1
-      pdf.addImage(imgData, "PNG", margin, position, usableWidth, imgHeight)
-      pdf.setFillColor(255, 255, 255)
-      pdf.rect(0, pageHeight - margin, pageWidth, margin, "F")
+      // Calculate how many pixels correspond to one page of usable height
+      const pxPerMM = canvas.width / usableWidth
+      const pageHeightPx = Math.floor(usableHeight * pxPerMM)
       
-      heightLeft -= usableHeight
-
-      // Additional Pages
-      while (heightLeft > 0) {
-        position = position - usableHeight
-        pdf.addPage()
-        pdf.addImage(imgData, "PNG", margin, position, usableWidth, imgHeight)
-        pdf.setFillColor(255, 255, 255)
-        pdf.rect(0, 0, pageWidth, margin, "F")
-        pdf.rect(0, pageHeight - margin, pageWidth, margin, "F")
-        heightLeft -= usableHeight
+      let pageCount = 0
+      let yOffset = 0
+      
+      while (yOffset < canvas.height) {
+        if (pageCount > 0) pdf.addPage()
+        
+        const sliceHeight = Math.min(pageHeightPx, canvas.height - yOffset)
+        
+        // Create a canvas slice for this page
+        const pageCanvas = document.createElement("canvas")
+        pageCanvas.width = canvas.width
+        pageCanvas.height = sliceHeight
+        const ctx = pageCanvas.getContext("2d")!
+        ctx.fillStyle = "#ffffff"
+        ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height)
+        ctx.drawImage(canvas, 0, yOffset, canvas.width, sliceHeight, 0, 0, canvas.width, sliceHeight)
+        
+        const pageImgData = pageCanvas.toDataURL("image/png")
+        const sliceHeightMM = (sliceHeight * usableWidth) / canvas.width
+        
+        pdf.addImage(pageImgData, "PNG", margin, margin, usableWidth, sliceHeightMM)
+        
+        yOffset += pageHeightPx
+        pageCount++
       }
       
       pdf.save("Arbeitsvertrag.pdf")

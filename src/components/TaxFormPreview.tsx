@@ -159,8 +159,7 @@ export function TaxFormPreview({ user, personalData, taxData, signatureUrl, taxD
               [ {taxData?.vocationalTraining === 'promotion' ? 'X' : ' '} ] Promotion
             </td>
             <td style={{ border: '1px solid #000', padding: '5px' }}>
-              Wöchentl. Arbeitszeit: max 10h<br/>
-              Urlaubsanspruch: 24 Tage / Jahr
+              Wöchentl. Arbeitszeit: max 10h
             </td>
           </tr>
           <tr>
