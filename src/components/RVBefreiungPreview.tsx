@@ -48,20 +48,26 @@ export function RVBefreiungPreview({
     return (
         <div className={styles.dateBoxesWrapper}>
             <div className={styles.datePart}>
-                <div className={styles.box}>{day[0] !== ' ' ? day[0] : ''}</div>
-                <div className={styles.box}>{day[1] !== ' ' ? day[1] : ''}</div>
+                <div className={styles.boxesContainer}>
+                    <div className={styles.box}>{day[0] !== ' ' ? day[0] : ''}</div>
+                    <div className={styles.box}>{day[1] !== ' ' ? day[1] : ''}</div>
+                </div>
                 <div className={styles.dateLabel}>T&nbsp;&nbsp;&nbsp;&nbsp;T</div>
             </div>
             <div className={styles.datePart}>
-                <div className={styles.box}>{month[0] !== ' ' ? month[0] : ''}</div>
-                <div className={styles.box}>{month[1] !== ' ' ? month[1] : ''}</div>
+                <div className={styles.boxesContainer}>
+                    <div className={styles.box}>{month[0] !== ' ' ? month[0] : ''}</div>
+                    <div className={styles.box}>{month[1] !== ' ' ? month[1] : ''}</div>
+                </div>
                 <div className={styles.dateLabel}>M&nbsp;&nbsp;&nbsp;&nbsp;M</div>
             </div>
             <div className={styles.datePart}>
-                <div className={styles.box}>{year[0] !== ' ' ? year[0] : ''}</div>
-                <div className={styles.box}>{year[1] !== ' ' ? year[1] : ''}</div>
-                <div className={styles.box}>{year[2] !== ' ' ? year[2] : ''}</div>
-                <div className={styles.box}>{year[3] !== ' ' ? year[3] : ''}</div>
+                <div className={styles.boxesContainer}>
+                    <div className={styles.box}>{year[0] !== ' ' ? year[0] : ''}</div>
+                    <div className={styles.box}>{year[1] !== ' ' ? year[1] : ''}</div>
+                    <div className={styles.box}>{year[2] !== ' ' ? year[2] : ''}</div>
+                    <div className={styles.box}>{year[3] !== ' ' ? year[3] : ''}</div>
+                </div>
                 <div className={styles.dateLabel}>J&nbsp;&nbsp;&nbsp;&nbsp;J&nbsp;&nbsp;&nbsp;&nbsp;J&nbsp;&nbsp;&nbsp;&nbsp;J</div>
             </div>
         </div>
@@ -128,7 +134,7 @@ export function RVBefreiungPreview({
             <div className={styles.rowWrapper}>
                 <div className={styles.labelLong}>Betriebsnummer:</div>
                 <div className={styles.boxesContainer}>
-                    {renderBoxes('', 8)}
+                    {renderBoxes('75405251', 8)}
                 </div>
             </div>
 
