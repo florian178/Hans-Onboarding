@@ -97,7 +97,19 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
   }
 
   const firstName = user.name?.split(" ")[0] || user.name
-  const hasHygieneCertificate = documents.some(d => d.type === "HYGIENE_CERTIFICATE")
+  const hygieneDoc = documents.find(d => d.type === "HYGIENE_CERTIFICATE")
+  const hasHygieneCertificate = !!hygieneDoc
+  
+  let showHygieneCard = true
+  if (hygieneDoc) {
+    const uploadedDate = new Date(hygieneDoc.uploadedAt)
+    const fiveDaysAgo = new Date()
+    fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5)
+    
+    if (uploadedDate < fiveDaysAgo) {
+      showHygieneCard = false
+    }
+  }
 
   const navItems = [
     { id: "home", label: "Home", icon: <LuLayoutDashboard />, path: null },
@@ -241,47 +253,49 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
                 </Card>
 
                 {/* Hygiene Training */}
-                <div style={{ backgroundColor: hasHygieneCertificate ? 'var(--surface)' : 'rgba(223, 123, 41, 0.05)', borderColor: hasHygieneCertificate ? 'var(--border)' : 'var(--brand-primary)', borderRadius: 'var(--radius-xl)', padding: '2px' }}>
-                  <Card className={styles.actionCard}>
-                    <div className={styles.actionIcon}><LuFileText /></div>
-                  <div className={styles.actionContent}>
-                    <h3 className={styles.actionTitle}>Hygiene-Schulung</h3>
-                    {hasHygieneCertificate ? (
-                      <p className={styles.actionText}>Zertifikat erfolgreich hochgeladen. Vielen Dank!</p>
-                    ) : (
-                      <>
-                        <p className={styles.actionText} style={{ marginBottom: '10px' }}>
-                          Bitte absolviere innerhalb von 4 Wochen nach Start die Online-Hygieneschulung (Metro).
-                        </p>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', zIndex: 10, position: 'relative' }}>
-                          <a href="https://kw.my/jEM8PK/#/" target="_blank" rel="noopener noreferrer">
-                            <Button variant="outline" size="sm">Zur Schulung</Button>
-                          </a>
-                          <div style={{ display: 'inline-block' }}>
-                            <Button 
-                              variant="primary" 
-                              size="sm" 
-                              type="button"
-                              onClick={() => document.getElementById("hygiene-upload-input")?.click()}
-                              disabled={isUploadingHygiene}
-                            >
-                              {isUploadingHygiene ? "Lädt..." : "Zertifikat hochladen"}
-                            </Button>
-                            <input 
-                              id="hygiene-upload-input"
-                              type="file" 
-                              accept=".pdf,image/*" 
-                              style={{ display: 'none' }} 
-                              onChange={handleHygieneUpload}
-                              disabled={isUploadingHygiene}
-                            />
+                {showHygieneCard && (
+                  <div style={{ backgroundColor: hasHygieneCertificate ? 'var(--surface)' : 'rgba(223, 123, 41, 0.05)', borderColor: hasHygieneCertificate ? 'var(--border)' : 'var(--brand-primary)', borderRadius: 'var(--radius-xl)', padding: '2px' }}>
+                    <Card className={styles.actionCard}>
+                      <div className={styles.actionIcon}><LuFileText /></div>
+                    <div className={styles.actionContent}>
+                      <h3 className={styles.actionTitle}>Hygiene-Schulung</h3>
+                      {hasHygieneCertificate ? (
+                        <p className={styles.actionText}>Zertifikat erfolgreich hochgeladen. Vielen Dank!</p>
+                      ) : (
+                        <>
+                          <p className={styles.actionText} style={{ marginBottom: '10px' }}>
+                            Bitte absolviere innerhalb von 4 Wochen nach Start die Online-Hygieneschulung (Metro).
+                          </p>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', zIndex: 10, position: 'relative' }}>
+                            <a href="https://kw.my/jEM8PK/#/" target="_blank" rel="noopener noreferrer">
+                              <Button variant="outline" size="sm">Zur Schulung</Button>
+                            </a>
+                            <div style={{ display: 'inline-block' }}>
+                              <Button 
+                                variant="primary" 
+                                size="sm" 
+                                type="button"
+                                onClick={() => document.getElementById("hygiene-upload-input")?.click()}
+                                disabled={isUploadingHygiene}
+                              >
+                                {isUploadingHygiene ? "Lädt..." : "Zertifikat hochladen"}
+                              </Button>
+                              <input 
+                                id="hygiene-upload-input"
+                                type="file" 
+                                accept=".pdf,image/*" 
+                                style={{ display: 'none' }} 
+                                onChange={handleHygieneUpload}
+                                disabled={isUploadingHygiene}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      </>
-                    )}
+                        </>
+                      )}
+                    </div>
+                    </Card>
                   </div>
-                  </Card>
-                </div>
+                )}
               </div>
             </div>
           )}
