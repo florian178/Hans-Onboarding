@@ -82,6 +82,7 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
       })
 
       if (res.ok) {
+        alert("Zertifikat erfolgreich hochgeladen!");
         window.location.reload()
       } else {
         const err = await res.json()

@@ -14,7 +14,7 @@ export default async function DashboardPage() {
       onboardingStatus: true,
       documents: {
         where: {
-          type: { in: ['CONTRACT_SIGNED', 'INSTRUCTION'] }
+          type: { in: ['CONTRACT_SIGNED', 'INSTRUCTION', 'HYGIENE_CERTIFICATE'] }
         },
         orderBy: { uploadedAt: 'desc' }
       },
