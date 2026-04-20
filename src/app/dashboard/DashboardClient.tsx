@@ -51,6 +51,7 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [docSection, setDocSection] = useState<"general" | "payslips">("general")
   const [myShifts, setMyShifts] = useState<any[]>([])
+  const [isUploadingHygiene, setIsUploadingHygiene] = useState(false)
 
   React.useEffect(() => {
     if (activeTab === "shifts") {
@@ -64,7 +65,38 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
     window.location.href = path
   }
 
+  const handleHygieneUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setIsUploadingHygiene(true)
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+      formData.append("name", "Infektionsschutzbelehrung (Hygiene-Zertifikat)")
+      formData.append("type", "HYGIENE_CERTIFICATE")
+
+      const res = await fetch("/api/documents/upload", {
+        method: "POST",
+        body: formData
+      })
+
+      if (res.ok) {
+        window.location.reload()
+      } else {
+        const err = await res.json()
+        alert(err.error || "Fehler beim Upload")
+      }
+    } catch (error) {
+      console.error(error)
+      alert("Fehler beim Upload")
+    } finally {
+      setIsUploadingHygiene(false)
+    }
+  }
+
   const firstName = user.name?.split(" ")[0] || user.name
+  const hasHygieneCertificate = documents.some(d => d.type === "HYGIENE_CERTIFICATE")
 
   const navItems = [
     { id: "home", label: "Home", icon: <LuLayoutDashboard />, path: null },
@@ -206,6 +238,44 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
                     )}
                   </div>
                 </Card>
+
+                {/* Hygiene Training */}
+                <div style={{ backgroundColor: hasHygieneCertificate ? 'var(--surface)' : 'rgba(223, 123, 41, 0.05)', borderColor: hasHygieneCertificate ? 'var(--border)' : 'var(--brand-primary)', borderRadius: 'var(--radius-xl)', padding: '2px' }}>
+                  <Card className={styles.actionCard}>
+                    <div className={styles.actionIcon}><LuFileText /></div>
+                  <div className={styles.actionContent}>
+                    <h3 className={styles.actionTitle}>Hygiene-Schulung</h3>
+                    {hasHygieneCertificate ? (
+                      <p className={styles.actionText}>Zertifikat erfolgreich hochgeladen. Vielen Dank!</p>
+                    ) : (
+                      <>
+                        <p className={styles.actionText} style={{ marginBottom: '10px' }}>
+                          Bitte absolviere innerhalb von 4 Wochen nach Start die Online-Hygieneschulung (Metro).
+                        </p>
+                        <div style={{ display: 'flex', gap: '8px', zIndex: 10, position: 'relative' }}>
+                          <a href="https://kw.my/jEM8PK/#/" target="_blank" rel="noopener noreferrer">
+                            <Button variant="outline" size="sm">Zur Schulung</Button>
+                          </a>
+                          <label style={{ cursor: 'pointer', display: 'inline-block' }}>
+                            <div className="button-wrapper" style={{ pointerEvents: 'none' }}>
+                              <Button variant="primary" size="sm" type="button">
+                                {isUploadingHygiene ? "Lädt..." : "Zertifikat hochladen"}
+                              </Button>
+                            </div>
+                            <input 
+                              type="file" 
+                              accept=".pdf,image/*" 
+                              style={{ display: 'none' }} 
+                              onChange={handleHygieneUpload}
+                              disabled={isUploadingHygiene}
+                            />
+                          </label>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  </Card>
+                </div>
               </div>
             </div>
           )}
