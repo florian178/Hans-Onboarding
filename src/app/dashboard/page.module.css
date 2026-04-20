@@ -600,6 +600,8 @@
 
 .actionContent {
   flex: 1;
+  min-width: 0; /* Prevents text from pushing parent width */
+  padding-right: 1.5rem; /* Space for the absolutely positioned arrow */
 }
 
 .actionTitle {
@@ -613,6 +615,8 @@
   color: var(--secondary-foreground);
   margin: 0;
   line-height: 1.4;
+  word-wrap: break-word; /* Ensure long words break instead of overflowing */
+  overflow-wrap: anywhere;
 }
 
 .actionArrow {

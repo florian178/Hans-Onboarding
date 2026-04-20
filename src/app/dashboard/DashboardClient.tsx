@@ -256,20 +256,25 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
                           <a href="https://kw.my/jEM8PK/#/" target="_blank" rel="noopener noreferrer">
                             <Button variant="outline" size="sm">Zur Schulung</Button>
                           </a>
-                          <label style={{ cursor: 'pointer', display: 'inline-block' }}>
-                            <div className="button-wrapper" style={{ pointerEvents: 'none' }}>
-                              <Button variant="primary" size="sm" type="button">
-                                {isUploadingHygiene ? "Lädt..." : "Zertifikat hochladen"}
-                              </Button>
-                            </div>
+                          <div style={{ display: 'inline-block' }}>
+                            <Button 
+                              variant="primary" 
+                              size="sm" 
+                              type="button"
+                              onClick={() => document.getElementById("hygiene-upload-input")?.click()}
+                              disabled={isUploadingHygiene}
+                            >
+                              {isUploadingHygiene ? "Lädt..." : "Zertifikat hochladen"}
+                            </Button>
                             <input 
+                              id="hygiene-upload-input"
                               type="file" 
                               accept=".pdf,image/*" 
                               style={{ display: 'none' }} 
                               onChange={handleHygieneUpload}
                               disabled={isUploadingHygiene}
                             />
-                          </label>
+                          </div>
                         </div>
                       </>
                     )}

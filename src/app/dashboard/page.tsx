@@ -80,7 +80,7 @@ export default async function DashboardPage() {
       where: {
         userId,
         date: { gte: monthStartStr },
-        status: { in: ['APPROVED', 'SUBMITTED'] } // Count submitted too for motivation
+        status: 'APPROVED'
       },
       select: { totalHours: true, hourlyWage: true }
     }),
