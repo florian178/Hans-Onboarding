@@ -39,57 +39,96 @@ function ContractText({ name, addressLine, today, startDate, personalData, hourl
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.png" alt="Hans im Club Logo" />
       </div>
-      <h2>Arbeitsvertrag einer geringfügigen Beschäftigung</h2>
+      <h2>Arbeitsvertrag für eine geringfügige Beschäftigung (Minijob)</h2>
       <p>
-        Zwischen HS Event GmbH, Schützenplatz 14, 01067 Dresden<br/>
-        (Name und Adresse des Arbeitgebers) - nachfolgend „Arbeitgeber“ genannt -
+        zwischen<br/>
+        HS Event GmbH, Schützenplatz 14, 01067 Dresden<br/>
+        – nachfolgend „Arbeitgeber“ –
       </p>
       <p>und</p>
       <p>
         <strong>{name}</strong>, {addressLine}<br/>
-        - nachfolgend „Arbeitnehmer/-in“ genannt -
+        – nachfolgend „Arbeitnehmer“ –
       </p>
       <p>wird folgender Arbeitsvertrag geschlossen:</p>
 
-      <h3>§ 1 Arbeitsverhältnis</h3>
-      <p>Das Arbeitsverhältnis beginnt am {startDate || '18.03.2026'}. Der Arbeitnehmer wird im Rahmen eines geringfügigen Beschäftigungsverhältnisses auf Anfrage bis zu 603 Euro beschäftigt.</p>
+      <h3>§1 Beginn des Arbeitsverhältnisses</h3>
+      <p>Das Arbeitsverhältnis beginnt am {startDate || '18.03.2026'}.</p>
 
-      <h3>§ 2 Vertragsdauer</h3>
-      <p>Das Arbeitsverhältnis wird auf befristete Zeit geschlossen, einschließlich bis zum {getEndDateStr(startDate)}. Nach Ablauf der Frist verlängert sich der Arbeitsvertrag automatisch um jeweils einen Monat bis zur Kündigung.</p>
+      <h3>§2 Vertragsdauer</h3>
+      <p>Das Arbeitsverhältnis wird auf unbestimmte Zeit geschlossen.<br/>
+      Die ersten 3 Monate gelten als Probezeit. Während dieser Zeit kann das Arbeitsverhältnis mit einer Frist von 2 Wochen gekündigt werden.</p>
 
-      <h3>§ 3 Tätigkeit und Aufgabengebiet</h3>
-      <p>Der Arbeitnehmer/ die Arbeitnehmerin wird als Servicekraft/ Barkraft im “Hans im Club”, Wallstraße 11, 01067 Dresden, eingestellt.</p>
+      <h3>§3 Tätigkeit und Arbeitsort</h3>
+      <p>Der Arbeitnehmer wird als Servicekraft / Barkraft im Betrieb<br/>
+      „Hans im Club“, Wallstraße 11, 01067 Dresden eingesetzt.<br/>
+      Der Arbeitgeber ist berechtigt, dem Arbeitnehmer andere gleichwertige und zumutbare Tätigkeiten zuzuweisen.</p>
 
-      <h3>§ 4 Arbeitsvergütung</h3>
-      <p>Der Arbeitnehmer/ die Arbeitnehmerin erhält einen Stundenlohn von {hourlyWage.toFixed(2).replace('.', ',')}€/h (höchstens 603 Euro). Die Vergütung wird jeweils am 15. des Folgemonats zahlbar auf das vom Arbeitnehmer angegebene Konto überwiesen: IBAN {personalData?.iban || '_______________________'}.</p>
-      <p>Der Arbeitgeber leistet die Pauschalabgabe in der jeweils gesetzlich geschuldeten Höhe an die zentrale Einzugsstelle (Bundesknappschaft).</p>
+      <h3>§4 Vergütung</h3>
+      <p>Der Arbeitnehmer erhält einen Stundenlohn in Höhe von {hourlyWage.toFixed(2).replace('.', ',')} € brutto.<br/>
+      Die Beschäftigung erfolgt im Rahmen eines geringfügigen Beschäftigungsverhältnisses gemäß § 8 SGB IV.<br/>
+      Das regelmäßige monatliche Arbeitsentgelt darf die gesetzliche Geringfügigkeitsgrenze (derzeit 603 €) nicht überschreiten.<br/>
+      Die Auszahlung erfolgt jeweils zum 15. des Folgemonats auf ein vom Arbeitnehmer benanntes Konto: IBAN {personalData?.iban || '_______________________'}.<br/>
+      Der Arbeitgeber führt die pauschalen Abgaben zur Sozialversicherung an die Minijob-Zentrale ab.</p>
 
-      <h3>§ 5 Arbeitszeit</h3>
-      <p>Der Arbeitnehmer/ die Arbeitnehmerin arbeitet beim Arbeitgeber auf Anfrage<br/>
-      Die regelmäßige monatliche Arbeitszeit beträgt maximal 43,38h Stunden.</p>
-      <p>Die grundsätzliche Verteilung der wöchentlichen Arbeitszeit erfolgt in der Regel an Wochentagen und Zeiten:</p>
+      <h3>§5 Arbeitszeit (Arbeit auf Abruf)</h3>
+      <p>Die Beschäftigung erfolgt nach Bedarf des Arbeitgebers.<br/>
+      Die monatliche Arbeitszeit beträgt maximal 43 Stunden.<br/>
+      Die Einsätze erfolgen in der Regel zu folgenden Zeiten:</p>
       <ul>
-        <li>Mittwoch: 22:00 Uhr bis 05:00 Uhr</li>
-        <li>Freitag: 22:00 Uhr bis 05:00 Uhr</li>
-        <li>Samstag: 22:00 Uhr bis 05:00 Uhr</li>
-        <li>Feiertage: 22:00 Uhr bis 05:00 Uhr</li>
+        <li>Mittwoch: 22:00 – 05:00 Uhr</li>
+        <li>Freitag: 22:00 – 05:00 Uhr</li>
+        <li>Samstag: 22:00 – 05:00 Uhr</li>
+        <li>Feiertage: 22:00 – 05:00 Uhr</li>
       </ul>
+      <p>Beginn und Ende der täglichen Arbeitszeit richten sich nach den betrieblichen Erfordernissen.</p>
 
-      <h3>§ 6 Krankheit</h3>
-      <p>Die Arbeitsunfähigkeit ist dem Arbeitgeber unverzüglich mitzuteilen. Außerdem ist vor Ablauf des dritten Kalendertags nach Beginn der Erkrankung eine ärztliche Bescheinigung über die Arbeitsunfähigkeit und deren voraussichtliche Dauer vorzulegen.</p>
+      <h3>§6 Urlaub</h3>
+      <p>Der Arbeitnehmer hat Anspruch auf den gesetzlichen Mindesturlaub.<br/>
+      Die Urlaubstage werden anteilig entsprechend der tatsächlichen Arbeitstage berechnet.</p>
 
-      <h3>§ 8 Verschwiegenheitspflicht</h3>
-      <p>Der Arbeitnehmer/ die Arbeitnehmerin verpflichtet sich, während der Dauer des Arbeitsverhältnisses und auch nach dem Ausscheiden, über alle Betriebs- und Geschäftsgeheimnisse Stillschweigen zu bewahren.</p>
+      <h3>§7 Krankheit</h3>
+      <p>Der Arbeitnehmer ist verpflichtet, dem Arbeitgeber eine Arbeitsunfähigkeit unverzüglich mitzuteilen.<br/>
+      Spätestens am dritten Kalendertag ist eine ärztliche Bescheinigung vorzulegen.<br/>
+      Im Übrigen gelten die gesetzlichen Vorschriften zur Entgeltfortzahlung im Krankheitsfall.</p>
 
-      <h3>§ 9 Nebentätigkeit</h3>
-      <p>Jede entgeltliche oder das Arbeitsverhältnis beeinträchtigende Nebenbeschäftigung ist nur mit Zustimmung des Arbeitgebers zulässig.</p>
+      <h3>§8 Verschwiegenheit</h3>
+      <p>Der Arbeitnehmer verpflichtet sich, über alle Betriebs- und Geschäftsgeheimnisse auch nach Beendigung des Arbeitsverhältnisses Stillschweigen zu bewahren.</p>
 
-      <h3>§10 Hinweis bzgl. des Verzichts auf Rentenversicherungsfreiheit</h3>
-      <p>Der Arbeitnehmer hat die Möglichkeit, jederzeit durch schriftliche Erklärung gegenüber dem Arbeitgeber auf seine Versicherungsfreiheit in der gesetzlichen Rentenversicherung zu verzichten. Der Verzicht kann nur für die Zukunft und im Falle der Ausübung mehrerer geringfügiger Beschäftigungen nur einheitlich für alle Beschäftigungen erklärt werden.</p>
-      <p>Wird der Verzicht erklärt, ist der Arbeitnehmer verpflichtet, den gesetzlichen Pauschalbeitrag zur Rentenversicherung von 15 % des Arbeitsentgelts auf den jeweils geltenden Rentenversicherungsbeitrag aufzustocken. Durch diese eigenen Zuzahlungen werden volle Leistungsansprüche in der Rentenversicherung erworben.</p>
+      <h3>§9 Nebentätigkeit</h3>
+      <p>Eine Nebentätigkeit ist dem Arbeitgeber vorher anzuzeigen und bedarf dessen Zustimmung, sofern berechtigte betriebliche Interessen betroffen sind.</p>
 
-      <h3>§11 Sonstige Bestimmungen</h3>
-      <p>Während der Arbeit darf der Arbeitnehmer/ die Arbeitnehmerin maximal 50,00€ Bargeld mit sich führen. Wenn ein Mitarbeiter aus irgendeinem Grund an einem bestimmten Arbeitstag über mehr Bargeld verfügt, ist er verpflichtet, dies zu melden. Der Mitarbeiter ist mit stichprobenartigen Kontrollen von Taschen oder Jacken einverstanden.</p>
+      <h3>§10 Rentenversicherung (Minijob)</h3>
+      <p>Der Arbeitnehmer wird darauf hingewiesen, dass grundsätzlich Rentenversicherungspflicht besteht.<br/>
+      Er kann sich auf Antrag von der Rentenversicherungspflicht befreien lassen. Der Antrag ist schriftlich gegenüber dem Arbeitgeber zu erklären.</p>
+
+      <h3>§11 Kassen- und Kontrollregelung</h3>
+      <p>Der Arbeitnehmer ist verpflichtet, sorgfältig mit Bargeld und Betriebseigentum umzugehen.<br/>
+      Taschen- und Personenkontrollen sind ausschließlich in begründeten Einzelfällen zulässig, wenn ein konkreter Verdacht auf Pflichtverletzungen besteht.<br/>
+      Dabei sind die Persönlichkeitsrechte des Arbeitnehmers zu wahren.<br/>
+      Für vorsätzlich oder grob fahrlässig verursachte Kassendifferenzen haftet der Arbeitnehmer im Rahmen der gesetzlichen Vorschriften.</p>
+
+      <h3>§12 Alkohol- und Drogenverbot</h3>
+      <p>Dem Arbeitnehmer ist es untersagt, während der Arbeitszeit sowie vor Dienstantritt in einem Zustand zu erscheinen, der seine Arbeitsfähigkeit beeinträchtigt, insbesondere durch Alkohol oder andere berauschende Mittel.<br/>
+      Bei Verstößen ist der Arbeitgeber berechtigt, den Arbeitnehmer von der Arbeitsleistung auszuschließen.<br/>
+      Weitere arbeitsrechtliche Maßnahmen (insbesondere Abmahnung oder Kündigung) bleiben vorbehalten.</p>
+
+      <h3>§13 Verhalten bei Nichterscheinen (No-Show)</h3>
+      <p>Der Arbeitnehmer ist verpflichtet, vereinbarte Arbeitseinsätze wahrzunehmen.<br/>
+      Ist ihm die Arbeitsaufnahme nicht möglich, hat er den Arbeitgeber unverzüglich zu informieren.<br/>
+      Ein unentschuldigtes Nichterscheinen stellt eine erhebliche Pflichtverletzung dar und kann arbeitsrechtliche Konsequenzen nach sich ziehen (insbesondere Abmahnung oder Kündigung).<br/>
+      Verursacht der Arbeitnehmer durch schuldhaftes Nichterscheinen einen nachweisbaren Schaden, ist er im Rahmen der gesetzlichen Vorschriften zum Ersatz verpflichtet.</p>
+
+      <h3>§14 Kündigung</h3>
+      <p>Nach Ablauf der Probezeit gelten die gesetzlichen Kündigungsfristen gemäß § 622 BGB.<br/>
+      Die Kündigung bedarf der Schriftform.</p>
+
+      <h3>§15 Ausschlussfristen</h3>
+      <p>Ansprüche aus dem Arbeitsverhältnis verfallen, wenn sie nicht innerhalb von 3 Monaten nach Fälligkeit schriftlich geltend gemacht werden.</p>
+
+      <h3>§16 Schlussbestimmungen</h3>
+      <p>Änderungen und Ergänzungen dieses Vertrages bedürfen der Schriftform.<br/>
+      Sollte eine Bestimmung dieses Vertrages unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.</p>
       
       <br/>
       <p>Dresden, {today}</p>
