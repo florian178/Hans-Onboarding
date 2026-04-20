@@ -10,6 +10,14 @@ export default async function InstructionsStep() {
   if (!session?.user) redirect("/login")
   const userId = session.user.id!
 
+  // Check if previous step is completed
+  const contractProgressCheck = await prisma.stepProgress.findUnique({
+    where: { userId_stepId: { userId, stepId: "contract" } }
+  })
+  if (!contractProgressCheck?.completed) {
+    redirect("/onboarding/contract")
+  }
+
   const instructions = await prisma.document.findMany({
     where: { type: "INSTRUCTION", userId: null },
     orderBy: { uploadedAt: "desc" }

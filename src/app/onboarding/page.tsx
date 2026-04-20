@@ -10,6 +10,7 @@ export default async function OnboardingIndex() {
 
   const steps = [
     "personal-data",
+    "tax-data",
     "contract",
     "instructions",
     "video"

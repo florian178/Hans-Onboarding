@@ -10,6 +10,14 @@ export default async function VideoStep() {
   if (!session?.user) redirect("/login")
   const userId = session.user.id!
 
+  // Check if previous step is completed
+  const instructionsProgressCheck = await prisma.stepProgress.findUnique({
+    where: { userId_stepId: { userId, stepId: "instructions" } }
+  })
+  if (!instructionsProgressCheck?.completed) {
+    redirect("/onboarding/instructions")
+  }
+
   const videos = await prisma.document.findMany({
     where: { type: "VIDEO", userId: null },
     orderBy: { uploadedAt: "desc" }

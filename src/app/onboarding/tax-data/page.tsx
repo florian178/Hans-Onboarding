@@ -13,6 +13,14 @@ export default async function TaxDataStep() {
 
   const userId = session.user.id!
 
+  // Check if previous step is completed
+  const personalDataProgress = await prisma.stepProgress.findUnique({
+    where: { userId_stepId: { userId, stepId: "personal-data" } }
+  })
+  if (!personalDataProgress?.completed) {
+    redirect("/onboarding/personal-data")
+  }
+
   const existingProgress = await prisma.stepProgress.findUnique({
     where: { userId_stepId: { userId, stepId: "tax-data" } }
   })

@@ -11,6 +11,14 @@ export default async function ContractStep() {
   if (!session?.user) redirect("/login")
   const userId = session.user.id!
 
+  // Check if previous step is completed
+  const taxDataProgressCheck = await prisma.stepProgress.findUnique({
+    where: { userId_stepId: { userId, stepId: "tax-data" } }
+  })
+  if (!taxDataProgressCheck?.completed) {
+    redirect("/onboarding/tax-data")
+  }
+
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { startDate: true, hourlyWage: true }
