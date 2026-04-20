@@ -253,7 +253,7 @@ export default function DashboardClient({ user, documents, payslips, summary }: 
                         <p className={styles.actionText} style={{ marginBottom: '10px' }}>
                           Bitte absolviere innerhalb von 4 Wochen nach Start die Online-Hygieneschulung (Metro).
                         </p>
-                        <div style={{ display: 'flex', gap: '8px', zIndex: 10, position: 'relative' }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', zIndex: 10, position: 'relative' }}>
                           <a href="https://kw.my/jEM8PK/#/" target="_blank" rel="noopener noreferrer">
                             <Button variant="outline" size="sm">Zur Schulung</Button>
                           </a>
