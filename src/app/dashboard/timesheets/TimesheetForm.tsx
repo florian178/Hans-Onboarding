@@ -20,7 +20,9 @@ export default function TimesheetForm({ onSuccess }: Props) {
   const [error, setError] = useState<string | null>(null)
 
   const totalHours = calculateTotalHours(startTime, endTime, breakMinutes)
-  const warnings = validateTimesheet(totalHours, breakMinutes)
+  const validation = validateTimesheet(totalHours, breakMinutes)
+  const warnings = validation.warnings
+  const formErrors = validation.errors
 
   const handleSubmit = async (e: FormEvent, status: "DRAFT" | "SUBMITTED") => {
     e.preventDefault()
@@ -110,7 +112,10 @@ export default function TimesheetForm({ onSuccess }: Props) {
         </div>
 
         {warnings.map((warn, i) => (
-          <div key={i} className={styles.warningBox}>⚠️ {warn}</div>
+          <div key={`warn-${i}`} className={styles.warningBox}>⚠️ {warn}</div>
+        ))}
+        {formErrors.map((formErr, i) => (
+          <div key={`err-${i}`} className={styles.errorBox}>❌ {formErr}</div>
         ))}
         {error && <div className={styles.errorBox}>❌ {error}</div>}
 
@@ -118,13 +123,13 @@ export default function TimesheetForm({ onSuccess }: Props) {
           <Button 
             variant="outline" 
             onClick={(e) => handleSubmit(e, "DRAFT")}
-            disabled={loading || totalHours <= 0}
+            disabled={loading || totalHours <= 0 || formErrors.length > 0}
           >
             Als Entwurf speichern
           </Button>
           <Button 
             onClick={(e) => handleSubmit(e, "SUBMITTED")}
-            disabled={loading || totalHours <= 0}
+            disabled={loading || totalHours <= 0 || formErrors.length > 0}
           >
             Direkt einreichen
           </Button>

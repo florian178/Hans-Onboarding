@@ -21,11 +21,16 @@ export function calculateTotalHours(startTime: string, endTime: string, breakMin
 
 export function validateTimesheet(totalHours: number, breakMinutes: number) {
   const warnings: string[] = []
-  if (totalHours > 6 && breakMinutes === 0) {
-    warnings.push("Gesetzliche Vorgabe: Bei einer Arbeitszeit von über 6 Stunden ist eine Pause Pflicht.")
+  const errors: string[] = []
+  
+  if (totalHours > 9 && breakMinutes < 45) {
+    errors.push("Gesetzliche Vorgabe: Bei einer Arbeitszeit von über 9 Stunden sind mindestens 45 Minuten Pause Pflicht.")
+  } else if (totalHours > 6 && breakMinutes < 30) {
+    errors.push("Gesetzliche Vorgabe: Bei einer Arbeitszeit von über 6 Stunden sind mindestens 30 Minuten Pause Pflicht.")
   }
+
   if (totalHours > 10) {
     warnings.push("Achtung: Die tägliche Höchstarbeitszeit von 10 Stunden wurde überschritten.")
   }
-  return warnings
+  return { warnings, errors }
 }

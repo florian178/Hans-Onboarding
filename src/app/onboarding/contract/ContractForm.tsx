@@ -12,7 +12,8 @@ import { ZoomableDocument } from "@/components/ui/ZoomableDocument"
 const getEndDateStr = (startStr?: string | Date | null) => {
   const start = startStr ? new Date(startStr) : new Date();
   const end = new Date(start);
-  end.setMonth(end.getMonth() + 6);
+  end.setMonth(end.getMonth() + 7);
+  end.setDate(0);
   return end.toLocaleDateString("de-DE", { day: '2-digit', month: '2-digit', year: 'numeric' });
 };
 

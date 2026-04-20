@@ -9,7 +9,8 @@ import styles from "../../admin/contracts/[userId]/page.module.css"
 const getEndDate = (start?: Date | null | string) => {
   const s = start ? new Date(start) : new Date();
   const e = new Date(s);
-  e.setMonth(e.getMonth() + 6);
+  e.setMonth(e.getMonth() + 7);
+  e.setDate(0);
   return e.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
 };
 
